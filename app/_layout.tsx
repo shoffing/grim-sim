@@ -29,7 +29,7 @@ function RootLayout() {
     <PaperProvider theme={paperTheme}>
       <ThemeProvider value={paperTheme}>
         <Stack>
-          <Stack.Screen name="grim" options={{ headerShown: false }}/>
+          <Stack.Screen name="index" options={{ headerShown: false }}/>
         </Stack>
       </ThemeProvider>
     </PaperProvider>

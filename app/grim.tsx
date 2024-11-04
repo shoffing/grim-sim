@@ -1,30 +1,28 @@
-import { Surface, Text } from 'react-native-paper';
-import { Image, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
+import { Surface } from 'react-native-paper';
+import Token from '@/app/token';
+import { useState } from 'react';
 
 const Grim = () => {
+  const [layout, setLayout] = useState<LayoutRectangle>();
+  const onLayout = (event: LayoutChangeEvent) => {
+    setLayout(event.nativeEvent.layout)
+  };
   return (
-    <SafeAreaView>
-      <Surface mode="flat" style={styles.surface}>
-        <Text variant="displayLarge" style={styles.header}>Grim Sim</Text>
-        <Text variant="headlineSmall" style={styles.header}>A grimoire simulator for Blood on the Clocktower.</Text>
-        <Image source={require('@/assets/images/characters/demons/imp.webp')}></Image>
-      </Surface>
-    </SafeAreaView>
-  );
+    <Surface mode="flat" style={styles.container} onLayout={onLayout}>
+      <Token position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}></Token>
+      <Token position={new Animated.ValueXY({ x: 200, y: 150 })} containerLayout={layout}></Token>
+      <Token position={new Animated.ValueXY({ x: 120, y: 100 })} containerLayout={layout}></Token>
+    </Surface>
+  )
 };
 
 export default Grim;
 
 const styles = StyleSheet.create({
-  surface: {
-    alignItems: 'center',
-    height: '100%',
-    justifyContent: 'flex-start',
-    padding: 16,
+  container: {
     width: '100%',
+    height: '100%',
+    backgroundColor: 'green'
   },
-  header: {
-    textAlign: 'center',
-  },
-});
+})
