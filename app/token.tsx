@@ -1,5 +1,5 @@
-import { Animated, Dimensions, LayoutRectangle, PanResponder, StyleSheet, Text } from 'react-native';
-import { useRef } from 'react';
+import { Animated, Dimensions, LayoutChangeEvent, LayoutRectangle, PanResponder, StyleSheet } from 'react-native';
+import { useRef, useState } from 'react';
 
 interface TokenProps {
   position?: Animated.ValueXY;
@@ -7,8 +7,7 @@ interface TokenProps {
 }
 
 const Token = ({ position, containerLayout }: TokenProps) => {
-  const pan = useRef(position || new Animated.ValueXY()).current;
-
+  const pan = useRef(position ?? new Animated.ValueXY()).current;
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -25,19 +24,23 @@ const Token = ({ position, containerLayout }: TokenProps) => {
     }),
   ).current;
 
-  const containerWidth = containerLayout?.width || Dimensions.get('window').width;
-  const containerHeight = containerLayout?.height || Dimensions.get('window').height;
-  console.log(containerWidth, containerHeight);
-  const translateX = Animated.diffClamp(pan.x, 0, containerWidth);
-  const translateY = Animated.diffClamp(pan.y, 0, containerHeight);
+  const [layout, setLayout] = useState<LayoutRectangle>();
+  const onLayout = (event: LayoutChangeEvent) => {
+    setLayout(event.nativeEvent.layout);
+  };
+
+  // Constrain the token's position to be within its container's layout rect.
+  const containerWidth = containerLayout?.width ?? Dimensions.get('window').width;
+  const containerHeight = containerLayout?.height ?? Dimensions.get('window').height;
+  const translateX = Animated.diffClamp(pan.x, 0, containerWidth - (layout?.width ?? 0));
+  const translateY = Animated.diffClamp(pan.y, 0, containerHeight - (layout?.height ?? 0));
   const style = StyleSheet.compose(
     baseStyles.container,
     { transform: [{ translateX }, { translateY }] },
   );
 
   return (
-    <Animated.View style={style} {...panResponder.panHandlers}>
-      <Text>TOKEN</Text>
+    <Animated.View style={style} onLayout={onLayout} {...panResponder.panHandlers}>
     </Animated.View>
   );
 };

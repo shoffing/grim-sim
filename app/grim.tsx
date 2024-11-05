@@ -1,28 +1,35 @@
 import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
-import { Surface } from 'react-native-paper';
+import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 import Token from '@/app/token';
 import { useState } from 'react';
 
-const Grim = () => {
+interface GrimProps {
+  theme: MD3Theme,
+}
+
+const Grim = ({ theme }: GrimProps) => {
   const [layout, setLayout] = useState<LayoutRectangle>();
   const onLayout = (event: LayoutChangeEvent) => {
-    setLayout(event.nativeEvent.layout)
+    setLayout(event.nativeEvent.layout);
   };
+
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: theme.colors.background,
+      borderRadius: theme.roundness,
+      flex: 1,
+      height: '100%',
+      width: '100%',
+    },
+  });
+
   return (
-    <Surface mode="flat" style={styles.container} onLayout={onLayout}>
+    <Surface mode="elevated" style={styles.container} onLayout={onLayout}>
       <Token position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}></Token>
       <Token position={new Animated.ValueXY({ x: 200, y: 150 })} containerLayout={layout}></Token>
       <Token position={new Animated.ValueXY({ x: 120, y: 100 })} containerLayout={layout}></Token>
     </Surface>
-  )
+  );
 };
 
-export default Grim;
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'green'
-  },
-})
+export default withTheme(Grim);
