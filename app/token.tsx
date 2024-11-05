@@ -1,5 +1,7 @@
 import { Animated, Dimensions, LayoutChangeEvent, LayoutRectangle, PanResponder, StyleSheet } from 'react-native';
 import { useRef, useState } from 'react';
+import Character from '@/app/character';
+import { CharacterId, getCharacterById } from '@/app/data/character_data';
 
 interface TokenProps {
   position?: Animated.ValueXY;
@@ -41,6 +43,7 @@ const Token = ({ position, containerLayout }: TokenProps) => {
 
   return (
     <Animated.View style={style} onLayout={onLayout} {...panResponder.panHandlers}>
+      <Character character={getCharacterById(CharacterId.Imp)}></Character>
     </Animated.View>
   );
 };
@@ -48,9 +51,9 @@ const Token = ({ position, containerLayout }: TokenProps) => {
 const baseStyles = StyleSheet.create({
   container: {
     position: 'absolute',
-    height: 64,
-    width: 64,
-    borderRadius: 64,
+    height: 'auto',
+    width: 'auto',
+    borderRadius: 9999,
     backgroundColor: 'red',
   },
 });
