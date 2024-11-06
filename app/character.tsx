@@ -10,7 +10,9 @@ const Character = ({ character }: CharacterProps) => {
 
   return (
     <View>
-      <Image source={character.icon}></Image>
+      <Image source={character.icon.default} style={{width: 128, height: 128}}></Image>
+      <Image source={character.icon.red} style={{width: 128, height: 128}}></Image>
+      <Image source={character.icon.blue} style={{width: 128, height: 128}}></Image>
     </View>
   );
 };

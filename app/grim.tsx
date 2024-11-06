@@ -2,6 +2,8 @@ import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 import Token from '@/app/token';
 import { useState } from 'react';
+import Character from '@/app/character';
+import { CharacterId, getCharacterById } from '@/app/data/character_data';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -25,9 +27,15 @@ const Grim = ({ theme }: GrimProps) => {
 
   return (
     <Surface mode="elevated" style={styles.container} onLayout={onLayout}>
-      <Token position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}></Token>
-      <Token position={new Animated.ValueXY({ x: 200, y: 150 })} containerLayout={layout}></Token>
-      <Token position={new Animated.ValueXY({ x: 120, y: 100 })} containerLayout={layout}></Token>
+      <Token position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}>
+        <Character character={getCharacterById(CharacterId.Imp)}></Character>
+      </Token>
+      <Token position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}>
+        <Character character={getCharacterById(CharacterId.Mayor)}></Character>
+      </Token>
+      <Token position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}>
+        <Character character={getCharacterById(CharacterId.Gangster)}></Character>
+      </Token>
     </Surface>
   );
 };

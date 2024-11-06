@@ -5,7 +5,7 @@
  * - {character}__tint_red.webp
  * - {character}__tint_blue.webp
  *
- * The script is idempotent, and can be run without worry.
+ * This script is idempotent.
  *
  * Must have ImageMagick installed locally.
  */
@@ -16,24 +16,42 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 const iconsDir = path.join(process.cwd(), 'assets', 'images', 'icons');
-const TYPES = ['demon', 'minion', 'townsfolk', 'outsider', 'traveller'];
+const TYPES = [
+  {id: 'demon', tint: 'blue'},
+  {id: 'minion', tint: 'blue'},
+  {id: 'outsider', tint: 'red'},
+  {id: 'townsfolk', tint: 'red'},
+  {id: 'traveller', tint: 'both'},
+];
+
 const characters = TYPES.flatMap(type => {
-  const typeDir = path.join(iconsDir, type)
-  return fs.readdirSync(typeDir).map(char => path.join(typeDir, char));
+  const typeDir = path.join(iconsDir, type.id);
+  return fs.readdirSync(typeDir).map(char => path.join(typeDir, char)).map(f => [type, f]);
 });
 
 (async () => {
-  for (const character of characters) {
-    if (!character.includes('__variant')) {
-      console.log(character, '...');
-      const baseName = path.basename(character, '.webp');
-      const gray = path.join(path.dirname(character), `${baseName}__variant_gray.webp`);
-      const red = path.join(path.dirname(character), `${baseName}__variant_red.webp`);
-      const blue = path.join(path.dirname(character), `${baseName}__variant_blue.webp`);
-      await exec(`convert ${character} -colorspace LinearGray ${gray}`);
-      await exec(`convert ${gray} -fill '#F00' -tint 130 ${red}`);
-      await exec(`convert ${gray} -fill '#00F' -tint 130 ${blue}`);
-      await exec(`rm ${gray}`);
-    }
-  }
+  await Promise.all(characters.map(([type, character]) => {
+    return (async () => {
+      if (!character.includes('__variant')) {
+        console.log(character, '...');
+        const extName = path.extname(character);
+        const baseName = path.basename(character, extName);
+        const gray = path.join(path.dirname(character), `${baseName}__variant_gray${extName}`);
+        const red = path.join(path.dirname(character), `${baseName}__variant_red${extName}`);
+        const blue = path.join(path.dirname(character), `${baseName}__variant_blue${extName}`);
+        await exec(`convert ${character} -colorspace Gray ${gray}`);
+        if (type.tint === 'red') {
+          await exec(`convert ${gray} -fill '#CC0000' -tint 100 -level 25%,100%  ${red}`);
+        }
+        if (type.tint === 'blue') {
+          await exec(`convert ${gray} -fill '#0072FF' -tint 100 -level 0%,70% -modulate 100,80,100 ${blue}`);
+        }
+        if (type.tint === 'both') {
+          await exec(`convert ${gray} -fill '#CC0000' -tint 100 -level 25%,100%  ${red}`);
+          await exec(`convert ${gray} -fill '#0072FF' -tint 100 -level 0%,70% -modulate 100,80,100 ${blue}`);
+        }
+        await exec(`rm ${gray}`);
+      }
+    })();
+  }));
 })();
