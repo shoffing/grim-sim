@@ -264,7 +264,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/alhadikhia.webp'),
-      red: require('@/assets/images/icons/demon/alhadikhia__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/alhadikhia__variant_blue.webp'),
     },
   },
@@ -273,7 +272,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/baojun.webp'),
-      red: require('@/assets/images/icons/demon/baojun__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/baojun__variant_blue.webp'),
     },
   },
@@ -282,7 +280,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/dianyuzhang.webp'),
-      red: require('@/assets/images/icons/demon/dianyuzhang__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/dianyuzhang__variant_blue.webp'),
     },
   },
@@ -291,7 +288,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/fanggu.webp'),
-      red: require('@/assets/images/icons/demon/fanggu__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/fanggu__variant_blue.webp'),
     },
   },
@@ -300,7 +296,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/guhuoniao.webp'),
-      red: require('@/assets/images/icons/demon/guhuoniao__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/guhuoniao__variant_blue.webp'),
     },
   },
@@ -309,7 +304,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/hundun.webp'),
-      red: require('@/assets/images/icons/demon/hundun__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/hundun__variant_blue.webp'),
     },
   },
@@ -318,7 +312,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/imp.webp'),
-      red: require('@/assets/images/icons/demon/imp__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/imp__variant_blue.webp'),
     },
   },
@@ -327,7 +320,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/jianning.webp'),
-      red: require('@/assets/images/icons/demon/jianning__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/jianning__variant_blue.webp'),
     },
   },
@@ -336,7 +328,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/kazali.webp'),
-      red: require('@/assets/images/icons/demon/kazali__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/kazali__variant_blue.webp'),
     },
   },
@@ -345,7 +336,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/legion.webp'),
-      red: require('@/assets/images/icons/demon/legion__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/legion__variant_blue.webp'),
     },
   },
@@ -354,7 +344,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/leviathan.webp'),
-      red: require('@/assets/images/icons/demon/leviathan__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/leviathan__variant_blue.webp'),
     },
   },
@@ -363,7 +352,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/lilmonsta.webp'),
-      red: require('@/assets/images/icons/demon/lilmonsta__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/lilmonsta__variant_blue.webp'),
     },
   },
@@ -372,7 +360,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/lleech.webp'),
-      red: require('@/assets/images/icons/demon/lleech__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/lleech__variant_blue.webp'),
     },
   },
@@ -381,7 +368,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/lordoftyphon.webp'),
-      red: require('@/assets/images/icons/demon/lordoftyphon__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/lordoftyphon__variant_blue.webp'),
     },
   },
@@ -390,7 +376,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/nodashii.webp'),
-      red: require('@/assets/images/icons/demon/nodashii__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/nodashii__variant_blue.webp'),
     },
   },
@@ -399,7 +384,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/ojo.webp'),
-      red: require('@/assets/images/icons/demon/ojo__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/ojo__variant_blue.webp'),
     },
   },
@@ -408,7 +392,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/po.webp'),
-      red: require('@/assets/images/icons/demon/po__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/po__variant_blue.webp'),
     },
   },
@@ -417,7 +400,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/pukka.webp'),
-      red: require('@/assets/images/icons/demon/pukka__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/pukka__variant_blue.webp'),
     },
   },
@@ -426,7 +408,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/qiongqi.webp'),
-      red: require('@/assets/images/icons/demon/qiongqi__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/qiongqi__variant_blue.webp'),
     },
   },
@@ -435,7 +416,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/riot.webp'),
-      red: require('@/assets/images/icons/demon/riot__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/riot__variant_blue.webp'),
     },
   },
@@ -444,7 +424,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/shabaloth.webp'),
-      red: require('@/assets/images/icons/demon/shabaloth__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/shabaloth__variant_blue.webp'),
     },
   },
@@ -453,7 +432,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/shimengmo.webp'),
-      red: require('@/assets/images/icons/demon/shimengmo__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/shimengmo__variant_blue.webp'),
     },
   },
@@ -462,7 +440,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/taotie.webp'),
-      red: require('@/assets/images/icons/demon/taotie__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/taotie__variant_blue.webp'),
     },
   },
@@ -471,7 +448,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/taowu.webp'),
-      red: require('@/assets/images/icons/demon/taowu__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/taowu__variant_blue.webp'),
     },
   },
@@ -480,7 +456,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/vigormortis.webp'),
-      red: require('@/assets/images/icons/demon/vigormortis__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/vigormortis__variant_blue.webp'),
     },
   },
@@ -489,7 +464,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/vortox.webp'),
-      red: require('@/assets/images/icons/demon/vortox__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/vortox__variant_blue.webp'),
     },
   },
@@ -498,7 +472,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/yaggababble.webp'),
-      red: require('@/assets/images/icons/demon/yaggababble__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/yaggababble__variant_blue.webp'),
     },
   },
@@ -507,7 +480,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/yanluo.webp'),
-      red: require('@/assets/images/icons/demon/yanluo__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/yanluo__variant_blue.webp'),
     },
   },
@@ -516,7 +488,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Demon,
     icon: {
       default: require('@/assets/images/icons/demon/zombuul.webp'),
-      red: require('@/assets/images/icons/demon/zombuul__variant_red.webp'),
       blue: require('@/assets/images/icons/demon/zombuul__variant_blue.webp'),
     },
   },
@@ -658,7 +629,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/assassin.webp'),
-      red: require('@/assets/images/icons/minion/assassin__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/assassin__variant_blue.webp'),
     },
   },
@@ -667,7 +637,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/baron.webp'),
-      red: require('@/assets/images/icons/minion/baron__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/baron__variant_blue.webp'),
     },
   },
@@ -676,7 +645,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/boffin.webp'),
-      red: require('@/assets/images/icons/minion/boffin__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/boffin__variant_blue.webp'),
     },
   },
@@ -685,7 +653,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/boomdandy.webp'),
-      red: require('@/assets/images/icons/minion/boomdandy__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/boomdandy__variant_blue.webp'),
     },
   },
@@ -694,7 +661,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/cerenovus.webp'),
-      red: require('@/assets/images/icons/minion/cerenovus__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/cerenovus__variant_blue.webp'),
     },
   },
@@ -703,7 +669,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/chimei.webp'),
-      red: require('@/assets/images/icons/minion/chimei__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/chimei__variant_blue.webp'),
     },
   },
@@ -712,7 +677,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/devilsadvocate.webp'),
-      red: require('@/assets/images/icons/minion/devilsadvocate__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/devilsadvocate__variant_blue.webp'),
     },
   },
@@ -721,7 +685,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/eviltwin.webp'),
-      red: require('@/assets/images/icons/minion/eviltwin__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/eviltwin__variant_blue.webp'),
     },
   },
@@ -730,7 +693,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/fearmonger.webp'),
-      red: require('@/assets/images/icons/minion/fearmonger__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/fearmonger__variant_blue.webp'),
     },
   },
@@ -739,7 +701,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/ganshiren.webp'),
-      red: require('@/assets/images/icons/minion/ganshiren__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/ganshiren__variant_blue.webp'),
     },
   },
@@ -748,7 +709,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/goblin.webp'),
-      red: require('@/assets/images/icons/minion/goblin__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/goblin__variant_blue.webp'),
     },
   },
@@ -757,7 +717,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/godfather.webp'),
-      red: require('@/assets/images/icons/minion/godfather__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/godfather__variant_blue.webp'),
     },
   },
@@ -766,7 +725,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/gudiao.webp'),
-      red: require('@/assets/images/icons/minion/gudiao__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/gudiao__variant_blue.webp'),
     },
   },
@@ -775,7 +733,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/harpy.webp'),
-      red: require('@/assets/images/icons/minion/harpy__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/harpy__variant_blue.webp'),
     },
   },
@@ -784,7 +741,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/huapi.webp'),
-      red: require('@/assets/images/icons/minion/huapi__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/huapi__variant_blue.webp'),
     },
   },
@@ -793,7 +749,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/humeiniang.webp'),
-      red: require('@/assets/images/icons/minion/humeiniang__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/humeiniang__variant_blue.webp'),
     },
   },
@@ -802,7 +757,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/jinweijun.webp'),
-      red: require('@/assets/images/icons/minion/jinweijun__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/jinweijun__variant_blue.webp'),
     },
   },
@@ -811,7 +765,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/jinweijun2.webp'),
-      red: require('@/assets/images/icons/minion/jinweijun2__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/jinweijun2__variant_blue.webp'),
     },
   },
@@ -820,7 +773,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/marionette.webp'),
-      red: require('@/assets/images/icons/minion/marionette__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/marionette__variant_blue.webp'),
     },
   },
@@ -829,7 +781,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/mastermind.webp'),
-      red: require('@/assets/images/icons/minion/mastermind__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/mastermind__variant_blue.webp'),
     },
   },
@@ -838,7 +789,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/mengpo.webp'),
-      red: require('@/assets/images/icons/minion/mengpo__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/mengpo__variant_blue.webp'),
     },
   },
@@ -847,7 +797,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/mephit.webp'),
-      red: require('@/assets/images/icons/minion/mephit__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/mephit__variant_blue.webp'),
     },
   },
@@ -856,7 +805,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/mezepheles.webp'),
-      red: require('@/assets/images/icons/minion/mezepheles__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/mezepheles__variant_blue.webp'),
     },
   },
@@ -865,7 +813,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/niangjiushi.webp'),
-      red: require('@/assets/images/icons/minion/niangjiushi__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/niangjiushi__variant_blue.webp'),
     },
   },
@@ -874,7 +821,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/organgrinder.webp'),
-      red: require('@/assets/images/icons/minion/organgrinder__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/organgrinder__variant_blue.webp'),
     },
   },
@@ -883,7 +829,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/panguan.webp'),
-      red: require('@/assets/images/icons/minion/panguan__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/panguan__variant_blue.webp'),
     },
   },
@@ -892,7 +837,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/pithag.webp'),
-      red: require('@/assets/images/icons/minion/pithag__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/pithag__variant_blue.webp'),
     },
   },
@@ -901,7 +845,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/poisoner.webp'),
-      red: require('@/assets/images/icons/minion/poisoner__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/poisoner__variant_blue.webp'),
     },
   },
@@ -910,7 +853,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/psychopath.webp'),
-      red: require('@/assets/images/icons/minion/psychopath__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/psychopath__variant_blue.webp'),
     },
   },
@@ -919,7 +861,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/scarletwoman.webp'),
-      red: require('@/assets/images/icons/minion/scarletwoman__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/scarletwoman__variant_blue.webp'),
     },
   },
@@ -928,7 +869,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/spy.webp'),
-      red: require('@/assets/images/icons/minion/spy__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/spy__variant_blue.webp'),
     },
   },
@@ -937,7 +877,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/summoner.webp'),
-      red: require('@/assets/images/icons/minion/summoner__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/summoner__variant_blue.webp'),
     },
   },
@@ -946,7 +885,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/vizier.webp'),
-      red: require('@/assets/images/icons/minion/vizier__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/vizier__variant_blue.webp'),
     },
   },
@@ -955,7 +893,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/widow.webp'),
-      red: require('@/assets/images/icons/minion/widow__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/widow__variant_blue.webp'),
     },
   },
@@ -964,7 +901,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/witch.webp'),
-      red: require('@/assets/images/icons/minion/witch__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/witch__variant_blue.webp'),
     },
   },
@@ -973,7 +909,6 @@ const CHARACTERS: CharacterData[] = [
     type: CharacterType.Minion,
     icon: {
       default: require('@/assets/images/icons/minion/yangguren.webp'),
-      red: require('@/assets/images/icons/minion/yangguren__variant_red.webp'),
       blue: require('@/assets/images/icons/minion/yangguren__variant_blue.webp'),
     },
   },
@@ -983,7 +918,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/barber.webp'),
       red: require('@/assets/images/icons/outsider/barber__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/barber__variant_blue.webp'),
     },
   },
   {
@@ -992,7 +926,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/butler.webp'),
       red: require('@/assets/images/icons/outsider/butler__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/butler__variant_blue.webp'),
     },
   },
   {
@@ -1001,7 +934,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/damsel.webp'),
       red: require('@/assets/images/icons/outsider/damsel__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/damsel__variant_blue.webp'),
     },
   },
   {
@@ -1010,7 +942,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/drunk.webp'),
       red: require('@/assets/images/icons/outsider/drunk__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/drunk__variant_blue.webp'),
     },
   },
   {
@@ -1019,7 +950,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/golem.webp'),
       red: require('@/assets/images/icons/outsider/golem__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/golem__variant_blue.webp'),
     },
   },
   {
@@ -1028,7 +958,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/goon.webp'),
       red: require('@/assets/images/icons/outsider/goon__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/goon__variant_blue.webp'),
     },
   },
   {
@@ -1037,7 +966,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/hatter.webp'),
       red: require('@/assets/images/icons/outsider/hatter__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/hatter__variant_blue.webp'),
     },
   },
   {
@@ -1046,7 +974,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/heretic.webp'),
       red: require('@/assets/images/icons/outsider/heretic__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/heretic__variant_blue.webp'),
     },
   },
   {
@@ -1055,7 +982,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/jiubao.webp'),
       red: require('@/assets/images/icons/outsider/jiubao__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/jiubao__variant_blue.webp'),
     },
   },
   {
@@ -1064,7 +990,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/klutz.webp'),
       red: require('@/assets/images/icons/outsider/klutz__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/klutz__variant_blue.webp'),
     },
   },
   {
@@ -1073,7 +998,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/lunatic.webp'),
       red: require('@/assets/images/icons/outsider/lunatic__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/lunatic__variant_blue.webp'),
     },
   },
   {
@@ -1082,7 +1006,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/moonchild.webp'),
       red: require('@/assets/images/icons/outsider/moonchild__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/moonchild__variant_blue.webp'),
     },
   },
   {
@@ -1091,7 +1014,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/mutant.webp'),
       red: require('@/assets/images/icons/outsider/mutant__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/mutant__variant_blue.webp'),
     },
   },
   {
@@ -1100,7 +1022,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/nichen.webp'),
       red: require('@/assets/images/icons/outsider/nichen__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/nichen__variant_blue.webp'),
     },
   },
   {
@@ -1109,7 +1030,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/ogre.webp'),
       red: require('@/assets/images/icons/outsider/ogre__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/ogre__variant_blue.webp'),
     },
   },
   {
@@ -1118,7 +1038,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/plaguedoctor.webp'),
       red: require('@/assets/images/icons/outsider/plaguedoctor__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/plaguedoctor__variant_blue.webp'),
     },
   },
   {
@@ -1127,7 +1046,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/politician.webp'),
       red: require('@/assets/images/icons/outsider/politician__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/politician__variant_blue.webp'),
     },
   },
   {
@@ -1136,7 +1054,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/puzzlemaster.webp'),
       red: require('@/assets/images/icons/outsider/puzzlemaster__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/puzzlemaster__variant_blue.webp'),
     },
   },
   {
@@ -1145,7 +1062,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/recluse.webp'),
       red: require('@/assets/images/icons/outsider/recluse__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/recluse__variant_blue.webp'),
     },
   },
   {
@@ -1154,7 +1070,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/rulianshi.webp'),
       red: require('@/assets/images/icons/outsider/rulianshi__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/rulianshi__variant_blue.webp'),
     },
   },
   {
@@ -1163,7 +1078,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/saint.webp'),
       red: require('@/assets/images/icons/outsider/saint__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/saint__variant_blue.webp'),
     },
   },
   {
@@ -1172,7 +1086,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/shaxing.webp'),
       red: require('@/assets/images/icons/outsider/shaxing__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/shaxing__variant_blue.webp'),
     },
   },
   {
@@ -1181,7 +1094,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/shijie.webp'),
       red: require('@/assets/images/icons/outsider/shijie__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/shijie__variant_blue.webp'),
     },
   },
   {
@@ -1190,7 +1102,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/shusheng.webp'),
       red: require('@/assets/images/icons/outsider/shusheng__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/shusheng__variant_blue.webp'),
     },
   },
   {
@@ -1199,7 +1110,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/shutong.webp'),
       red: require('@/assets/images/icons/outsider/shutong__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/shutong__variant_blue.webp'),
     },
   },
   {
@@ -1208,7 +1118,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/snitch.webp'),
       red: require('@/assets/images/icons/outsider/snitch__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/snitch__variant_blue.webp'),
     },
   },
   {
@@ -1217,7 +1126,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/sweetheart.webp'),
       red: require('@/assets/images/icons/outsider/sweetheart__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/sweetheart__variant_blue.webp'),
     },
   },
   {
@@ -1226,7 +1134,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/tinker.webp'),
       red: require('@/assets/images/icons/outsider/tinker__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/tinker__variant_blue.webp'),
     },
   },
   {
@@ -1235,7 +1142,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/outsider/zealot.webp'),
       red: require('@/assets/images/icons/outsider/zealot__variant_red.webp'),
-      blue: require('@/assets/images/icons/outsider/zealot__variant_blue.webp'),
     },
   },
   {
@@ -1244,7 +1150,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/acrobat.webp'),
       red: require('@/assets/images/icons/townsfolk/acrobat__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/acrobat__variant_blue.webp'),
     },
   },
   {
@@ -1253,7 +1158,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/alchemist.webp'),
       red: require('@/assets/images/icons/townsfolk/alchemist__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/alchemist__variant_blue.webp'),
     },
   },
   {
@@ -1262,7 +1166,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/alsaahir.webp'),
       red: require('@/assets/images/icons/townsfolk/alsaahir__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/alsaahir__variant_blue.webp'),
     },
   },
   {
@@ -1271,7 +1174,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/amnesiac.webp'),
       red: require('@/assets/images/icons/townsfolk/amnesiac__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/amnesiac__variant_blue.webp'),
     },
   },
   {
@@ -1280,7 +1182,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/artist.webp'),
       red: require('@/assets/images/icons/townsfolk/artist__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/artist__variant_blue.webp'),
     },
   },
   {
@@ -1289,7 +1190,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/atheist.webp'),
       red: require('@/assets/images/icons/townsfolk/atheist__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/atheist__variant_blue.webp'),
     },
   },
   {
@@ -1298,7 +1198,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/balloonist.webp'),
       red: require('@/assets/images/icons/townsfolk/balloonist__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/balloonist__variant_blue.webp'),
     },
   },
   {
@@ -1307,7 +1206,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/banshee.webp'),
       red: require('@/assets/images/icons/townsfolk/banshee__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/banshee__variant_blue.webp'),
     },
   },
   {
@@ -1316,7 +1214,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/banxian.webp'),
       red: require('@/assets/images/icons/townsfolk/banxian__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/banxian__variant_blue.webp'),
     },
   },
   {
@@ -1325,7 +1222,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/bianlianshi.webp'),
       red: require('@/assets/images/icons/townsfolk/bianlianshi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/bianlianshi__variant_blue.webp'),
     },
   },
   {
@@ -1334,7 +1230,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/bingbi.webp'),
       red: require('@/assets/images/icons/townsfolk/bingbi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/bingbi__variant_blue.webp'),
     },
   },
   {
@@ -1343,7 +1238,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/bountyhunter.webp'),
       red: require('@/assets/images/icons/townsfolk/bountyhunter__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/bountyhunter__variant_blue.webp'),
     },
   },
   {
@@ -1352,7 +1246,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/cannibal.webp'),
       red: require('@/assets/images/icons/townsfolk/cannibal__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/cannibal__variant_blue.webp'),
     },
   },
   {
@@ -1361,7 +1254,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/chambermaid.webp'),
       red: require('@/assets/images/icons/townsfolk/chambermaid__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/chambermaid__variant_blue.webp'),
     },
   },
   {
@@ -1370,7 +1262,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/chef.webp'),
       red: require('@/assets/images/icons/townsfolk/chef__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/chef__variant_blue.webp'),
     },
   },
   {
@@ -1379,7 +1270,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/choirboy.webp'),
       red: require('@/assets/images/icons/townsfolk/choirboy__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/choirboy__variant_blue.webp'),
     },
   },
   {
@@ -1388,7 +1278,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/chongfei.webp'),
       red: require('@/assets/images/icons/townsfolk/chongfei__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/chongfei__variant_blue.webp'),
     },
   },
   {
@@ -1397,7 +1286,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/clockmaker.webp'),
       red: require('@/assets/images/icons/townsfolk/clockmaker__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/clockmaker__variant_blue.webp'),
     },
   },
   {
@@ -1406,7 +1294,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/courtier.webp'),
       red: require('@/assets/images/icons/townsfolk/courtier__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/courtier__variant_blue.webp'),
     },
   },
   {
@@ -1415,7 +1302,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/cultleader.webp'),
       red: require('@/assets/images/icons/townsfolk/cultleader__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/cultleader__variant_blue.webp'),
     },
   },
   {
@@ -1424,7 +1310,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/dagengren.webp'),
       red: require('@/assets/images/icons/townsfolk/dagengren__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/dagengren__variant_blue.webp'),
     },
   },
   {
@@ -1433,7 +1318,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/daoke.webp'),
       red: require('@/assets/images/icons/townsfolk/daoke__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/daoke__variant_blue.webp'),
     },
   },
   {
@@ -1442,7 +1326,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/daoshi.webp'),
       red: require('@/assets/images/icons/townsfolk/daoshi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/daoshi__variant_blue.webp'),
     },
   },
   {
@@ -1451,7 +1334,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/dianxiaoer.webp'),
       red: require('@/assets/images/icons/townsfolk/dianxiaoer__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/dianxiaoer__variant_blue.webp'),
     },
   },
   {
@@ -1460,7 +1342,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/dreamer.webp'),
       red: require('@/assets/images/icons/townsfolk/dreamer__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/dreamer__variant_blue.webp'),
     },
   },
   {
@@ -1469,7 +1350,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/empath.webp'),
       red: require('@/assets/images/icons/townsfolk/empath__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/empath__variant_blue.webp'),
     },
   },
   {
@@ -1478,7 +1358,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/engineer.webp'),
       red: require('@/assets/images/icons/townsfolk/engineer__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/engineer__variant_blue.webp'),
     },
   },
   {
@@ -1487,7 +1366,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/exorcist.webp'),
       red: require('@/assets/images/icons/townsfolk/exorcist__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/exorcist__variant_blue.webp'),
     },
   },
   {
@@ -1496,7 +1374,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/fangshi.webp'),
       red: require('@/assets/images/icons/townsfolk/fangshi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/fangshi__variant_blue.webp'),
     },
   },
   {
@@ -1505,7 +1382,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/farmer.webp'),
       red: require('@/assets/images/icons/townsfolk/farmer__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/farmer__variant_blue.webp'),
     },
   },
   {
@@ -1514,7 +1390,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/fengshuishi.webp'),
       red: require('@/assets/images/icons/townsfolk/fengshuishi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/fengshuishi__variant_blue.webp'),
     },
   },
   {
@@ -1523,7 +1398,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/fisherman.webp'),
       red: require('@/assets/images/icons/townsfolk/fisherman__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/fisherman__variant_blue.webp'),
     },
   },
   {
@@ -1532,7 +1406,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/flowergirl.webp'),
       red: require('@/assets/images/icons/townsfolk/flowergirl__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/flowergirl__variant_blue.webp'),
     },
   },
   {
@@ -1541,7 +1414,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/fool.webp'),
       red: require('@/assets/images/icons/townsfolk/fool__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/fool__variant_blue.webp'),
     },
   },
   {
@@ -1550,7 +1422,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/fortuneteller.webp'),
       red: require('@/assets/images/icons/townsfolk/fortuneteller__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/fortuneteller__variant_blue.webp'),
     },
   },
   {
@@ -1559,7 +1430,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/gambler.webp'),
       red: require('@/assets/images/icons/townsfolk/gambler__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/gambler__variant_blue.webp'),
     },
   },
   {
@@ -1568,7 +1438,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/geling.webp'),
       red: require('@/assets/images/icons/townsfolk/geling__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/geling__variant_blue.webp'),
     },
   },
   {
@@ -1577,7 +1446,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/general.webp'),
       red: require('@/assets/images/icons/townsfolk/general__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/general__variant_blue.webp'),
     },
   },
   {
@@ -1586,7 +1454,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/gossip.webp'),
       red: require('@/assets/images/icons/townsfolk/gossip__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/gossip__variant_blue.webp'),
     },
   },
   {
@@ -1595,7 +1462,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/grandmother.webp'),
       red: require('@/assets/images/icons/townsfolk/grandmother__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/grandmother__variant_blue.webp'),
     },
   },
   {
@@ -1604,7 +1470,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/heshang.webp'),
       red: require('@/assets/images/icons/townsfolk/heshang__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/heshang__variant_blue.webp'),
     },
   },
   {
@@ -1613,7 +1478,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/highpriestess.webp'),
       red: require('@/assets/images/icons/townsfolk/highpriestess__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/highpriestess__variant_blue.webp'),
     },
   },
   {
@@ -1622,7 +1486,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/huntsman.webp'),
       red: require('@/assets/images/icons/townsfolk/huntsman__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/huntsman__variant_blue.webp'),
     },
   },
   {
@@ -1631,7 +1494,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/innkeeper.webp'),
       red: require('@/assets/images/icons/townsfolk/innkeeper__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/innkeeper__variant_blue.webp'),
     },
   },
   {
@@ -1640,7 +1502,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/investigator.webp'),
       red: require('@/assets/images/icons/townsfolk/investigator__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/investigator__variant_blue.webp'),
     },
   },
   {
@@ -1649,7 +1510,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/jinyiwei.webp'),
       red: require('@/assets/images/icons/townsfolk/jinyiwei__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/jinyiwei__variant_blue.webp'),
     },
   },
   {
@@ -1658,7 +1518,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/juggler.webp'),
       red: require('@/assets/images/icons/townsfolk/juggler__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/juggler__variant_blue.webp'),
     },
   },
   {
@@ -1667,7 +1526,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/king.webp'),
       red: require('@/assets/images/icons/townsfolk/king__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/king__variant_blue.webp'),
     },
   },
   {
@@ -1676,7 +1534,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/knight.webp'),
       red: require('@/assets/images/icons/townsfolk/knight__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/knight__variant_blue.webp'),
     },
   },
   {
@@ -1685,7 +1542,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/langzhong.webp'),
       red: require('@/assets/images/icons/townsfolk/langzhong__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/langzhong__variant_blue.webp'),
     },
   },
   {
@@ -1694,7 +1550,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/lankeren.webp'),
       red: require('@/assets/images/icons/townsfolk/lankeren__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/lankeren__variant_blue.webp'),
     },
   },
   {
@@ -1703,7 +1558,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/librarian.webp'),
       red: require('@/assets/images/icons/townsfolk/librarian__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/librarian__variant_blue.webp'),
     },
   },
   {
@@ -1712,7 +1566,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/limao.webp'),
       red: require('@/assets/images/icons/townsfolk/limao__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/limao__variant_blue.webp'),
     },
   },
   {
@@ -1721,7 +1574,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/lycanthrope.webp'),
       red: require('@/assets/images/icons/townsfolk/lycanthrope__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/lycanthrope__variant_blue.webp'),
     },
   },
   {
@@ -1730,7 +1582,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/magician.webp'),
       red: require('@/assets/images/icons/townsfolk/magician__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/magician__variant_blue.webp'),
     },
   },
   {
@@ -1739,7 +1590,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/mathematician.webp'),
       red: require('@/assets/images/icons/townsfolk/mathematician__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/mathematician__variant_blue.webp'),
     },
   },
   {
@@ -1748,7 +1598,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/mayor.webp'),
       red: require('@/assets/images/icons/townsfolk/mayor__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/mayor__variant_blue.webp'),
     },
   },
   {
@@ -1757,7 +1606,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/minstrel.webp'),
       red: require('@/assets/images/icons/townsfolk/minstrel__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/minstrel__variant_blue.webp'),
     },
   },
   {
@@ -1766,7 +1614,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/monk.webp'),
       red: require('@/assets/images/icons/townsfolk/monk__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/monk__variant_blue.webp'),
     },
   },
   {
@@ -1775,7 +1622,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/nightwatchman.webp'),
       red: require('@/assets/images/icons/townsfolk/nightwatchman__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/nightwatchman__variant_blue.webp'),
     },
   },
   {
@@ -1784,7 +1630,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/noble.webp'),
       red: require('@/assets/images/icons/townsfolk/noble__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/noble__variant_blue.webp'),
     },
   },
   {
@@ -1793,7 +1638,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/oracle.webp'),
       red: require('@/assets/images/icons/townsfolk/oracle__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/oracle__variant_blue.webp'),
     },
   },
   {
@@ -1802,7 +1646,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/pacifist.webp'),
       red: require('@/assets/images/icons/townsfolk/pacifist__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/pacifist__variant_blue.webp'),
     },
   },
   {
@@ -1811,7 +1654,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/philosopher.webp'),
       red: require('@/assets/images/icons/townsfolk/philosopher__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/philosopher__variant_blue.webp'),
     },
   },
   {
@@ -1820,7 +1662,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/pixie.webp'),
       red: require('@/assets/images/icons/townsfolk/pixie__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/pixie__variant_blue.webp'),
     },
   },
   {
@@ -1829,7 +1670,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/poppygrower.webp'),
       red: require('@/assets/images/icons/townsfolk/poppygrower__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/poppygrower__variant_blue.webp'),
     },
   },
   {
@@ -1838,7 +1678,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/preacher.webp'),
       red: require('@/assets/images/icons/townsfolk/preacher__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/preacher__variant_blue.webp'),
     },
   },
   {
@@ -1847,7 +1686,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/professor.webp'),
       red: require('@/assets/images/icons/townsfolk/professor__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/professor__variant_blue.webp'),
     },
   },
   {
@@ -1856,7 +1694,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/qianke.webp'),
       red: require('@/assets/images/icons/townsfolk/qianke__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/qianke__variant_blue.webp'),
     },
   },
   {
@@ -1865,7 +1702,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/qintianjian.webp'),
       red: require('@/assets/images/icons/townsfolk/qintianjian__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/qintianjian__variant_blue.webp'),
     },
   },
   {
@@ -1874,7 +1710,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/ranfangfangzhu.webp'),
       red: require('@/assets/images/icons/townsfolk/ranfangfangzhu__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/ranfangfangzhu__variant_blue.webp'),
     },
   },
   {
@@ -1883,7 +1718,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/ravenkeeper.webp'),
       red: require('@/assets/images/icons/townsfolk/ravenkeeper__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/ravenkeeper__variant_blue.webp'),
     },
   },
   {
@@ -1892,7 +1726,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/sage.webp'),
       red: require('@/assets/images/icons/townsfolk/sage__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/sage__variant_blue.webp'),
     },
   },
   {
@@ -1901,7 +1734,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/sailor.webp'),
       red: require('@/assets/images/icons/townsfolk/sailor__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/sailor__variant_blue.webp'),
     },
   },
   {
@@ -1910,7 +1742,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/savant.webp'),
       red: require('@/assets/images/icons/townsfolk/savant__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/savant__variant_blue.webp'),
     },
   },
   {
@@ -1919,7 +1750,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/seamstress.webp'),
       red: require('@/assets/images/icons/townsfolk/seamstress__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/seamstress__variant_blue.webp'),
     },
   },
   {
@@ -1928,7 +1758,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/shiguan.webp'),
       red: require('@/assets/images/icons/townsfolk/shiguan__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/shiguan__variant_blue.webp'),
     },
   },
   {
@@ -1937,7 +1766,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/shugenja.webp'),
       red: require('@/assets/images/icons/townsfolk/shugenja__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/shugenja__variant_blue.webp'),
     },
   },
   {
@@ -1946,7 +1774,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/slayer.webp'),
       red: require('@/assets/images/icons/townsfolk/slayer__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/slayer__variant_blue.webp'),
     },
   },
   {
@@ -1955,7 +1782,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/snakecharmer.webp'),
       red: require('@/assets/images/icons/townsfolk/snakecharmer__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/snakecharmer__variant_blue.webp'),
     },
   },
   {
@@ -1964,7 +1790,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/soldier.webp'),
       red: require('@/assets/images/icons/townsfolk/soldier__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/soldier__variant_blue.webp'),
     },
   },
   {
@@ -1973,7 +1798,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/steward.webp'),
       red: require('@/assets/images/icons/townsfolk/steward__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/steward__variant_blue.webp'),
     },
   },
   {
@@ -1982,7 +1806,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/tealady.webp'),
       red: require('@/assets/images/icons/townsfolk/tealady__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/tealady__variant_blue.webp'),
     },
   },
   {
@@ -1991,7 +1814,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/tixingguan.webp'),
       red: require('@/assets/images/icons/townsfolk/tixingguan__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/tixingguan__variant_blue.webp'),
     },
   },
   {
@@ -2000,7 +1822,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/towncrier.webp'),
       red: require('@/assets/images/icons/townsfolk/towncrier__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/towncrier__variant_blue.webp'),
     },
   },
   {
@@ -2009,7 +1830,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/undertaker.webp'),
       red: require('@/assets/images/icons/townsfolk/undertaker__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/undertaker__variant_blue.webp'),
     },
   },
   {
@@ -2018,7 +1838,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/villageidiot.webp'),
       red: require('@/assets/images/icons/townsfolk/villageidiot__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/villageidiot__variant_blue.webp'),
     },
   },
   {
@@ -2027,7 +1846,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/virgin.webp'),
       red: require('@/assets/images/icons/townsfolk/virgin__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/virgin__variant_blue.webp'),
     },
   },
   {
@@ -2036,7 +1854,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/washerwoman.webp'),
       red: require('@/assets/images/icons/townsfolk/washerwoman__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/washerwoman__variant_blue.webp'),
     },
   },
   {
@@ -2045,7 +1862,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/wudaozhe.webp'),
       red: require('@/assets/images/icons/townsfolk/wudaozhe__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/wudaozhe__variant_blue.webp'),
     },
   },
   {
@@ -2054,7 +1870,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/wushiren.webp'),
       red: require('@/assets/images/icons/townsfolk/wushiren__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/wushiren__variant_blue.webp'),
     },
   },
   {
@@ -2063,7 +1878,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/xingjiaoshang.webp'),
       red: require('@/assets/images/icons/townsfolk/xingjiaoshang__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/xingjiaoshang__variant_blue.webp'),
     },
   },
   {
@@ -2072,7 +1886,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/xionghaizi.webp'),
       red: require('@/assets/images/icons/townsfolk/xionghaizi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/xionghaizi__variant_blue.webp'),
     },
   },
   {
@@ -2081,7 +1894,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/xizi.webp'),
       red: require('@/assets/images/icons/townsfolk/xizi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/xizi__variant_blue.webp'),
     },
   },
   {
@@ -2090,7 +1902,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/xuncha.webp'),
       red: require('@/assets/images/icons/townsfolk/xuncha__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/xuncha__variant_blue.webp'),
     },
   },
   {
@@ -2099,7 +1910,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/yanshi.webp'),
       red: require('@/assets/images/icons/townsfolk/yanshi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/yanshi__variant_blue.webp'),
     },
   },
   {
@@ -2108,7 +1918,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/yinluren.webp'),
       red: require('@/assets/images/icons/townsfolk/yinluren__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/yinluren__variant_blue.webp'),
     },
   },
   {
@@ -2117,7 +1926,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/yinyangshi.webp'),
       red: require('@/assets/images/icons/townsfolk/yinyangshi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/yinyangshi__variant_blue.webp'),
     },
   },
   {
@@ -2126,7 +1934,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/yishi.webp'),
       red: require('@/assets/images/icons/townsfolk/yishi__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/yishi__variant_blue.webp'),
     },
   },
   {
@@ -2135,7 +1942,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/yongjiang.webp'),
       red: require('@/assets/images/icons/townsfolk/yongjiang__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/yongjiang__variant_blue.webp'),
     },
   },
   {
@@ -2144,7 +1950,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/zhen.webp'),
       red: require('@/assets/images/icons/townsfolk/zhen__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/zhen__variant_blue.webp'),
     },
   },
   {
@@ -2153,7 +1958,6 @@ const CHARACTERS: CharacterData[] = [
     icon: {
       default: require('@/assets/images/icons/townsfolk/zhifu.webp'),
       red: require('@/assets/images/icons/townsfolk/zhifu__variant_red.webp'),
-      blue: require('@/assets/images/icons/townsfolk/zhifu__variant_blue.webp'),
     },
   },
   {
