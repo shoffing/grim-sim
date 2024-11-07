@@ -1,9 +1,11 @@
+import Character from '@/app/character';
+import Token from '@/app/token';
+import CharacterId from '@/constants/characters/character_id';
+import { getCharacterById } from '@/constants/characters/characters';
+import _ from 'lodash';
+import { useState } from 'react';
 import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
-import Token from '@/app/token';
-import { useState } from 'react';
-import Character from '@/app/character';
-import { CharacterId, getCharacterById } from '@/app/data/character_data';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -25,17 +27,18 @@ const Grim = ({ theme }: GrimProps) => {
     },
   });
 
+  const chars = _.sampleSize(CharacterId, 10);
+  const rendered = chars.map((id: CharacterId) => {
+    return (
+      <Token key={id} position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}>
+        <Character character={getCharacterById(id)}></Character>
+      </Token>
+    );
+  });
+
   return (
     <Surface mode="elevated" style={styles.container} onLayout={onLayout}>
-      <Token position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}>
-        <Character character={getCharacterById(CharacterId.Imp)}></Character>
-      </Token>
-      <Token position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}>
-        <Character character={getCharacterById(CharacterId.Mayor)}></Character>
-      </Token>
-      <Token position={new Animated.ValueXY({ x: 0, y: 0 })} containerLayout={layout}>
-        <Character character={getCharacterById(CharacterId.Gangster)}></Character>
-      </Token>
+      {rendered}
     </Surface>
   );
 };

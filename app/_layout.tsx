@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 import { PaperProvider, adaptNavigationTheme, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants/colors';
 import {
   DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme,

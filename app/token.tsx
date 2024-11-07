@@ -1,5 +1,9 @@
-import { Text, Animated, Dimensions, LayoutChangeEvent, LayoutRectangle, PanResponder, StyleSheet } from 'react-native';
 import { PropsWithChildren, useRef, useState } from 'react';
+import { Animated, Dimensions, LayoutChangeEvent, LayoutRectangle, PanResponder, StyleSheet } from 'react-native';
+import { PanResponderGestureState } from 'react-native/Libraries/Interaction/PanResponder';
+import { GestureResponderEvent } from 'react-native/Libraries/Types/CoreEventTypes';
+
+const DRAG_THRESHOLD = 20;
 
 interface TokenProps {
   position?: Animated.ValueXY;
@@ -10,7 +14,9 @@ const Token = ({ position, containerLayout, children }: PropsWithChildren<TokenP
   const pan = useRef(position ?? new Animated.ValueXY()).current;
   const panResponder = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (e: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+        return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > DRAG_THRESHOLD;
+      },
       onPanResponderGrant: () => {
         pan.extractOffset();
       },
@@ -49,8 +55,6 @@ const Token = ({ position, containerLayout, children }: PropsWithChildren<TokenP
 const baseStyles = StyleSheet.create({
   container: {
     position: 'absolute',
-    height: 'auto',
-    width: 'auto',
     borderRadius: 9999,
     backgroundColor: 'white',
   },

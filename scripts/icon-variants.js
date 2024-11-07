@@ -22,6 +22,7 @@ const TYPES = [
   {id: 'outsider', tint: 'red'},
   {id: 'townsfolk', tint: 'red'},
   {id: 'traveller', tint: 'both'},
+  {id: 'fabled', tint: 'none'},
 ];
 
 const characters = TYPES.flatMap(type => {
@@ -32,14 +33,16 @@ const characters = TYPES.flatMap(type => {
 (async () => {
   await Promise.all(characters.map(([type, character]) => {
     return (async () => {
-      if (!character.includes('__variant')) {
+      if (!character.includes('__')) {
         console.log(character, '...');
         const extName = path.extname(character);
         const baseName = path.basename(character, extName);
-        const gray = path.join(path.dirname(character), `${baseName}__variant_gray${extName}`);
-        const red = path.join(path.dirname(character), `${baseName}__variant_red${extName}`);
-        const blue = path.join(path.dirname(character), `${baseName}__variant_blue${extName}`);
-        await exec(`convert ${character} -colorspace Gray ${gray}`);
+        const trim = path.join(path.dirname(character), `${baseName}__trim${extName}`);
+        const gray = path.join(path.dirname(character), `${baseName}__trim__gray${extName}`);
+        const red = path.join(path.dirname(character), `${baseName}__trim__variant_red${extName}`);
+        const blue = path.join(path.dirname(character), `${baseName}__trim__variant_blue${extName}`);
+        await exec(`convert ${character} -trim ${trim}`);
+        await exec(`convert ${trim} -colorspace Gray ${gray}`);
         if (type.tint === 'red') {
           await exec(`convert ${gray} -fill '#CC0000' -tint 100 -level 25%,100%  ${red}`);
         }

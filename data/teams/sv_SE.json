@@ -1,0 +1,26 @@
+[
+    {
+        "id": "townsfolk",
+        "name": "Bybor"
+    },
+    {
+        "id": "outsider",
+        "name": "Utbölingar"
+    },
+    {
+        "id": "minion",
+        "name": "Hantlangare"
+    },
+    {
+        "id": "demon",
+        "name": "Demoner"
+    },
+    {
+        "id": "traveller",
+        "name": "Resenärer"
+    },
+    {
+        "id": "fabled",
+        "name": "Fabler"
+    }
+]
