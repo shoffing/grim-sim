@@ -1,3 +1,5 @@
+import Character from '@/app/components/character';
+
 enum CharacterType {
   Demon = 'demon',
   Minion = 'minion',

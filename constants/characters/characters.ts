@@ -1,5 +1,6 @@
 import CharacterData from '@/constants/characters/character_data';
 import CharacterId from '@/constants/characters/character_id';
+import CharacterType from '@/constants/characters/character_type';
 
 const CHARACTERS: CharacterData[] = [
   new CharacterData(CharacterId.Alhadikhia, {
@@ -937,5 +938,9 @@ const CHARACTERS: CharacterData[] = [
 ];
 
 export const getCharacterById = (id: CharacterId) => {
-  return CHARACTERS.find(character => character.id === id);
+  return CHARACTERS.find(character => character.id === id)!;
+};
+
+export const getCharactersByType = (type: CharacterType) => {
+  return CHARACTERS.filter(character => character.type === type);
 };

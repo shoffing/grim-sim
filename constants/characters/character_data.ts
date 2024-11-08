@@ -34,7 +34,7 @@ class CharacterData {
     if (characterData == null) {
       throw new Error(`Character import failed, "${id}" was not found.`);
     }
-    this.type = CharacterType[characterData.type as keyof typeof CharacterType];
+    this.type = characterData.type as CharacterType;
     this.name = characterData.name;
     this.ability = characterData.ability;
     this.reminders = characterData.reminders;

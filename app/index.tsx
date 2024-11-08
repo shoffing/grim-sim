@@ -1,7 +1,7 @@
 import { Surface, Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Grim from '@/app/grim';
+import Grim from '@/app/screens/grim';
 
 const Index = () => {
   return (

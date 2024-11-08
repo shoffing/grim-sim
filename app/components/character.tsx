@@ -1,21 +1,17 @@
+import TokenSelect from '@/app/screens/token_select';
 import CharacterData from '@/constants/characters/character_data';
+import CharacterType from '@/constants/characters/character_type';
+import { getCharactersByType } from '@/constants/characters/characters';
 import Team from '@/constants/team';
-import { useState } from 'react';
-import {
-  GestureResponderEvent,
-  Image,
-  ImageURISource,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Fragment, useState } from 'react';
+import { Image, ImageURISource, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 
 interface CharacterProps {
   character?: CharacterData;
+  onPress?: () => void;
 }
 
-const Character = ({ character }: CharacterProps) => {
+const Character = ({ character, onPress }: CharacterProps) => {
   if (character == null) return null;
 
   const [team, setTeam] = useState(character.team);
@@ -31,24 +27,15 @@ const Character = ({ character }: CharacterProps) => {
     return character.icon.default;
   };
 
-  const handlePress = (event: GestureResponderEvent) => {
-    // Switch team logic (move to <Player> eventually).
-    if (team === Team.Good) {
-      setTeam(Team.Evil);
-    } else if (team === Team.Evil) {
-      setTeam(Team.Good);
-    } else {
-      setTeam(Team.Good);
-    }
-  };
-
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
-      <View style={baseStyles.container}>
-        <Image source={getIcon()} style={baseStyles.icon}></Image>
-        <Text>{character.name}</Text>
-      </View>
-    </TouchableWithoutFeedback>
+    <Fragment>
+      <TouchableWithoutFeedback onPress={onPress}>
+        <View style={baseStyles.container}>
+          <Image source={getIcon()} style={baseStyles.icon}></Image>
+          <Text>{character.name}</Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </Fragment>
   );
 };
 
