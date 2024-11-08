@@ -1,14 +1,35 @@
 import CharacterIcon from '@/constants/characters/character_icon';
 import CharacterId from '@/constants/characters/character_id';
 import CharacterType from '@/constants/characters/character_type';
+import Edition from '@/constants/editions/edition_id';
 import Team from '@/constants/team';
 
 import data from '@/data/characters.json';
+
+/*
+  {
+    "id": "innkeeper",
+    "name": "Innkeeper",
+    "edition": "bmr",
+    "type": "townsfolk",
+    "firstNight": 0,
+    "firstNightReminder": "",
+    "otherNight": 9,
+    "otherNightReminder": "The previously protected and drunk players lose those markers. The Innkeeper points to two players. Those players are protected. One is drunk.",
+    "reminders": [
+      "Protected",
+      "Drunk"
+    ],
+    "setup": false,
+    "ability": "Each night*, choose 2 players: they can't die tonight, but 1 is drunk until dusk."
+  },
+ */
 
 class CharacterData {
   id: CharacterId;
   icon: CharacterIcon;
   type: CharacterType;
+  edition: string;
   name: string;
   ability: string;
   reminders: string[] = [];
@@ -38,6 +59,7 @@ class CharacterData {
     this.name = characterData.name;
     this.ability = characterData.ability;
     this.reminders = characterData.reminders;
+    this.edition = characterData.edition;
   }
 }
 

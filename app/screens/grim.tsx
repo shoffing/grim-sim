@@ -4,7 +4,7 @@ import CharacterSelect from '@/app/screens/character_select';
 import Character_data from '@/constants/characters/character_data';
 import CharacterData from '@/constants/characters/character_data';
 import CharacterId from '@/constants/characters/character_id';
-import { getCharacterById } from '@/constants/characters/characters';
+import { CHARACTERS, getCharacterById } from '@/constants/characters/characters';
 import { Fragment, useState } from 'react';
 import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
@@ -60,25 +60,24 @@ const Grim = ({ theme }: GrimProps) => {
 
   const currentCharacters = characters.map((character, idx) => {
     return (
-      <Fragment key={character.data.id}>
-        <Token position={character.position} containerLayout={layout} onMove={pos => setCharacterPosition(idx, pos)}>
-          <Character character={getCharacterById(character.data.id)}
-                     onPress={() => showCharacterSelect(idx)}></Character>
-        </Token>
-      </Fragment>
+      <Token key={character.data.id} position={character.position} containerLayout={layout} onMove={pos => setCharacterPosition(idx, pos)}>
+        <Character character={getCharacterById(character.data.id)}
+                   onPress={() => showCharacterSelect(idx)}></Character>
+      </Token>
     );
   });
 
   return (
-    <Fragment>
-      <CharacterSelect visible={characterSelectVisible()}
+    <>
+      <CharacterSelect characters={CHARACTERS}
+                       visible={characterSelectVisible()}
                        onDismiss={hideCharacterSelect}
                        onSelect={onCharacterSelect}>
       </CharacterSelect>
       <Surface mode="elevated" style={styles.container} onLayout={onLayout}>
         {currentCharacters}
       </Surface>
-    </Fragment>
+    </>
   );
 };
 

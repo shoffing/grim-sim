@@ -2,7 +2,7 @@ import CharacterData from '@/constants/characters/character_data';
 import CharacterId from '@/constants/characters/character_id';
 import CharacterType from '@/constants/characters/character_type';
 
-const CHARACTERS: CharacterData[] = [
+export const CHARACTERS: CharacterData[] = [
   new CharacterData(CharacterId.Alhadikhia, {
     default: require(`@/assets/images/icons/demon/alhadikhia__trim.webp`),
     blue: require('@/assets/images/icons/demon/alhadikhia__trim__variant_blue.webp'),
@@ -937,10 +937,6 @@ const CHARACTERS: CharacterData[] = [
   }),
 ];
 
-export const getCharacterById = (id: CharacterId) => {
-  return CHARACTERS.find(character => character.id === id)!;
-};
-
-export const getCharactersByType = (type: CharacterType) => {
-  return CHARACTERS.filter(character => character.type === type);
-};
+export const getCharacterById = (id: CharacterId) => CHARACTERS.find(character => character.id === id)!;
+export const getCharactersByType = (type: CharacterType) => CHARACTERS.filter(character => character.type === type);
+export const getCharactersByEdition = (edition: string) => CHARACTERS.filter(character => character.edition === edition);

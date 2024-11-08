@@ -1,17 +1,24 @@
-import TokenSelect from '@/app/screens/token_select';
 import CharacterData from '@/constants/characters/character_data';
-import CharacterType from '@/constants/characters/character_type';
-import { getCharactersByType } from '@/constants/characters/characters';
 import Team from '@/constants/team';
 import { Fragment, useState } from 'react';
-import { Image, ImageURISource, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Image,
+  ImageURISource,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 
 interface CharacterProps {
   character?: CharacterData;
   onPress?: () => void;
+  nameStyle?: StyleProp<TextStyle>;
 }
 
-const Character = ({ character, onPress }: CharacterProps) => {
+const Character = ({ character, onPress, nameStyle }: CharacterProps) => {
   if (character == null) return null;
 
   const [team, setTeam] = useState(character.team);
@@ -32,7 +39,7 @@ const Character = ({ character, onPress }: CharacterProps) => {
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={baseStyles.container}>
           <Image source={getIcon()} style={baseStyles.icon}></Image>
-          <Text>{character.name}</Text>
+          <Text style={nameStyle}>{character.name}</Text>
         </View>
       </TouchableWithoutFeedback>
     </Fragment>
