@@ -8,9 +8,10 @@ const DRAG_THRESHOLD = 20;
 interface TokenProps {
   position?: Animated.ValueXY;
   containerLayout?: LayoutRectangle;
+  onMove?: (position: Animated.ValueXY) => void;
 }
 
-const Token = ({ position, containerLayout, children }: PropsWithChildren<TokenProps>) => {
+const Token = ({ position, containerLayout, onMove, children }: PropsWithChildren<TokenProps>) => {
   const pan = useRef(position ?? new Animated.ValueXY()).current;
   const panResponder = useRef(
     PanResponder.create({
@@ -26,6 +27,7 @@ const Token = ({ position, containerLayout, children }: PropsWithChildren<TokenP
       ),
       onPanResponderRelease: () => {
         pan.extractOffset();
+        onMove?.(pan);
       },
     }),
   ).current;
