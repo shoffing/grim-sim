@@ -1,18 +1,17 @@
 import Character from '@/app/components/character';
-import CharacterId from '@/constants/characters/character_id';
-import CharacterType from '@/constants/characters/character_type';
 import CharacterData from '@/constants/characters/character_data';
+import CharacterType from '@/constants/characters/character_type';
 import { getCharactersByEdition } from '@/constants/characters/characters';
 
 import editions from '@/data/editions.json';
+
+import game from '@/data/game.json';
 import Slider from '@react-native-community/slider';
 import _ from 'lodash';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Card, MD3Theme, Portal, RadioButton, Surface, Text, withTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import game from '@/data/game.json';
 
 interface GameSetupProps {
   theme: MD3Theme,

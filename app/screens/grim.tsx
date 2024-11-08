@@ -1,11 +1,10 @@
 import Character from '@/app/components/character';
 import Token from '@/app/components/token';
 import CharacterSelect from '@/app/screens/character_select';
-import Character_data from '@/constants/characters/character_data';
 import CharacterData from '@/constants/characters/character_data';
 import CharacterId from '@/constants/characters/character_id';
 import { CHARACTERS, getCharacterById } from '@/constants/characters/characters';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 import ValueXY = Animated.ValueXY;
@@ -15,7 +14,7 @@ interface GrimProps {
 }
 
 interface PositionedCharacterData {
-  data: Character_data;
+  data: CharacterData;
   position: ValueXY;
 }
 
