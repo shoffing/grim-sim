@@ -1,19 +1,41 @@
 import { PropsWithChildren } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { Modal, Portal, Surface } from 'react-native-paper';
+import { MD3Theme, Modal, Portal, Surface, withTheme } from 'react-native-paper';
 
 interface TokenSelectProps {
   visible: boolean;
   onDismiss: () => void;
+  theme: MD3Theme;
 }
 
-function TokenSelect({ visible, onDismiss, children }: PropsWithChildren<TokenSelectProps>) {
+function TokenSelect({ visible, onDismiss, theme, children }: PropsWithChildren<TokenSelectProps>) {
+  const style = StyleSheet.create({
+    modalContainer: {
+      alignItems: 'center',
+      flexDirection: 'column',
+      justifyContent: 'center',
+    },
+    modalContent: {
+      backgroundColor: theme.colors.surface,
+      flexBasis: 'auto',
+      flexDirection: 'row',
+      maxHeight: '80%',
+      maxWidth: '80%',
+    },
+    modalScroll: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+  });
+
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onDismiss} style={baseStyles.modalContainer}
-             contentContainerStyle={baseStyles.modalContent}>
+      <Modal visible={visible}
+             onDismiss={onDismiss}
+             style={style.modalContainer}
+             contentContainerStyle={style.modalContent}>
         <ScrollView>
-          <Surface style={baseStyles.modalScroll}>
+          <Surface style={style.modalScroll}>
             {children}
           </Surface>
         </ScrollView>
@@ -22,22 +44,4 @@ function TokenSelect({ visible, onDismiss, children }: PropsWithChildren<TokenSe
   );
 }
 
-const baseStyles = StyleSheet.create({
-  modalContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalContent: {
-    maxWidth: '80%',
-    maxHeight: '80%',
-    minHeight: 200,
-    backgroundColor: 'green',
-  },
-  modalScroll: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: 'white',
-  },
-});
-
-export default TokenSelect;
+export default withTheme(TokenSelect);

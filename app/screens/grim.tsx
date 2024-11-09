@@ -4,7 +4,7 @@ import { selectGameState } from '@/app/game-slice';
 import { useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
 import CharacterData from '@/constants/characters/character-data';
-import { CHARACTERS, getCharacterById } from '@/constants/characters/characters';
+import { CHARACTERS, getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
 import { useState } from 'react';
 import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
@@ -30,7 +30,7 @@ function Grim({ theme }: GrimProps) {
     },
   });
 
-  const { characters: characterIds } = useAppSelector(state => selectGameState(state.game));
+  const { characters: characterIds, edition } = useAppSelector(state => selectGameState(state.game));
   const gameCharacters = characterIds.map(getCharacterById);
 
   /** Current characters on the grimoire "board". */
@@ -72,7 +72,7 @@ function Grim({ theme }: GrimProps) {
 
   return (
     <>
-      <CharacterSelect characters={CHARACTERS}
+      <CharacterSelect characters={getCharactersByEdition(edition)}
                        visible={characterSelectVisible()}
                        onDismiss={hideCharacterSelect}
                        onSelect={onCharacterSelect}>

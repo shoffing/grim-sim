@@ -10,7 +10,7 @@ interface GameState {
 const initialState: GameState = {
   edition: 'tb',
   playerCount: 8,
-  characters: [],
+  characters: [CharacterId.Imp],
 };
 
 export const gameSlice = createSlice({
