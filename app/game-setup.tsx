@@ -12,8 +12,8 @@ import Slider from '@react-native-community/slider';
 import { useRouter } from 'expo-router';
 import _ from 'lodash';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Card, MD3Theme, RadioButton, Surface, Text, withTheme } from 'react-native-paper';
+import { ScrollView, StyleSheet, View, ViewStyle } from 'react-native';
+import { Button, Card, MD3Theme, RadioButton, Surface, Text, TouchableRipple, withTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface GameSetupProps {
@@ -38,6 +38,7 @@ function GameSetup({ theme }: GameSetupProps) {
     charactersContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',
+      gap: 8,
     },
   });
 
@@ -76,12 +77,13 @@ function GameSetup({ theme }: GameSetupProps) {
         </Text>
         <View style={style.sliderContainer}>
           <Text variant="labelLarge">{playerCount}</Text>
-          <Slider style={style.slider}
-                  value={playerCount}
-                  onValueChange={setPlayerCount}
-                  step={1}
-                  minimumValue={5}
-                  maximumValue={20}/>
+          <Slider
+            style={style.slider}
+            value={playerCount}
+            onValueChange={setPlayerCount}
+            step={1}
+            minimumValue={5}
+            maximumValue={20}/>
         </View>
       </Card.Content>
     </Card>
@@ -105,17 +107,39 @@ function GameSetup({ theme }: GameSetupProps) {
   };
   const renderCharacter = (character: CharacterData) => {
     const selected = selectedCharacters.includes(character);
-    const style = StyleSheet.create({
-      backgroundColor: selected ? theme.colors.secondaryContainer : theme.colors.surface,
+    const characterStyle = StyleSheet.create({
+      touchable: {
+        backgroundColor: selected ? theme.colors.secondaryContainer : theme.colors.surface,
+        borderRadius: 16,
+      },
+      container: {
+        alignItems: 'center',
+        borderRadius: 16,
+        flexDirection: 'column',
+        gap: 8,
+        justifyContent: 'center',
+        padding: 16,
+        width: 220,
+      },
+      font: {
+        color: selected ? theme.colors.onSecondaryContainer : theme.colors.onSurface,
+      },
     });
-    const nameColor = selected ? theme.colors.onSecondaryContainer : theme.colors.onSurface;
     return (
-      <View style={style} key={character.id}>
-        <Character character={character}
-                   onPress={() => onPressCharacter(character)}
-                   nameStyle={{ color: nameColor }}>
-        </Character>
-      </View>
+      <TouchableRipple
+        onPress={() => onPressCharacter(character)}
+        key={character.id}
+        style={characterStyle.touchable}
+        rippleColor={theme.colors.secondary}
+        borderless={true}>
+        <View style={characterStyle.container}>
+          <Character
+            character={character}
+            nameStyle={characterStyle.font}>
+          </Character>
+          <Text variant="labelSmall">{character.ability}</Text>
+        </View>
+      </TouchableRipple>
     );
   };
   const charactersForm = (

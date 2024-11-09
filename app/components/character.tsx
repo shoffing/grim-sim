@@ -1,29 +1,20 @@
 import CharacterData from '@/constants/characters/character-data';
 import Team from '@/constants/team';
-import { Fragment, useState } from 'react';
-import {
-  Image,
-  ImageURISource,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextStyle,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { useState } from 'react';
+import { Image, ImageURISource, StyleProp, StyleSheet, TextStyle, View } from 'react-native';
+import { Text } from 'react-native-paper';
 
 interface CharacterProps {
   character?: CharacterData;
-  onPress?: () => void;
+  team?: Team;
   nameStyle?: StyleProp<TextStyle>;
 }
 
-function Character({ character, onPress, nameStyle }: CharacterProps) {
-  const [team] = useState(character?.team);
-
+function Character({ character, nameStyle, team }: CharacterProps) {
   if (character == null) return null;
 
   const getIcon = (): ImageURISource => {
+    console.log(team);
     if (team !== character.team) {
       if (team === Team.Good && character.icon.blue) {
         return character.icon.blue;
@@ -35,30 +26,34 @@ function Character({ character, onPress, nameStyle }: CharacterProps) {
   };
 
   return (
-    <Fragment>
-      <TouchableWithoutFeedback onPress={onPress}>
-        <View style={baseStyles.container}>
-          <Image source={getIcon()} style={baseStyles.icon}></Image>
-          <Text style={nameStyle}>{character.name}</Text>
-        </View>
-      </TouchableWithoutFeedback>
-    </Fragment>
+    <View style={baseStyles.container}>
+      <View style={baseStyles.iconContainer}>
+        <Image source={getIcon()} style={baseStyles.icon}></Image>
+      </View>
+      <Text variant="labelLarge" style={StyleSheet.compose(baseStyles.name, nameStyle)}>{character.name}</Text>
+    </View>
   );
 }
 
 const baseStyles = StyleSheet.create({
   container: {
-    aspectRatio: 1,
     alignItems: 'center',
-    width: 128,
-    height: 128,
-    display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
+    flexDirection: 'column',
+    width: '100%',
+  },
+  iconContainer: {
+    width: '100%',
+    aspectRatio: 1,
+    flexShrink: 1,
   },
   icon: {
-    maxWidth: '75%',
-    maxHeight: '60%',
-    resizeMode: 'center',
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+  name: {
+    flexGrow: 1,
   }
 });
 
