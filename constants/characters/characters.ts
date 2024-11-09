@@ -1,6 +1,6 @@
-import CharacterData from '@/constants/characters/character_data';
-import CharacterId from '@/constants/characters/character_id';
-import CharacterType from '@/constants/characters/character_type';
+import CharacterData from '@/constants/characters/character-data';
+import CharacterId from '@/constants/characters/character-id';
+import CharacterType from '@/constants/characters/character-type';
 
 export const CHARACTERS: CharacterData[] = [
   new CharacterData(CharacterId.Alhadikhia, {

@@ -1,4 +1,4 @@
-import CharacterData from '@/constants/characters/character_data';
+import CharacterData from '@/constants/characters/character-data';
 import Team from '@/constants/team';
 import { Fragment, useState } from 'react';
 import {
@@ -19,9 +19,9 @@ interface CharacterProps {
 }
 
 function Character({ character, onPress, nameStyle }: CharacterProps) {
-  if (character == null) return null;
+  const [team] = useState(character?.team);
 
-  const [team, setTeam] = useState(character.team);
+  if (character == null) return null;
 
   const getIcon = (): ImageURISource => {
     if (team !== character.team) {

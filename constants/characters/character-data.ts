@@ -1,6 +1,6 @@
-import CharacterIcon from '@/constants/characters/character_icon';
-import CharacterId from '@/constants/characters/character_id';
-import CharacterType from '@/constants/characters/character_type';
+import CharacterIcon from '@/constants/characters/character-icon';
+import CharacterId from '@/constants/characters/character-id';
+import CharacterType from '@/constants/characters/character-type';
 import Team from '@/constants/team';
 
 import data from '@/data/characters.json';

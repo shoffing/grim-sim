@@ -1,4 +1,4 @@
-import CharacterId from '@/constants/characters/character_id';
+import CharacterId from '@/constants/characters/character-id';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface GameState {

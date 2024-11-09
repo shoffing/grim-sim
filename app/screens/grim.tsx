@@ -1,9 +1,9 @@
 import Character from '@/app/components/character';
 import Token from '@/app/components/token';
-import { selectGameState } from '@/app/game_slice';
+import { selectGameState } from '@/app/game-slice';
 import { useAppSelector } from '@/app/hooks';
-import CharacterSelect from '@/app/screens/character_select';
-import CharacterData from '@/constants/characters/character_data';
+import CharacterSelect from '@/app/screens/character-select';
+import CharacterData from '@/constants/characters/character-data';
 import { CHARACTERS, getCharacterById } from '@/constants/characters/characters';
 import { useState } from 'react';
 import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';

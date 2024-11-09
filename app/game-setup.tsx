@@ -1,9 +1,8 @@
 import Character from '@/app/components/character';
-import { selectGameState } from '@/app/game_slice';
-import * as gameSlice from '@/app/game_slice';
+import { selectGameState } from '@/app/game-slice';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import CharacterData from '@/constants/characters/character_data';
-import CharacterType from '@/constants/characters/character_type';
+import CharacterData from '@/constants/characters/character-data';
+import CharacterType from '@/constants/characters/character-type';
 import { getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
 
 import editions from '@/data/editions.json';
@@ -14,7 +13,7 @@ import { useRouter } from 'expo-router';
 import _ from 'lodash';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Card, MD3Theme, Portal, RadioButton, Surface, Text, withTheme } from 'react-native-paper';
+import { Button, Card, MD3Theme, RadioButton, Surface, Text, withTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface GameSetupProps {

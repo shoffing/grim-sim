@@ -1,6 +1,6 @@
 import Character from '@/app/components/character';
-import TokenSelect from '@/app/screens/token_select';
-import CharacterData from '@/constants/characters/character_data';
+import TokenSelect from '@/app/screens/token-select';
+import CharacterData from '@/constants/characters/character-data';
 import { getCharacterById } from '@/constants/characters/characters';
 import { View } from 'react-native';
 

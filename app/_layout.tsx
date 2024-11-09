@@ -35,7 +35,7 @@ function RootLayout() {
           <ThemeProvider value={paperTheme}>
             <Stack>
               <Stack.Screen name="index" options={{ headerShown: false }}/>
-              <Stack.Screen name="game_setup" options={{ headerShown: false }}/>
+              <Stack.Screen name="game-setup" options={{ headerShown: false }}/>
             </Stack>
           </ThemeProvider>
         </PaperProvider>
