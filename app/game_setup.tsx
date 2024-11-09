@@ -1,16 +1,20 @@
 import Character from '@/app/components/character';
+import { selectGameState } from '@/app/game_slice';
+import * as gameSlice from '@/app/game_slice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterData from '@/constants/characters/character_data';
 import CharacterType from '@/constants/characters/character_type';
-import { getCharactersByEdition } from '@/constants/characters/characters';
+import { getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
 
 import editions from '@/data/editions.json';
 
 import game from '@/data/game.json';
 import Slider from '@react-native-community/slider';
+import { useRouter } from 'expo-router';
 import _ from 'lodash';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Card, MD3Theme, Portal, RadioButton, Surface, Text, withTheme } from 'react-native-paper';
+import { Button, Card, MD3Theme, Portal, RadioButton, Surface, Text, withTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface GameSetupProps {
@@ -38,9 +42,14 @@ const GameSetup = ({ theme }: GameSetupProps) => {
     },
   });
 
-  const [edition, setEdition] = useState('tb');
-  const [playerCount, setPlayerCount] = useState(8);
-  const [selectedCharacters, setSelectedCharacters] = useState<CharacterData[]>([]);
+  const router = useRouter();
+
+  const dispatch = useAppDispatch();
+
+  const gameState = useAppSelector(({ game }) => selectGameState(game));
+  const [edition, setEdition] = useState(gameState.edition);
+  const [playerCount, setPlayerCount] = useState(gameState.playerCount);
+  const [selectedCharacters, setSelectedCharacters] = useState(gameState.characters.map(getCharacterById));
 
   const typeCountTargets = game[_.clamp(playerCount - 5, 0, game.length - 1)];
 
@@ -105,7 +114,7 @@ const GameSetup = ({ theme }: GameSetupProps) => {
       <View style={style} key={character.id}>
         <Character character={character}
                    onPress={() => onPressCharacter(character)}
-                   nameStyle={{color: nameColor}}>
+                   nameStyle={{ color: nameColor }}>
         </Character>
       </View>
     );
@@ -137,19 +146,27 @@ const GameSetup = ({ theme }: GameSetupProps) => {
     </Card>
   );
 
+  const onStartGame = () => {
+    dispatch(gameSlice.setEdition(edition));
+    dispatch(gameSlice.setPlayerCount(playerCount));
+    dispatch(gameSlice.setCharacters(selectedCharacters.map(c => c.id)));
+    router.push('/');
+  };
+
   return (
-    <Portal>
-      <SafeAreaView>
-        <ScrollView>
-          <Surface style={style.container}>
-            <Text variant="headlineLarge">Game Setup</Text>
-            {editionForm}
-            {playersForm}
-            {charactersForm}
-          </Surface>
-        </ScrollView>
-      </SafeAreaView>
-    </Portal>
+    <SafeAreaView>
+      <ScrollView>
+        <Surface style={style.container}>
+          <Text variant="headlineLarge">Game Setup</Text>
+          {editionForm}
+          {playersForm}
+          {charactersForm}
+          <Button mode="contained" icon="play" onPress={onStartGame}>
+            Start Game
+          </Button>
+        </Surface>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

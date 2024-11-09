@@ -1,13 +1,16 @@
-import { Stack } from 'expo-router';
-import { PaperProvider, adaptNavigationTheme, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
+import { store } from '@/app/store';
 import { Colors } from '@/constants/colors';
 import {
-  DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native';
 import merge from 'deepmerge';
+import { Stack } from 'expo-router';
+import { StrictMode } from 'react';
 import { useColorScheme } from 'react-native';
+import { adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { Provider as ReduxProvider } from 'react-redux';
 
 const customLightTheme = { ...MD3LightTheme, colors: Colors.light };
 const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
@@ -26,14 +29,18 @@ function RootLayout() {
   const paperTheme = colorScheme === 'dark' ? CombinedDarkTheme : CombinedLightTheme;
 
   return (
-    <PaperProvider theme={paperTheme}>
-      <ThemeProvider value={paperTheme}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }}/>
-          <Stack.Screen name="game_setup" options={{ headerShown: false }}/>
-        </Stack>
-      </ThemeProvider>
-    </PaperProvider>
+    <StrictMode>
+      <ReduxProvider store={store}>
+        <PaperProvider theme={paperTheme}>
+          <ThemeProvider value={paperTheme}>
+            <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }}/>
+              <Stack.Screen name="game_setup" options={{ headerShown: false }}/>
+            </Stack>
+          </ThemeProvider>
+        </PaperProvider>
+      </ReduxProvider>
+    </StrictMode>
   );
 }
 
