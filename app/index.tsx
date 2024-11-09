@@ -12,7 +12,7 @@ const Index = () => {
       <Surface mode="flat" style={styles.container}>
         <Text variant="displayLarge" style={styles.header}>Grim Sim</Text>
         <Text variant="headlineSmall" style={styles.header}>A grimoire simulator for Blood on the Clocktower.</Text>
-        <Button icon="cog" mode="contained" onPress={() => router.push('/game_setup')}>Game Setup</Button>
+        <Button icon="cog" mode="contained" onPress={() => router.push('/game-setup')}>Game Setup</Button>
         <Grim/>
       </Surface>
     </SafeAreaView>

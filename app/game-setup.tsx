@@ -1,5 +1,5 @@
 import Character from '@/app/components/character';
-import { selectGameState } from '@/app/game-slice';
+import * as slice from '@/app/game-slice';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterData from '@/constants/characters/character-data';
 import CharacterType from '@/constants/characters/character-type';
@@ -45,7 +45,7 @@ function GameSetup({ theme }: GameSetupProps) {
 
   const dispatch = useAppDispatch();
 
-  const gameState = useAppSelector(({ game }) => selectGameState(game));
+  const gameState = useAppSelector(({ game }) => slice.selectGameState(game));
   const [edition, setEdition] = useState(gameState.edition);
   const [playerCount, setPlayerCount] = useState(gameState.playerCount);
   const [selectedCharacters, setSelectedCharacters] = useState(gameState.characters.map(getCharacterById));
@@ -146,9 +146,9 @@ function GameSetup({ theme }: GameSetupProps) {
   );
 
   const onStartGame = () => {
-    dispatch(gameSlice.setEdition(edition));
-    dispatch(gameSlice.setPlayerCount(playerCount));
-    dispatch(gameSlice.setCharacters(selectedCharacters.map(c => c.id)));
+    dispatch(slice.setEdition(edition));
+    dispatch(slice.setPlayerCount(playerCount));
+    dispatch(slice.setCharacters(selectedCharacters.map(c => c.id)));
     router.push('/');
   };
 
