@@ -21,7 +21,7 @@ interface GameSetupProps {
   theme: MD3Theme,
 }
 
-const GameSetup = ({ theme }: GameSetupProps) => {
+function GameSetup({ theme }: GameSetupProps) {
   const style = StyleSheet.create({
     container: {
       padding: 8,
@@ -168,6 +168,6 @@ const GameSetup = ({ theme }: GameSetupProps) => {
       </ScrollView>
     </SafeAreaView>
   );
-};
+}
 
 export default withTheme(GameSetup);

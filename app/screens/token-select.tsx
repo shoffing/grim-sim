@@ -7,7 +7,7 @@ interface TokenSelectProps {
   onDismiss: () => void;
 }
 
-const TokenSelect = ({ visible, onDismiss, children }: PropsWithChildren<TokenSelectProps>) => {
+function TokenSelect({ visible, onDismiss, children }: PropsWithChildren<TokenSelectProps>) {
   return (
     <Portal>
       <Modal visible={visible} onDismiss={onDismiss} style={baseStyles.modalContainer}
@@ -20,7 +20,7 @@ const TokenSelect = ({ visible, onDismiss, children }: PropsWithChildren<TokenSe
       </Modal>
     </Portal>
   );
-};
+}
 
 const baseStyles = StyleSheet.create({
   modalContainer: {

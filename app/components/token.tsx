@@ -11,7 +11,7 @@ interface TokenProps {
   onMove?: (position: Animated.ValueXY) => void;
 }
 
-const Token = ({ position, containerLayout, onMove, children }: PropsWithChildren<TokenProps>) => {
+function Token({ position, containerLayout, onMove, children }: PropsWithChildren<TokenProps>) {
   const pan = useRef(position ?? new Animated.ValueXY()).current;
   const panResponder = useRef(
     PanResponder.create({
@@ -52,7 +52,7 @@ const Token = ({ position, containerLayout, onMove, children }: PropsWithChildre
       {children}
     </Animated.View>
   );
-};
+}
 
 const baseStyles = StyleSheet.create({
   container: {

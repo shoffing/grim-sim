@@ -18,7 +18,7 @@ interface CharacterProps {
   nameStyle?: StyleProp<TextStyle>;
 }
 
-const Character = ({ character, onPress, nameStyle }: CharacterProps) => {
+function Character({ character, onPress, nameStyle }: CharacterProps) {
   if (character == null) return null;
 
   const [team, setTeam] = useState(character.team);
@@ -44,7 +44,7 @@ const Character = ({ character, onPress, nameStyle }: CharacterProps) => {
       </TouchableWithoutFeedback>
     </Fragment>
   );
-};
+}
 
 const baseStyles = StyleSheet.create({
   container: {

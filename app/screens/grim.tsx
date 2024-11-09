@@ -19,7 +19,7 @@ interface PositionedCharacterData {
   position: ValueXY;
 }
 
-const Grim = ({ theme }: GrimProps) => {
+function Grim({ theme }: GrimProps) {
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
@@ -82,6 +82,6 @@ const Grim = ({ theme }: GrimProps) => {
       </Surface>
     </>
   );
-};
+}
 
 export default withTheme(Grim);

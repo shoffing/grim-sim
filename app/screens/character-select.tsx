@@ -11,7 +11,7 @@ interface CharacterSelectProps {
   onSelect: (character: CharacterData) => void;
 }
 
-const CharacterSelect = ({ visible, characters, onDismiss, onSelect }: CharacterSelectProps) => {
+function CharacterSelect({ visible, characters, onDismiss, onSelect }: CharacterSelectProps) {
   const characterSelectContent = characters.map(character => {
     return (
       <View key={character.id}>
@@ -24,6 +24,6 @@ const CharacterSelect = ({ visible, characters, onDismiss, onSelect }: Character
       {characterSelectContent}
     </TokenSelect>
   );
-};
+}
 
 export default CharacterSelect;
