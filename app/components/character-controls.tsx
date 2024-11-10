@@ -5,9 +5,10 @@ interface CharacterControlsProps {
   visible: boolean;
   onReplace: () => void,
   onChangeTeam: () => void,
+  onRemove: () => void,
 }
 
-function CharacterControls({ visible, onReplace, onChangeTeam }: CharacterControlsProps) {
+function CharacterControls({ visible, onReplace, onChangeTeam, onRemove }: CharacterControlsProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,6 +20,7 @@ function CharacterControls({ visible, onReplace, onChangeTeam }: CharacterContro
         actions={[
           { icon: 'swap-horizontal', label: 'Replace', onPress: onReplace },
           { icon: 'account-group', label: 'Change Team', onPress: onChangeTeam },
+          { icon: 'delete', label: 'Remove', onPress: onRemove },
         ]}
         onStateChange={({ open }) => setOpen(open)}/>
     </Portal>
