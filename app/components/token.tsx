@@ -47,11 +47,6 @@ function Token(props: PropsWithChildren<TokenProps>) {
 
   const selectedBorderSize = Math.round(size / 16);
 
-  const [layout, setLayout] = useState<LayoutRectangle>();
-  const onLayout = (event: LayoutChangeEvent) => {
-    setLayout(event.nativeEvent.layout);
-  };
-
   const position = useRef<TokenPosition>({ x: 0, y: 0 });
 
   const pan = useRef(initialPosition ?? new Animated.ValueXY()).current;
@@ -71,6 +66,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
       onPanResponderRelease: () => {
         onMoveEnd?.(position.current);
         pan.extractOffset();
+        pan.setOffset(position.current);
       },
     }),
   ).current;
@@ -78,8 +74,8 @@ function Token(props: PropsWithChildren<TokenProps>) {
   // Constrain the token's position to be within its container's layout rect.
   const containerWidth = containerLayout?.width ?? Dimensions.get('window').width;
   const containerHeight = containerLayout?.height ?? Dimensions.get('window').height;
-  const translateX = Animated.diffClamp(pan.x, 0, containerWidth - (layout?.width ?? 0));
-  const translateY = Animated.diffClamp(pan.y, 0, containerHeight - (layout?.height ?? 0));
+  const translateX = Animated.diffClamp(pan.x, 0, containerWidth - size);
+  const translateY = Animated.diffClamp(pan.y, 0, containerHeight - size);
   translateX.addListener(({ value }) => position.current = { ...position.current, x: value });
   translateY.addListener(({ value }) => position.current = { ...position.current, y: value });
 
@@ -126,7 +122,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
     },
   });
   return (
-    <Animated.View style={styles.container} onLayout={onLayout} {...panResponder.panHandlers}>
+    <Animated.View style={styles.container} {...panResponder.panHandlers}>
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.token}>
           <ImageBackground
