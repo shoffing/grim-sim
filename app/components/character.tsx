@@ -1,6 +1,5 @@
 import CharacterData from '@/constants/characters/character-data';
 import Team from '@/constants/team';
-import { useState } from 'react';
 import { Image, ImageURISource, StyleProp, StyleSheet, TextStyle, View } from 'react-native';
 import { Text } from 'react-native-paper';
 

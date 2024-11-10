@@ -1,9 +1,8 @@
 import Character from '@/app/components/character';
 import TokenSelect from '@/app/screens/token-select';
 import CharacterData from '@/constants/characters/character-data';
-import { getCharacterById } from '@/constants/characters/characters';
-import { View, StyleSheet } from 'react-native';
-import { MD3Theme, Text, TouchableRipple, withTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { MD3Theme, TouchableRipple, withTheme } from 'react-native-paper';
 
 interface CharacterSelectProps {
   visible: boolean;
@@ -14,12 +13,7 @@ interface CharacterSelectProps {
 }
 
 function CharacterSelect({ visible, characters, onDismiss, onSelect, theme }: CharacterSelectProps) {
-  const style = StyleSheet.create({
-    name: {
-      color: theme.colors.onSurface,
-    },
-  });
-  const characterSelectContent = characters.map(character => {
+  const characterSelectContent = characters.map((character, idx) => {
     const characterStyle = StyleSheet.create({
       touchable: {
         borderRadius: 16,
@@ -41,16 +35,15 @@ function CharacterSelect({ visible, characters, onDismiss, onSelect, theme }: Ch
     });
     return (
       <TouchableRipple
+        key={`character-${idx}`}
         onPress={() => onSelect(character)}
-        key={character.id}
         style={characterStyle.touchable}
         rippleColor={theme.colors.secondary}
         borderless={true}>
         <View style={characterStyle.container}>
           <Character
             character={character}
-            nameStyle={characterStyle.font}>
-          </Character>
+            nameStyle={characterStyle.font}/>
         </View>
       </TouchableRipple>
     );

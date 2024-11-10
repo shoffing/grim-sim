@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import { Button, Dialog, FAB, MD3Theme, Portal, withTheme } from 'react-native-paper';
 
-interface CharacterControlsProps {
+interface ReminderControlsProps {
   visible: boolean;
   onReplace: () => void;
-  onAddReminder: () => void;
-  onChangeTeam: () => void;
   onRemove: () => void;
   theme: MD3Theme;
 }
 
-function CharacterControls({ visible, onReplace, onAddReminder, onChangeTeam, onRemove, theme }: CharacterControlsProps) {
+function ReminderControls({ visible, onReplace, onRemove, theme }: ReminderControlsProps) {
   const [open, setOpen] = useState(false);
 
   const [confirmRemove, setConfirmRemove] = useState(false);
@@ -25,7 +23,7 @@ function CharacterControls({ visible, onReplace, onAddReminder, onChangeTeam, on
     <Portal>
       <Dialog visible={confirmRemove} onDismiss={hideConfirmRemove}
               style={{ bottom: 48, right: 0, position: 'absolute' }}>
-        <Dialog.Title>Are you sure you want to remove this character?</Dialog.Title>
+        <Dialog.Title>Are you sure you want to remove this reminder?</Dialog.Title>
         <Dialog.Actions>
           <Button onPress={hideConfirmRemove}>Cancel</Button>
           <Button
@@ -44,8 +42,6 @@ function CharacterControls({ visible, onReplace, onAddReminder, onChangeTeam, on
         icon={open ? 'cog-off' : 'cog'}
         actions={[
           { icon: 'swap-horizontal', label: 'Replace', onPress: onReplace },
-          { icon: 'account-group', label: 'Change team', onPress: onChangeTeam },
-          { icon: 'information-outline', label: 'Add reminder', onPress: onAddReminder },
           {
             icon: 'delete',
             label: 'Remove',
@@ -59,4 +55,4 @@ function CharacterControls({ visible, onReplace, onAddReminder, onChangeTeam, on
   );
 }
 
-export default withTheme(CharacterControls);
+export default withTheme(ReminderControls);
