@@ -11,7 +11,6 @@ import { useState } from 'react';
 import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 import ValueXY = Animated.ValueXY;
-import { produce } from 'immer';
 import { useImmer } from 'use-immer';
 
 interface GrimProps {
@@ -22,6 +21,7 @@ interface GrimCharacterData {
   data: CharacterData;
   position: ValueXY;
   team: Team;
+  front: boolean;
 }
 
 function Grim({ theme }: GrimProps) {
@@ -29,13 +29,19 @@ function Grim({ theme }: GrimProps) {
   const gameCharacters = characterIds.map(getCharacterById);
 
   /** Current characters on the grimoire "board". */
-  const [characters, setCharacters] = useImmer(gameCharacters.map(char => {
-    return ({ data: char, position: new ValueXY(), team: char.team });
+  const [characters, setCharacters] = useImmer<GrimCharacterData[]>(gameCharacters.map(char => {
+    return ({ data: char, position: new ValueXY(), team: char.team, front: false });
   }));
-  const setCharacterPosition = (character: GrimCharacterData, position: ValueXY) => {
+  const setCharacterPosition = (idx: number, position: ValueXY) => {
     setCharacters(draft => {
-      const char = draft.find(c => c === character);
-      if (char) char.position = position;
+      if (draft[idx]) draft[idx].position = position;
+    });
+  };
+  const setCharacterFront = (idx: number) => {
+    setCharacters(draft => {
+      draft.forEach((char, oIdx) => {
+        char.front = oIdx === idx;
+      });
     });
   };
 
@@ -74,8 +80,11 @@ function Grim({ theme }: GrimProps) {
   };
 
   const currentCharacters = characters.map((character, idx) => {
-    const onMove = (pos: ValueXY) => {
-      setCharacterPosition(character, pos);
+    const onMoveStart = () => {
+      setCharacterFront(idx);
+    };
+    const onMoveEnd = (pos: ValueXY) => {
+      setCharacterPosition(idx, pos);
     };
     const onPress = () => {
       setSelectedCharacterIdx(selectedCharacterIdx === idx ? undefined : idx);
@@ -84,9 +93,11 @@ function Grim({ theme }: GrimProps) {
       <Token
         key={character.data.id}
         position={character.position}
+        front={character.front}
         selected={idx === selectedCharacterIdx}
         containerLayout={layout}
-        onMove={onMove}
+        onMoveStart={onMoveStart}
+        onMoveEnd={onMoveEnd}
         onPress={onPress}>
         <Character
           nameStyle={{ color: 'black' }}

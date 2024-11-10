@@ -20,13 +20,17 @@ const CONTROLS_VISIBLE_BORDER_SIZE = 8;
 interface TokenProps {
   position?: Animated.ValueXY;
   selected: boolean;
+  front: boolean;
   containerLayout?: LayoutRectangle;
-  onMove?: (position: Animated.ValueXY) => void;
+  onMoveStart?: (position: Animated.ValueXY) => void;
+  onMoveEnd?: (position: Animated.ValueXY) => void;
   onPress?: () => void;
   theme: MD3Theme;
 }
 
-function Token({ position, selected, containerLayout, onMove, onPress, theme, children }: PropsWithChildren<TokenProps>) {
+function Token(props: PropsWithChildren<TokenProps>) {
+  const { position, selected, front, containerLayout, onMoveStart, onMoveEnd, onPress, theme, children } = props;
+
   const [layout, setLayout] = useState<LayoutRectangle>();
   const onLayout = (event: LayoutChangeEvent) => {
     setLayout(event.nativeEvent.layout);
@@ -40,6 +44,7 @@ function Token({ position, selected, containerLayout, onMove, onPress, theme, ch
       },
       onPanResponderGrant: () => {
         pan.extractOffset();
+        onMoveStart?.(pan);
       },
       onPanResponderMove: Animated.event(
         [null, { dx: pan.x, dy: pan.y }],
@@ -47,7 +52,7 @@ function Token({ position, selected, containerLayout, onMove, onPress, theme, ch
       ),
       onPanResponderRelease: () => {
         pan.extractOffset();
-        onMove?.(pan);
+        onMoveEnd?.(pan);
       },
     }),
   ).current;
@@ -64,6 +69,7 @@ function Token({ position, selected, containerLayout, onMove, onPress, theme, ch
       flexDirection: 'column',
       position: 'absolute',
       transform: [{ translateX }, { translateY }],
+      zIndex: front ? 1 : 0,
     },
     token: {
       alignItems: 'center',
