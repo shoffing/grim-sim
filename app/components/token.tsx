@@ -2,6 +2,7 @@ import { PropsWithChildren, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
+  ImageBackground,
   LayoutChangeEvent,
   LayoutRectangle,
   PanResponder,
@@ -10,9 +11,6 @@ import {
   View,
 } from 'react-native';
 import { MD3Theme, withTheme } from 'react-native-paper';
-import { PanResponderGestureState } from 'react-native/Libraries/Interaction/PanResponder';
-import { DimensionValue } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
-import { GestureResponderEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 
 const DRAG_THRESHOLD = 20;
 
@@ -54,7 +52,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
     setLayout(event.nativeEvent.layout);
   };
 
-  const position = useRef<TokenPosition>({x: 0, y: 0});
+  const position = useRef<TokenPosition>({ x: 0, y: 0 });
 
   const pan = useRef(initialPosition ?? new Animated.ValueXY()).current;
   const panResponder = useRef(
@@ -82,8 +80,8 @@ function Token(props: PropsWithChildren<TokenProps>) {
   const containerHeight = containerLayout?.height ?? Dimensions.get('window').height;
   const translateX = Animated.diffClamp(pan.x, 0, containerWidth - (layout?.width ?? 0));
   const translateY = Animated.diffClamp(pan.y, 0, containerHeight - (layout?.height ?? 0));
-  translateX.addListener(({value}) => position.current = { ...position.current, x: value });
-  translateY.addListener(({value}) => position.current = { ...position.current, y: value });
+  translateX.addListener(({ value }) => position.current = { ...position.current, x: value });
+  translateY.addListener(({ value }) => position.current = { ...position.current, y: value });
 
   const styles = StyleSheet.create({
     container: {
@@ -95,7 +93,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
     },
     token: {
       alignItems: 'center',
-      backgroundColor: 'white',
+      backgroundColor: 'green',
       borderColor: theme.colors.primary,
       borderRadius: size * 2,
       borderStyle: 'solid',
@@ -106,6 +104,22 @@ function Token(props: PropsWithChildren<TokenProps>) {
       top: selected ? -selectedBorderSize : 0,
       width: size + (selected ? selectedBorderSize * 2 : 0),
     },
+    tokenBackground: {
+      width: '100%',
+      height: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    tokenBackgroundImageNoise: {
+      borderRadius: size * 2,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    tokenBackgroundImageClock: {
+      borderRadius: size * 2,
+      opacity: 0.15,
+      transform: [{ scale: 0.9 }],
+    },
     tokenContent: {
       height: '70%',
       width: '70%',
@@ -115,9 +129,23 @@ function Token(props: PropsWithChildren<TokenProps>) {
     <Animated.View style={styles.container} onLayout={onLayout} {...panResponder.panHandlers}>
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.token}>
-          <View style={styles.tokenContent}>
-            {children}
-          </View>
+          <ImageBackground
+            style={styles.tokenBackground}
+            imageStyle={styles.tokenBackgroundImageNoise}
+            resizeMethod="auto"
+            resizeMode="stretch"
+            source={require('@/assets/images/character-token-noise.webp')}>
+            <ImageBackground
+              style={styles.tokenBackground}
+              imageStyle={styles.tokenBackgroundImageClock}
+              resizeMethod="auto"
+              resizeMode="contain"
+              source={require('@/assets/images/clockface.webp')}>
+              <View style={styles.tokenContent}>
+                {children}
+              </View>
+            </ImageBackground>
+          </ImageBackground>
         </View>
       </TouchableWithoutFeedback>
     </Animated.View>

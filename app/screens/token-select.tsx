@@ -14,6 +14,7 @@ function TokenSelect({ visible, onDismiss, theme, children }: PropsWithChildren<
       alignItems: 'center',
       flexDirection: 'column',
       justifyContent: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },
     modalContent: {
       backgroundColor: theme.colors.surface,
