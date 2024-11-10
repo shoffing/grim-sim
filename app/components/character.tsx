@@ -14,7 +14,6 @@ function Character({ character, nameStyle, team }: CharacterProps) {
   if (character == null) return null;
 
   const getIcon = (): ImageURISource => {
-    console.log(team);
     if (team !== character.team) {
       if (team === Team.Good && character.icon.blue) {
         return character.icon.blue;

@@ -42,7 +42,8 @@
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.10",
     "react-redux": "^9.1.2",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "use-immer": "^0.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

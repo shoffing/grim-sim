@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from 'react';
+import { PropsWithChildren, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { withTheme } from 'react-native-paper';
+import { MD3Theme, withTheme } from 'react-native-paper';
 import { PanResponderGestureState } from 'react-native/Libraries/Interaction/PanResponder';
 import { GestureResponderEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 
@@ -19,21 +19,18 @@ const CONTROLS_VISIBLE_BORDER_SIZE = 8;
 
 interface TokenProps {
   position?: Animated.ValueXY;
+  selected: boolean;
   containerLayout?: LayoutRectangle;
   onMove?: (position: Animated.ValueXY) => void;
-  content: ReactNode;
-  controls?: ReactNode;
+  onPress?: () => void;
   theme: MD3Theme;
 }
 
-function Token({ position, containerLayout, onMove, content, controls, theme }: TokenProps) {
+function Token({ position, selected, containerLayout, onMove, onPress, theme, children }: PropsWithChildren<TokenProps>) {
   const [layout, setLayout] = useState<LayoutRectangle>();
   const onLayout = (event: LayoutChangeEvent) => {
     setLayout(event.nativeEvent.layout);
   };
-
-  const [controlsVisible, setControlsVisible] = useState(false);
-  const toggleControls = () => setControlsVisible(!controlsVisible);
 
   const pan = useRef(position ?? new Animated.ValueXY()).current;
   const panResponder = useRef(
@@ -74,12 +71,12 @@ function Token({ position, containerLayout, onMove, content, controls, theme }: 
       borderColor: theme.colors.primary,
       borderRadius: 9999,
       borderStyle: 'solid',
-      borderWidth: controlsVisible ? CONTROLS_VISIBLE_BORDER_SIZE : 0,
-      height: 128 + (controlsVisible ? CONTROLS_VISIBLE_BORDER_SIZE * 2 : 0),
+      borderWidth: selected ? CONTROLS_VISIBLE_BORDER_SIZE : 0,
+      height: 128 + (selected ? CONTROLS_VISIBLE_BORDER_SIZE * 2 : 0),
       justifyContent: 'center',
-      left: controlsVisible ? -CONTROLS_VISIBLE_BORDER_SIZE : 0,
-      top: controlsVisible ? -CONTROLS_VISIBLE_BORDER_SIZE : 0,
-      width: 128 + (controlsVisible ? CONTROLS_VISIBLE_BORDER_SIZE * 2 : 0),
+      left: selected ? -CONTROLS_VISIBLE_BORDER_SIZE : 0,
+      top: selected ? -CONTROLS_VISIBLE_BORDER_SIZE : 0,
+      width: 128 + (selected ? CONTROLS_VISIBLE_BORDER_SIZE * 2 : 0),
     },
     tokenContent: {
       height: '70%',
@@ -88,14 +85,13 @@ function Token({ position, containerLayout, onMove, content, controls, theme }: 
   });
   return (
     <Animated.View style={styles.container} onLayout={onLayout} {...panResponder.panHandlers}>
-      <TouchableWithoutFeedback onPress={toggleControls}>
+      <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.token}>
           <View style={styles.tokenContent}>
-            {content}
+            {children}
           </View>
         </View>
       </TouchableWithoutFeedback>
-      {controlsVisible && controls}
     </Animated.View>
   );
 }

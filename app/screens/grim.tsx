@@ -5,12 +5,14 @@ import { selectGameState } from '@/app/game-slice';
 import { useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
 import CharacterData from '@/constants/characters/character-data';
-import { CHARACTERS, getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
+import { getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
 import Team from '@/constants/team';
 import { useState } from 'react';
 import { Animated, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 import ValueXY = Animated.ValueXY;
+import { produce } from 'immer';
+import { useImmer } from 'use-immer';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -27,35 +29,34 @@ function Grim({ theme }: GrimProps) {
   const gameCharacters = characterIds.map(getCharacterById);
 
   /** Current characters on the grimoire "board". */
-  const [characters, setCharacters] = useState<GrimCharacterData[]>(
-    gameCharacters.map(char => ({ data: char, position: new ValueXY(), team: char.team })),
-  );
-  const setCharacterPosition = (ofIdx: number, position: ValueXY) => {
-    setCharacters(characters.map((character, idx) => {
-      return idx === ofIdx ? { ...character, position } : character;
-    }));
+  const [characters, setCharacters] = useImmer(gameCharacters.map(char => {
+    return ({ data: char, position: new ValueXY(), team: char.team });
+  }));
+  const setCharacterPosition = (idx: number, position: ValueXY) => {
+    setCharacters(draft => void (draft[idx].position = position));
   };
-  const swapCharacterTeam = (ofIdx: number) => {
-    console.log('swap team', ofIdx);
-    setCharacters(characters.map((character, idx) => {
-      return idx === ofIdx ?
-        { ...character, team: (character.team === Team.Good ? Team.Evil : Team.Good) } :
-        character;
-    }));
+
+  /** Handling CharacterControls. */
+  const [selectedCharacterIdx, setSelectedCharacterIdx] = useState<number>();
+  const swapSelectedCharacterTeam = () => {
+    if (selectedCharacterIdx == null) return;
+    setCharacters(draft => {
+      draft[selectedCharacterIdx].team = (draft[selectedCharacterIdx].team === Team.Good ? Team.Evil : Team.Good);
+    });
   };
-  const setCharacterData = (ofIdx: number, data: CharacterData) => {
-    setCharacters(characters.map((character, idx) => {
-      return idx === selectCharacterIdx ? { ...character, data } : character;
-    }));
+  const replaceSelectedCharacterData = (newData: CharacterData) => {
+    if (selectedCharacterIdx == null) return;
+    setCharacters(draft => void (draft[selectedCharacterIdx].data = newData));
   };
 
   /** Handling character selection. */
-  const [selectCharacterIdx, setSelectCharacterIdx] = useState<number>();
-  const showCharacterSelect = (idx: number) => setSelectCharacterIdx(idx);
-  const hideCharacterSelect = () => setSelectCharacterIdx(undefined);
-  const characterSelectVisible = () => selectCharacterIdx != null;
+  const [characterSelectVisible, setCharacterSelectVisible] = useState(false);
+  const showCharacterSelect = () => setCharacterSelectVisible(true);
+  const hideCharacterSelect = () => setCharacterSelectVisible(false);
   const onCharacterSelect = (selectedCharacter: CharacterData) => {
-    setCharacterData(selectCharacterIdx || -1, selectedCharacter);
+    if (selectedCharacterIdx != null) {
+      replaceSelectedCharacterData(selectedCharacter);
+    }
     hideCharacterSelect();
   };
 
@@ -65,25 +66,25 @@ function Grim({ theme }: GrimProps) {
   };
 
   const currentCharacters = characters.map((character, idx) => {
-    const tokenContent = (
-      <Character
-        nameStyle={{ color: 'black' }}
-        character={getCharacterById(character.data.id)}
-        team={character.team}/>
-    );
-    const tokenControls = (
-      <CharacterControls
-        onReplace={() => showCharacterSelect(idx)}
-        onChangeTeam={() => swapCharacterTeam(idx)}/>
-    );
+    const onMove = (pos: ValueXY) => {
+      setCharacterPosition(idx, pos);
+    };
+    const onPress = () => {
+      setSelectedCharacterIdx(selectedCharacterIdx === idx ? undefined : idx);
+    };
     return (
       <Token
         key={character.data.id}
         position={character.position}
+        selected={idx === selectedCharacterIdx}
         containerLayout={layout}
-        onMove={pos => setCharacterPosition(idx, pos)}
-        content={tokenContent}
-        controls={tokenControls}/>
+        onMove={onMove}
+        onPress={onPress}>
+        <Character
+          nameStyle={{ color: 'black' }}
+          character={getCharacterById(character.data.id)}
+          team={character.team}/>
+      </Token>
     );
   });
 
@@ -100,9 +101,13 @@ function Grim({ theme }: GrimProps) {
     <>
       <CharacterSelect
         characters={getCharactersByEdition(edition)}
-        visible={characterSelectVisible()}
+        visible={characterSelectVisible}
         onDismiss={hideCharacterSelect}
         onSelect={onCharacterSelect}/>
+      <CharacterControls
+        visible={selectedCharacterIdx != null}
+        onChangeTeam={swapSelectedCharacterTeam}
+        onReplace={showCharacterSelect}/>
       <Surface mode="elevated" style={styles.container} onLayout={onLayout}>
         {currentCharacters}
       </Surface>
