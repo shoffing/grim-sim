@@ -37,17 +37,20 @@ function ReminderControls({ visible, onReplace, onRemove, theme }: ReminderContr
         </Dialog.Actions>
       </Dialog>
       <FAB.Group
+        style={{ transform: [{ scale: 1.1 }], transformOrigin: '100% 100%' }}
+        variant="tertiary"
         open={open}
         visible={visible}
-        icon={open ? 'cog-off' : 'cog'}
+        icon={open ? 'cog-off' : 'heart-cog'}
         actions={[
-          { icon: 'swap-horizontal', label: 'Replace', onPress: onReplace },
+          { icon: 'swap-horizontal', label: 'Replace', onPress: onReplace, size: 'medium' },
           {
             icon: 'delete',
             label: 'Remove',
             labelTextColor: theme.colors.error,
             color: theme.colors.error,
             onPress: showConfirmRemove,
+            size: 'medium',
           },
         ]}
         onStateChange={({ open }) => setOpen(open)}/>

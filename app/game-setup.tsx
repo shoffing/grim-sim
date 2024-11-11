@@ -190,6 +190,7 @@ function GameSetup({ theme }: GameSetupProps) {
     dispatch(slice.setEdition(edition));
     dispatch(slice.setPlayerCount(playerCount));
     dispatch(slice.setCharacters(selectedCharacters.map(c => c.id)));
+    dispatch(slice.setInitialize(true));
     router.push('/');
   };
 

@@ -10,7 +10,14 @@ interface CharacterControlsProps {
   theme: MD3Theme;
 }
 
-function CharacterControls({ visible, onReplace, onAddReminder, onChangeTeam, onRemove, theme }: CharacterControlsProps) {
+function CharacterControls({
+                             visible,
+                             onReplace,
+                             onAddReminder,
+                             onChangeTeam,
+                             onRemove,
+                             theme,
+                           }: CharacterControlsProps) {
   const [open, setOpen] = useState(false);
 
   const [confirmRemove, setConfirmRemove] = useState(false);
@@ -39,19 +46,22 @@ function CharacterControls({ visible, onReplace, onAddReminder, onChangeTeam, on
         </Dialog.Actions>
       </Dialog>
       <FAB.Group
+        style={{ transform: [{ scale: 1.1 }], transformOrigin: '100% 100%' }}
+        variant="secondary"
         open={open}
         visible={visible}
-        icon={open ? 'cog-off' : 'cog'}
+        icon={open ? 'cog-off' : 'account-cog'}
         actions={[
-          { icon: 'swap-horizontal', label: 'Replace', onPress: onReplace },
-          { icon: 'account-group', label: 'Change team', onPress: onChangeTeam },
-          { icon: 'information-outline', label: 'Add reminder', onPress: onAddReminder },
+          { icon: 'swap-horizontal', label: 'Replace', onPress: onReplace, size: 'medium' },
+          { icon: 'account-group', label: 'Change team', onPress: onChangeTeam, size: 'medium' },
+          { icon: 'information-outline', label: 'Add reminder', onPress: onAddReminder, size: 'medium' },
           {
             icon: 'delete',
             label: 'Remove',
             labelTextColor: theme.colors.error,
             color: theme.colors.error,
             onPress: showConfirmRemove,
+            size: 'medium',
           },
         ]}
         onStateChange={({ open }) => setOpen(open)}/>

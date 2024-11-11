@@ -5,12 +5,17 @@ interface GameState {
   edition: string;
   playerCount: number;
   characters: CharacterId[];
+
+  // Whether initialization of a new game needs to happen.
+  // Layout the tokens in an ellipse, etc.
+  initialize: boolean;
 }
 
 const initialState: GameState = {
   edition: 'tb',
   playerCount: 8,
   characters: [CharacterId.Imp],
+  initialize: false,
 };
 
 export const gameSlice = createSlice({
@@ -26,16 +31,27 @@ export const gameSlice = createSlice({
     setCharacters: (state, { payload }: PayloadAction<CharacterId[]>) => {
       state.characters = payload;
     },
+    setInitialize: (state, { payload }: PayloadAction<boolean>) => {
+      state.initialize = payload;
+    },
   },
 });
 
-export const { setEdition, setPlayerCount, setCharacters } = gameSlice.actions;
+export const { setEdition, setPlayerCount, setCharacters, setInitialize } = gameSlice.actions;
 
 const selectEdition = (state: GameState) => state.edition;
 const selectPlayerCount = (state: GameState) => state.playerCount;
 const selectCharacters = (state: GameState) => state.characters;
-export const selectGameState = createSelector([selectEdition, selectPlayerCount, selectCharacters], (edition, playerCount, characters) => {
-  return {edition, playerCount, characters};
-});
+const selectInitialize = (state: GameState) => state.initialize;
+export const selectGameState = createSelector(
+  [selectEdition, selectPlayerCount, selectCharacters, selectInitialize],
+  (edition, playerCount, characters, initialize) => {
+    return {
+      edition,
+      playerCount,
+      characters,
+      initialize,
+    };
+  });
 
 export default gameSlice.reducer;

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { MD3Theme, withTheme } from 'react-native-paper';
 
-const DRAG_THRESHOLD = 20;
+const DRAG_THRESHOLD = 10;
 
 export interface TokenPosition {
   x: number;
@@ -50,7 +50,6 @@ function Token(props: PropsWithChildren<TokenProps>) {
   const selectedBorderSize = Math.round(size / 16);
 
   const pan = useRef(new Animated.ValueXY()).current;
-  pan.setOffset(position);
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: (_e, gestureState) => {
@@ -78,6 +77,10 @@ function Token(props: PropsWithChildren<TokenProps>) {
       },
     }),
   ).current;
+
+  // Updates to position from props.
+  pan.setOffset(position);
+  movingPosition.current = position;
 
   // Constrain the token's position to be within its container's layout rect.
   const containerWidth = containerLayout?.width ?? Dimensions.get('window').width;

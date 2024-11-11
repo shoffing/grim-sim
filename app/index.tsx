@@ -1,18 +1,12 @@
-import { useRouter } from 'expo-router';
-import { Button, Surface, Text } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Grim from '@/app/screens/grim';
+import { StyleSheet } from 'react-native';
+import { Surface } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Index = () => {
-  const router = useRouter();
-
   return (
     <SafeAreaView>
       <Surface mode="flat" style={styles.container}>
-        <Text variant="displayLarge" style={styles.header}>Grim Sim</Text>
-        <Text variant="headlineSmall" style={styles.header}>A grimoire simulator for Blood on the Clocktower.</Text>
-        <Button icon="cog" mode="contained" onPress={() => router.push('/game-setup')}>Game Setup</Button>
         <Grim/>
       </Surface>
     </SafeAreaView>
@@ -26,7 +20,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     justifyContent: 'flex-start',
-    padding: 16,
     width: '100%',
   },
   header: {
