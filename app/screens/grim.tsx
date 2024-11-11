@@ -4,6 +4,7 @@ import GameControls from '@/app/components/game-controls';
 import Reminder from '@/app/components/reminder';
 import ReminderControls from '@/app/components/reminder-controls';
 import Token, { TokenPosition } from '@/app/components/token';
+import * as slice from '@/app/game-slice';
 import { selectGameState } from '@/app/game-slice';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
@@ -17,7 +18,6 @@ import { useEffect, useState } from 'react';
 import { LayoutChangeEvent, LayoutRectangle, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 import { useImmer } from 'use-immer';
-import * as slice from '@/app/game-slice';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -83,7 +83,7 @@ function Grim({ theme }: GrimProps) {
         ),
       });
     });
-    setSelectedCharacterIdx(characters.length);
+    selectCharacter(characters.length);
   };
 
   /** Current reminders on the grimoire "board". */
@@ -115,11 +115,20 @@ function Grim({ theme }: GrimProps) {
         ),
       });
     });
-    setSelectedReminderIdx(reminders.length);
+    selectReminder(reminders.length);
+  };
+
+  const clearSelections = () => {
+    setSelectedCharacterIdx(undefined);
+    setSelectedReminderIdx(undefined);
   };
 
   /** Handling CharacterControls. */
   const [selectedCharacterIdx, setSelectedCharacterIdx] = useState<number>();
+  const selectCharacter = (idx?: number) => {
+    clearSelections();
+    setSelectedCharacterIdx(idx);
+  };
   const swapSelectedCharacterTeam = () => {
     if (selectedCharacterIdx == null) return;
     setCharacters(draft => {
@@ -151,6 +160,10 @@ function Grim({ theme }: GrimProps) {
 
   /** Handling ReminderControls. */
   const [selectedReminderIdx, setSelectedReminderIdx] = useState<number>();
+  const selectReminder = (idx?: number) => {
+    clearSelections();
+    setSelectedReminderIdx(idx);
+  };
   const replaceSelectedReminderData = (newData: ReminderData) => {
     if (selectedReminderIdx == null) return;
     setReminders(draft => void (draft[selectedReminderIdx].data = newData));
@@ -201,8 +214,7 @@ function Grim({ theme }: GrimProps) {
       setCharacterFront(idx);
     };
     const onPress = () => {
-      setSelectedCharacterIdx(selectedCharacterIdx === idx ? undefined : idx);
-      setSelectedReminderIdx(undefined);
+      selectCharacter(selectedCharacterIdx === idx ? undefined : idx);
     };
     return (
       <Token
@@ -232,8 +244,7 @@ function Grim({ theme }: GrimProps) {
       setReminderFront(idx);
     };
     const onPress = () => {
-      setSelectedReminderIdx(selectedReminderIdx === idx ? undefined : idx);
-      setSelectedCharacterIdx(undefined);
+      selectReminder(selectedReminderIdx === idx ? undefined : idx);
     };
     return (
       <Token
@@ -252,11 +263,6 @@ function Grim({ theme }: GrimProps) {
       </Token>
     );
   });
-
-  const onPressGrim = () => {
-    setSelectedCharacterIdx(undefined);
-    setSelectedReminderIdx(undefined);
-  };
 
   const styles = StyleSheet.create({
     container: {
@@ -304,7 +310,7 @@ function Grim({ theme }: GrimProps) {
         }
         onDismiss={hideReminderSelect}
         onSelect={onReminderSelect}/>
-      <TouchableWithoutFeedback onPress={onPressGrim}>
+      <TouchableWithoutFeedback onPress={clearSelections}>
         <Surface mode="elevated" style={styles.container} onLayout={onLayout}>
           {currentCharacters}
           {currentReminders}
