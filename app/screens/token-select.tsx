@@ -1,31 +1,35 @@
-import { PropsWithChildren } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ReactNode } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { MD3Theme, Modal, Portal, Surface, withTheme } from 'react-native-paper';
 
 interface TokenSelectProps {
   visible: boolean;
   onDismiss: () => void;
+  actions?: ReactNode;
+  tokens?: ReactNode;
   theme: MD3Theme;
 }
 
-function TokenSelect({ visible, onDismiss, theme, children }: PropsWithChildren<TokenSelectProps>) {
+function TokenSelect({ visible, onDismiss, tokens, actions, theme }: TokenSelectProps) {
   const style = StyleSheet.create({
     modalContainer: {
       alignItems: 'center',
       flexDirection: 'column',
       justifyContent: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },
     modalContent: {
       backgroundColor: theme.colors.surface,
       flexBasis: 'auto',
-      flexDirection: 'row',
+      flexDirection: 'column',
       maxHeight: '80%',
-      maxWidth: '80%',
+      width: '80%',
+      alignItems: 'flex-start',
+      padding: 16,
     },
     modalScroll: {
       flexDirection: 'row',
       flexWrap: 'wrap',
+      flex: 0,
     },
   });
 
@@ -37,9 +41,12 @@ function TokenSelect({ visible, onDismiss, theme, children }: PropsWithChildren<
              contentContainerStyle={style.modalContent}>
         <ScrollView>
           <Surface style={style.modalScroll}>
-            {children}
+            {tokens}
           </Surface>
         </ScrollView>
+        <View style={{ alignSelf: 'flex-end' }}>
+          {actions}
+        </View>
       </Modal>
     </Portal>
   );

@@ -48,11 +48,7 @@ function CharacterSelect({ visible, characters, onDismiss, onSelect, theme }: Ch
       </TouchableRipple>
     );
   });
-  return (
-    <TokenSelect visible={visible} onDismiss={onDismiss}>
-      {characterSelectContent}
-    </TokenSelect>
-  );
+  return <TokenSelect visible={visible} onDismiss={onDismiss} tokens={characterSelectContent}/>;
 }
 
 export default withTheme(CharacterSelect);

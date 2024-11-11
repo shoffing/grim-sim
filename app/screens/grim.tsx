@@ -83,6 +83,7 @@ function Grim({ theme }: GrimProps) {
         ),
       });
     });
+    setSelectedCharacterIdx(characters.length);
   };
 
   /** Current reminders on the grimoire "board". */
@@ -99,12 +100,12 @@ function Grim({ theme }: GrimProps) {
       });
     });
   };
-  const addReminder = (reminder: ReminderData) => {
+  const addReminder = (reminder: ReminderData, position?: TokenPosition) => {
     setReminders(draft => {
       draft.push({
         data: reminder,
-        front: false,
-        position: (
+        front: true,
+        position: position || (
           layout ?
             {
               x: (layout.width / 2) - REMINDER_SIZE / 2,
@@ -114,6 +115,7 @@ function Grim({ theme }: GrimProps) {
         ),
       });
     });
+    setSelectedReminderIdx(reminders.length);
   };
 
   /** Handling CharacterControls. */
@@ -167,7 +169,7 @@ function Grim({ theme }: GrimProps) {
     if (selectedReminderIdx != null) {
       replaceSelectedReminderData(selectedReminder);
     } else {
-      addReminder(selectedReminder);
+      addReminder(selectedReminder, selectedCharacterIdx ? characters[selectedCharacterIdx].position : undefined);
     }
     hideReminderSelect();
   };
@@ -288,17 +290,18 @@ function Grim({ theme }: GrimProps) {
         onReplace={showReminderSelect}
         onRemove={removeSelectedReminder}/>
       <CharacterSelect
-        characters={getCharactersByEdition(edition)}
         visible={characterSelectVisible}
+        characters={getCharactersByEdition(edition)}
         onDismiss={hideCharacterSelect}
         onSelect={onCharacterSelect}/>
       <ReminderSelect
+        visible={reminderSelectVisible}
+        edition={edition}
         characterIds={
           selectedCharacterIdx ?
             [characters[selectedCharacterIdx].data.id] :
             characters.map(c => c.data.id)
         }
-        visible={reminderSelectVisible}
         onDismiss={hideReminderSelect}
         onSelect={onReminderSelect}/>
       <TouchableWithoutFeedback onPress={onPressGrim}>
