@@ -3,7 +3,7 @@ import * as slice from '@/app/game-slice';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterData from '@/constants/characters/character-data';
 import CharacterType from '@/constants/characters/character-type';
-import { getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
+import { getCharactersByEdition } from '@/constants/characters/characters';
 
 import editions from '@/data/editions.json';
 
@@ -12,7 +12,7 @@ import Slider from '@react-native-community/slider';
 import { useRouter } from 'expo-router';
 import _ from 'lodash';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, View, ViewStyle } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, MD3Theme, RadioButton, Surface, Text, TouchableRipple, withTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -28,6 +28,10 @@ function GameSetup({ theme }: GameSetupProps) {
     },
     card: {
       backgroundColor: theme.colors.surface,
+    },
+    cardContent: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
     },
     sliderContainer: {
       flexDirection: 'row',
@@ -49,14 +53,24 @@ function GameSetup({ theme }: GameSetupProps) {
   const gameState = useAppSelector(({ game }) => slice.selectGameState(game));
   const [edition, setEdition] = useState(gameState.edition);
   const [playerCount, setPlayerCount] = useState(gameState.playerCount);
-  const [selectedCharacters, setSelectedCharacters] = useState(gameState.characters.map(getCharacterById));
+  const [selectedCharacters, setSelectedCharacters] = useState<CharacterData[]>([]);
+  // TODO: these will need to change to support duplicates of characters.
+  const addCharacter = (character: CharacterData) => setSelectedCharacters([...selectedCharacters, character]);
+  const removeCharacter = (character: CharacterData) => setSelectedCharacters(selectedCharacters.filter(c => c.id !== character.id));
+  const toggleCharacter = (character: CharacterData) => {
+    if (selectedCharacters.includes(character)) {
+      removeCharacter(character);
+    } else {
+      addCharacter(character);
+    }
+  };
 
   const typeCountTargets = game[_.clamp(playerCount - 5, 0, game.length - 1)];
 
   const editionForm = (
     <Card style={style.card}>
       <Card.Title title="Select Edition"/>
-      <Card.Content>
+      <Card.Content style={style.cardContent}>
         <RadioButton.Group onValueChange={newEdition => setEdition(newEdition)} value={edition}>
           {editions.map(e => <RadioButton.Item key={e.id} label={e.name} value={e.id}/>)}
           <RadioButton.Item label="Custom" value="__custom__"/>
@@ -68,7 +82,7 @@ function GameSetup({ theme }: GameSetupProps) {
   const playersForm = (
     <Card style={style.card}>
       <Card.Title title="Players"/>
-      <Card.Content>
+      <Card.Content style={style.cardContent}>
         <Text variant="labelSmall">
           {typeCountTargets.townsfolk} Townsfolk,&nbsp;
           {typeCountTargets.outsider} Outsiders,&nbsp;
@@ -98,13 +112,6 @@ function GameSetup({ theme }: GameSetupProps) {
   const outsiderCount = selectedCharacters.filter(c => c.type === CharacterType.Outsider).length;
   const minionCount = selectedCharacters.filter(c => c.type === CharacterType.Minion).length;
   const demonCount = selectedCharacters.filter(c => c.type === CharacterType.Demon).length;
-  const onPressCharacter = (character: CharacterData) => {
-    if (selectedCharacters.includes(character)) {
-      setSelectedCharacters(selectedCharacters.filter(c => c.id !== character.id));
-    } else {
-      setSelectedCharacters([...selectedCharacters, character]);
-    }
-  };
   const renderCharacter = (character: CharacterData) => {
     const selected = selectedCharacters.includes(character);
     const characterStyle = StyleSheet.create({
@@ -127,7 +134,7 @@ function GameSetup({ theme }: GameSetupProps) {
     });
     return (
       <TouchableRipple
-        onPress={() => onPressCharacter(character)}
+        onPress={() => toggleCharacter(character)}
         key={character.id}
         style={characterStyle.touchable}
         rippleColor={theme.colors.secondary}
@@ -142,10 +149,20 @@ function GameSetup({ theme }: GameSetupProps) {
       </TouchableRipple>
     );
   };
+  const selectRandom = () => {
+    setSelectedCharacters([
+      ..._.sampleSize(townsfolk, typeCountTargets.townsfolk),
+      ..._.sampleSize(outsiders, typeCountTargets.outsider),
+      ..._.sampleSize(minions, typeCountTargets.minion),
+      ..._.sampleSize(demons, typeCountTargets.demon),
+    ]);
+  };
   const charactersForm = (
     <Card style={style.card}>
       <Card.Title title="Characters"/>
-      <Card.Content>
+      <Card.Content style={style.cardContent}>
+        <Button mode="contained" onPress={selectRandom}>Select Random</Button>
+
         <Text variant="headlineSmall">
           Townsfolk ({townsfolkCount} / {typeCountTargets.townsfolk})
         </Text>
