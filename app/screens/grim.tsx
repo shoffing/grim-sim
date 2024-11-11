@@ -12,9 +12,8 @@ import { getCharacterById, getCharactersByEdition } from '@/constants/characters
 import ReminderData from '@/constants/reminder-data';
 import Team from '@/constants/team';
 import { useState } from 'react';
-import { Animated, ImageURISource, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
+import { LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
-import ValueXY = Animated.ValueXY;
 import { useImmer } from 'use-immer';
 
 interface GrimProps {
@@ -33,6 +32,9 @@ interface GrimReminderData {
   position: TokenPosition;
   front: boolean;
 }
+
+const CHARACTER_SIZE = 128;
+const REMINDER_SIZE = 92;
 
 function Grim({ theme }: GrimProps) {
   const { characters: characterIds, edition } = useAppSelector(state => selectGameState(state.game));
@@ -133,6 +135,16 @@ function Grim({ theme }: GrimProps) {
   const [layout, setLayout] = useState<LayoutRectangle>();
   const onLayout = (event: LayoutChangeEvent) => {
     setLayout(event.nativeEvent.layout);
+
+    // Position characters in ellipse layout.
+    const { width, height } = event.nativeEvent.layout;
+    characters.forEach((_c, idx) => {
+      const t = idx / characters.length;
+      setCharacterPosition(idx, {
+        x: (width / 2) + Math.cos(2 * t * Math.PI) * 0.8 * (width / 2) - CHARACTER_SIZE / 2,
+        y: (height / 2) + Math.sin(2 * t * Math.PI) * 0.8 * (height / 2) - CHARACTER_SIZE / 2,
+      });
+    });
   };
 
   const currentCharacters = characters.map((character, idx) => {
@@ -149,9 +161,9 @@ function Grim({ theme }: GrimProps) {
     return (
       <Token
         key={`character-${idx}`}
-        position={new ValueXY(character.position)}
+        position={character.position}
         front={character.front}
-        size={128}
+        size={CHARACTER_SIZE}
         selected={idx === selectedCharacterIdx}
         containerLayout={layout}
         onMoveStart={onMoveStart}
@@ -179,9 +191,9 @@ function Grim({ theme }: GrimProps) {
     return (
       <Token
         key={`reminder-${idx}`}
-        position={new ValueXY(reminder.position)}
+        position={reminder.position}
         front={reminder.front}
-        size={92}
+        size={REMINDER_SIZE}
         selected={idx === selectedReminderIdx}
         containerLayout={layout}
         onMoveStart={onMoveStart}

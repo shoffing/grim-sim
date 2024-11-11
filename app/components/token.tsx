@@ -1,9 +1,8 @@
-import { PropsWithChildren, useRef, useState } from 'react';
+import { PropsWithChildren, useRef } from 'react';
 import {
   Animated,
   Dimensions,
   ImageBackground,
-  LayoutChangeEvent,
   LayoutRectangle,
   PanResponder,
   StyleSheet,
@@ -20,7 +19,7 @@ export interface TokenPosition {
 }
 
 interface TokenProps {
-  position?: Animated.ValueXY;
+  position?: TokenPosition;
   selected: boolean;
   front: boolean;
   size: number;
@@ -33,7 +32,7 @@ interface TokenProps {
 
 function Token(props: PropsWithChildren<TokenProps>) {
   const {
-    position: initialPosition,
+    position: iPosition,
     selected,
     front,
     size,
@@ -44,29 +43,38 @@ function Token(props: PropsWithChildren<TokenProps>) {
     theme,
     children,
   } = props;
+  const position = iPosition ?? { x: 0, y: 0 };
+  const movingPosition = useRef(position);
+  const dragOffset = useRef({ x: 0, y: 0 });
 
   const selectedBorderSize = Math.round(size / 16);
 
-  const position = useRef<TokenPosition>({ x: 0, y: 0 });
-
-  const pan = useRef(initialPosition ?? new Animated.ValueXY()).current;
+  const pan = useRef(new Animated.ValueXY()).current;
+  pan.setOffset(position);
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: (_e, gestureState) => {
+        dragOffset.current = {
+          x: gestureState.dx,
+          y: gestureState.dy,
+        };
         return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > DRAG_THRESHOLD;
       },
       onPanResponderGrant: () => {
-        onMoveStart?.(position.current);
-        pan.extractOffset();
+        // Compensate for drag threshold.
+        pan.setOffset({
+          x: dragOffset.current.x + movingPosition.current.x,
+          y: dragOffset.current.y + movingPosition.current.y,
+        });
+        onMoveStart?.(movingPosition.current);
       },
       onPanResponderMove: Animated.event(
         [null, { dx: pan.x, dy: pan.y }],
         { useNativeDriver: false },
       ),
       onPanResponderRelease: () => {
-        onMoveEnd?.(position.current);
+        onMoveEnd?.(movingPosition.current);
         pan.extractOffset();
-        pan.setOffset(position.current);
       },
     }),
   ).current;
@@ -76,8 +84,8 @@ function Token(props: PropsWithChildren<TokenProps>) {
   const containerHeight = containerLayout?.height ?? Dimensions.get('window').height;
   const translateX = Animated.diffClamp(pan.x, 0, containerWidth - size);
   const translateY = Animated.diffClamp(pan.y, 0, containerHeight - size);
-  translateX.addListener(({ value }) => position.current = { ...position.current, x: value });
-  translateY.addListener(({ value }) => position.current = { ...position.current, y: value });
+  translateX.addListener(({ value }) => movingPosition.current = { ...movingPosition.current, x: value });
+  translateY.addListener(({ value }) => movingPosition.current = { ...movingPosition.current, y: value });
 
   const styles = StyleSheet.create({
     container: {
