@@ -59,6 +59,7 @@ function ReminderSelect({ visible, edition, characterIds, onDismiss, onSelect, t
     });
     return (
       <TouchableRipple
+        accessibilityRole="button"
         key={`reminder-${idx}`}
         onPress={() => onSelect(reminder)}
         style={reminderStyle.touchable}

@@ -10,6 +10,8 @@ interface GameControlsProps {
   theme: MD3Theme;
 }
 
+export const ACCESSIBILITY_LABEL = 'open game controls';
+
 function GameControls({ visible, onAddCharacter, onAddReminder, onGameSetup, onClearGrim, theme }: GameControlsProps) {
   const [open, setOpen] = useState(false);
 
@@ -39,6 +41,7 @@ function GameControls({ visible, onAddCharacter, onAddReminder, onGameSetup, onC
         </Dialog.Actions>
       </Dialog>
       <FAB.Group
+        accessibilityLabel={ACCESSIBILITY_LABEL}
         style={{ transform: [{ scale: 1.1 }], transformOrigin: '100% 100%' }}
         variant="primary"
         open={open}

@@ -35,6 +35,7 @@ function CharacterSelect({ visible, characters, onDismiss, onSelect, theme }: Ch
     });
     return (
       <TouchableRipple
+        accessibilityRole="button"
         key={`character-${idx}`}
         onPress={() => onSelect(character)}
         style={characterStyle.touchable}

@@ -134,7 +134,10 @@ function Token(props: PropsWithChildren<TokenProps>) {
   });
   return (
     <Animated.View style={styles.container} {...panResponder.panHandlers}>
-      <TouchableWithoutFeedback onPress={onPress}>
+      <TouchableWithoutFeedback
+        onPress={onPress}
+        aria-selected={selected}
+        accessibilityRole="button">
         <View style={styles.token}>
           <ImageBackground
             style={styles.tokenBackground}

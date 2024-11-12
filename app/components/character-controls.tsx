@@ -10,6 +10,8 @@ interface CharacterControlsProps {
   theme: MD3Theme;
 }
 
+export const ACCESSIBILITY_LABEL = 'open character controls';
+
 function CharacterControls({
                              visible,
                              onReplace,
@@ -46,15 +48,34 @@ function CharacterControls({
         </Dialog.Actions>
       </Dialog>
       <FAB.Group
+        accessibilityLabel={ACCESSIBILITY_LABEL}
         style={{ transform: [{ scale: 1.1 }], transformOrigin: '100% 100%' }}
         variant="secondary"
         open={open}
         visible={visible}
         icon={open ? 'cog-off' : 'account-cog'}
         actions={[
-          { icon: 'swap-horizontal', label: 'Replace', onPress: onReplace, size: 'medium' },
-          { icon: 'account-group', label: 'Change team', onPress: onChangeTeam, size: 'medium' },
-          { icon: 'information-outline', label: 'Add reminder', onPress: onAddReminder, size: 'medium' },
+          {
+            icon: 'swap-horizontal',
+            label: 'Replace',
+            onPress: onReplace,
+            size: 'medium',
+            testID: 'replace-character',
+          },
+          {
+            icon: 'account-group',
+            label: 'Change team',
+            onPress: onChangeTeam,
+            size: 'medium',
+            testID: 'change-team-character',
+          },
+          {
+            icon: 'information-outline',
+            label: 'Add reminder',
+            onPress: onAddReminder,
+            size: 'medium',
+            testID: 'add-reminder-character',
+          },
           {
             icon: 'delete',
             label: 'Remove',
@@ -62,6 +83,7 @@ function CharacterControls({
             color: theme.colors.error,
             onPress: showConfirmRemove,
             size: 'medium',
+            testID: 'delete-character',
           },
         ]}
         onStateChange={({ open }) => setOpen(open)}/>

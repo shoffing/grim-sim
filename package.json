@@ -13,20 +13,27 @@
     "lint": "expo lint"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "moduleDirectories": [
+      "node_modules",
+      "utils"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|...|react-redux)|((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg)"
+    ]
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
-    "@react-native-community/slider": "^4.5.5",
+    "@react-native-community/slider": "4.5.2",
     "@react-navigation/native": "^6.0.2",
     "@reduxjs/toolkit": "^2.3.0",
     "deepmerge": "^4.3.1",
-    "expo": "~51.0.28",
+    "expo": "~51.0.39",
     "expo-constants": "~16.0.2",
     "expo-font": "~12.0.9",
     "expo-linking": "~6.3.1",
-    "expo-router": "~3.5.23",
-    "expo-splash-screen": "~0.27.5",
+    "expo-router": "~3.5.24",
+    "expo-splash-screen": "~0.27.7",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
     "expo-web-browser": "~13.0.3",
@@ -47,6 +54,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@testing-library/react-native": "^12.8.1",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.17.13",
     "@types/react": "~18.2.45",

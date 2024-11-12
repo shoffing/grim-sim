@@ -8,6 +8,8 @@ interface ReminderControlsProps {
   theme: MD3Theme;
 }
 
+export const ACCESSIBILITY_LABEL = 'open reminder controls';
+
 function ReminderControls({ visible, onReplace, onRemove, theme }: ReminderControlsProps) {
   const [open, setOpen] = useState(false);
 
@@ -37,6 +39,7 @@ function ReminderControls({ visible, onReplace, onRemove, theme }: ReminderContr
         </Dialog.Actions>
       </Dialog>
       <FAB.Group
+        accessibilityLabel={ACCESSIBILITY_LABEL}
         style={{ transform: [{ scale: 1.1 }], transformOrigin: '100% 100%' }}
         variant="tertiary"
         open={open}

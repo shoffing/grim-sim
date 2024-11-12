@@ -13,8 +13,9 @@ import CharacterData from '@/constants/characters/character-data';
 import { getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
 import ReminderData from '@/constants/reminder-data';
 import Team from '@/constants/team';
-import { useNavigation, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { LayoutChangeEvent, LayoutRectangle, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 import { useImmer } from 'use-immer';
@@ -41,11 +42,12 @@ const REMINDER_SIZE = 92;
 
 function Grim({ theme }: GrimProps) {
   const router = useRouter();
-  const navigation = useNavigation();
 
   const [focused, setFocused] = useState(true);
-  useEffect(() => navigation.addListener('focus', () => setFocused(true)), [navigation]);
-  useEffect(() => navigation.addListener('blur', () => setFocused(false)), [navigation]);
+  useFocusEffect(() => {
+    setFocused(true);
+    return () => setFocused(false);
+  });
 
   const dispatch = useAppDispatch();
   const { characters: characterIds, edition, initialize } = useAppSelector(state => selectGameState(state.game));
