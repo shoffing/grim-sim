@@ -264,6 +264,11 @@ function Grim({ theme }: GrimProps) {
     );
   });
 
+  const onClearGrim = () => {
+    setCharacters([]);
+    setReminders([]);
+  };
+
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
@@ -284,7 +289,7 @@ function Grim({ theme }: GrimProps) {
         onAddCharacter={() => showCharacterSelect()}
         onAddReminder={() => showReminderSelect()}
         onGameSetup={() => router.push('/game-setup')}
-        onClearGrim={() => setCharacters([])}/>
+        onClearGrim={onClearGrim}/>
       <CharacterControls
         visible={selectedCharacterIdx != null}
         onChangeTeam={swapSelectedCharacterTeam}
