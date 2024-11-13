@@ -1,6 +1,7 @@
 import Character from '@/app/components/character';
 import CharacterControls from '@/app/components/character-controls';
 import GameControls from '@/app/components/game-controls';
+import Player from '@/app/components/player';
 import Reminder from '@/app/components/reminder';
 import ReminderControls from '@/app/components/reminder-controls';
 import Token, { TokenPosition } from '@/app/components/token';
@@ -234,6 +235,7 @@ function Grim({ theme }: GrimProps) {
           character={character.data}
           team={character.team}
           nameStyle={{ color: 'black' }}/>
+        <Player name="Steve" alive={true}/>
       </Token>
     );
   });
