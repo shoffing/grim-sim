@@ -11,7 +11,7 @@ function Reminder({ reminder, labelStyle }: ReminderProps) {
   return (
     <View style={baseStyles.container}>
       <View style={baseStyles.iconContainer}>
-        <Image source={reminder.icon} style={baseStyles.icon}></Image>
+        <Image source={reminder.icon} style={baseStyles.icon}/>
       </View>
       <Text variant="labelSmall" style={StyleSheet.compose(baseStyles.label, labelStyle)}>{reminder.label}</Text>
     </View>
@@ -37,7 +37,7 @@ const baseStyles = StyleSheet.create({
   },
   label: {
     flexGrow: 1,
-  }
+  },
 });
 
 export default Reminder;

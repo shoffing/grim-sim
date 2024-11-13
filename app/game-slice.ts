@@ -34,10 +34,11 @@ export const gameSlice = createSlice({
     setInitialize: (state, { payload }: PayloadAction<boolean>) => {
       state.initialize = payload;
     },
+    reset: () => initialState,
   },
 });
 
-export const { setEdition, setPlayerCount, setCharacters, setInitialize } = gameSlice.actions;
+export const { setEdition, setPlayerCount, setCharacters, setInitialize, reset } = gameSlice.actions;
 
 const selectEdition = (state: GameState) => state.edition;
 const selectPlayerCount = (state: GameState) => state.playerCount;

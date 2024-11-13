@@ -29,8 +29,9 @@ function GameControls({ visible, onAddCharacter, onAddReminder, onGameSetup, onC
               style={{ bottom: 48, right: 0, position: 'absolute' }}>
         <Dialog.Title>Are you sure you want to clear the grimoire?</Dialog.Title>
         <Dialog.Actions>
-          <Button onPress={hideConfirmClearGrim}>Cancel</Button>
+          <Button testID="cancel-clear-grim" onPress={hideConfirmClearGrim}>Cancel</Button>
           <Button
+            testID="confirm-clear-grim"
             mode="contained"
             icon="delete"
             onPress={onConfirmClearGrim}
@@ -48,9 +49,9 @@ function GameControls({ visible, onAddCharacter, onAddReminder, onGameSetup, onC
         visible={visible}
         icon={open ? 'cog-off' : 'cog'}
         actions={[
-          { icon: 'account-plus', label: 'Add character', onPress: onAddCharacter, size: 'medium' },
-          { icon: 'information-outline', label: 'Add reminder', onPress: onAddReminder, size: 'medium' },
-          { icon: 'application-cog', label: 'Game setup', onPress: onGameSetup, size: 'medium' },
+          { icon: 'account-plus', label: 'Add character', onPress: onAddCharacter, size: 'medium', testID: 'add-character-game' },
+          { icon: 'information-outline', label: 'Add reminder', onPress: onAddReminder, size: 'medium', testID: 'add-reminder-game' },
+          { icon: 'application-cog', label: 'Game setup', onPress: onGameSetup, size: 'medium', testID: 'setup-game' },
           {
             icon: 'nuke',
             label: 'Clear grimoire',
@@ -58,6 +59,7 @@ function GameControls({ visible, onAddCharacter, onAddReminder, onGameSetup, onC
             color: theme.colors.error,
             onPress: showConfirmClearGrim,
             size: 'medium',
+            testID: 'clear-grim-game',
           },
         ]}
         onStateChange={({ open }) => setOpen(open)}/>

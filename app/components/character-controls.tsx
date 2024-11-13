@@ -36,8 +36,9 @@ function CharacterControls({
               style={{ bottom: 48, right: 0, position: 'absolute' }}>
         <Dialog.Title>Are you sure you want to remove this character?</Dialog.Title>
         <Dialog.Actions>
-          <Button onPress={hideConfirmRemove}>Cancel</Button>
+          <Button testID="cancel-remove-character" onPress={hideConfirmRemove}>Cancel</Button>
           <Button
+            testID="confirm-remove-character"
             mode="contained"
             icon="delete"
             onPress={onConfirmRemove}

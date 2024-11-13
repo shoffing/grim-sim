@@ -28,6 +28,7 @@ interface TokenProps {
   onMoveEnd?: (position: TokenPosition) => void;
   onPress?: () => void;
   theme: MD3Theme;
+  testID: string;
 }
 
 function Token(props: PropsWithChildren<TokenProps>) {
@@ -42,6 +43,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
     onPress,
     theme,
     children,
+    testID,
   } = props;
   const position = iPosition ?? { x: 0, y: 0 };
   const movingPosition = useRef(position);
@@ -135,6 +137,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
   return (
     <Animated.View style={styles.container} {...panResponder.panHandlers}>
       <TouchableWithoutFeedback
+        testID={testID}
         onPress={onPress}
         aria-selected={selected}
         accessibilityRole="button">

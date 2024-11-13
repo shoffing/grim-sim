@@ -27,13 +27,14 @@ function ReminderControls({ visible, onReplace, onRemove, theme }: ReminderContr
               style={{ bottom: 48, right: 0, position: 'absolute' }}>
         <Dialog.Title>Are you sure you want to remove this reminder?</Dialog.Title>
         <Dialog.Actions>
-          <Button onPress={hideConfirmRemove}>Cancel</Button>
+          <Button onPress={hideConfirmRemove} testID="cancel-delete-reminder">Cancel</Button>
           <Button
             mode="contained"
             icon="delete"
             onPress={onConfirmRemove}
             buttonColor={theme.colors.errorContainer}
-            textColor={theme.colors.onErrorContainer}>
+            textColor={theme.colors.onErrorContainer}
+            testID="confirm-delete-reminder">
             Remove
           </Button>
         </Dialog.Actions>
@@ -46,7 +47,13 @@ function ReminderControls({ visible, onReplace, onRemove, theme }: ReminderContr
         visible={visible}
         icon={open ? 'cog-off' : 'heart-cog'}
         actions={[
-          { icon: 'swap-horizontal', label: 'Replace', onPress: onReplace, size: 'medium' },
+          {
+            icon: 'swap-horizontal',
+            label: 'Replace',
+            onPress: onReplace,
+            size: 'medium',
+            testID: 'replace-reminder',
+          },
           {
             icon: 'delete',
             label: 'Remove',
@@ -54,6 +61,7 @@ function ReminderControls({ visible, onReplace, onRemove, theme }: ReminderContr
             color: theme.colors.error,
             onPress: showConfirmRemove,
             size: 'medium',
+            testID: 'delete-reminder',
           },
         ]}
         onStateChange={({ open }) => setOpen(open)}/>

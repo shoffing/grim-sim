@@ -26,7 +26,10 @@ function Character({ character, nameStyle, team }: CharacterProps) {
   return (
     <View style={baseStyles.container}>
       <View style={baseStyles.iconContainer}>
-        <Image source={getIcon()} style={baseStyles.icon}></Image>
+        <Image
+          source={getIcon()}
+          style={baseStyles.icon}
+          alt={`${character.name} (${team || character.team})`} />
       </View>
       <Text variant="labelLarge" style={StyleSheet.compose(baseStyles.name, nameStyle)}>{character.name}</Text>
     </View>

@@ -74,7 +74,7 @@ function ReminderSelect({ visible, edition, characterIds, onDismiss, onSelect, t
   const actions = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       <Text variant="labelLarge">Show all</Text>
-      <Switch value={showAll} onValueChange={() => setShowAll(!showAll)}/>
+      <Switch value={showAll} onValueChange={() => setShowAll(!showAll)} testID="reminders-show-all"/>
     </View>
   );
   return <TokenSelect visible={visible} onDismiss={onDismiss} tokens={reminderSelectContent} actions={actions}/>;

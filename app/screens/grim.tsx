@@ -221,6 +221,7 @@ function Grim({ theme }: GrimProps) {
     return (
       <Token
         key={`character-${idx}`}
+        testID={`character-${idx}-${character.data.id}`}
         position={character.position}
         front={character.front}
         size={CHARACTER_SIZE}
@@ -251,6 +252,7 @@ function Grim({ theme }: GrimProps) {
     return (
       <Token
         key={`reminder-${idx}`}
+        testID={`reminder-${idx}-${reminder.data.label}`}
         position={reminder.position}
         front={reminder.front}
         size={REMINDER_SIZE}
@@ -317,8 +319,8 @@ function Grim({ theme }: GrimProps) {
         }
         onDismiss={hideReminderSelect}
         onSelect={onReminderSelect}/>
-      <TouchableWithoutFeedback onPress={clearSelections}>
-        <Surface mode="elevated" style={styles.container} onLayout={onLayout}>
+      <TouchableWithoutFeedback onPress={clearSelections} testID="grim" onLayout={onLayout}>
+        <Surface mode="elevated" style={styles.container}>
           {currentCharacters}
           {currentReminders}
         </Surface>
