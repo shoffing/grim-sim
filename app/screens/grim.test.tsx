@@ -8,7 +8,6 @@ import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
 import { fireEvent, userEvent } from '@testing-library/react-native';
 import { UserEventInstance } from '@testing-library/react-native/build/user-event/setup';
-import { View } from 'react-native';
 import { ReactTestInstance } from 'react-test-renderer';
 import { render, screen } from '../test-utils';
 import '@testing-library/react-native/extend-expect';
