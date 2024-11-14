@@ -1,17 +1,9 @@
-import { PropsWithChildren, useRef } from 'react';
-import {
-  Animated,
-  Dimensions,
-  ImageBackground,
-  LayoutRectangle,
-  PanResponder,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import _ from 'lodash';
+import { PropsWithChildren, useEffect } from 'react';
+import { Dimensions, ImageBackground, LayoutRectangle, StyleSheet, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, withTheme } from 'react-native-paper';
-
-const DRAG_THRESHOLD = 10;
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 export interface TokenPosition {
   x: number;
@@ -24,8 +16,7 @@ interface TokenProps {
   front: boolean;
   size: number;
   containerLayout?: LayoutRectangle;
-  onMoveStart?: (position: TokenPosition) => void;
-  onMoveEnd?: (position: TokenPosition) => void;
+  onMove?: (position: TokenPosition) => void;
   onPress?: () => void;
   theme: MD3Theme;
   testID: string;
@@ -33,71 +24,68 @@ interface TokenProps {
 
 function Token(props: PropsWithChildren<TokenProps>) {
   const {
-    position: iPosition,
+    position,
     selected,
     front,
     size,
     containerLayout,
-    onMoveStart,
-    onMoveEnd,
+    onMove,
     onPress,
     theme,
     children,
     testID,
   } = props;
-  const position = iPosition ?? { x: 0, y: 0 };
-  const movingPosition = useRef(position);
-  const dragOffset = useRef({ x: 0, y: 0 });
-
   const selectedBorderSize = Math.round(size / 16);
+  const offset = useSharedValue(position || {x: 0, y: 0});
+  const moving = useSharedValue(false);
 
-  const pan = useRef(new Animated.ValueXY()).current;
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (_e, gestureState) => {
-        dragOffset.current = {
-          x: gestureState.dx,
-          y: gestureState.dy,
-        };
-        return Math.sqrt(Math.pow(gestureState.dx, 2) + Math.pow(gestureState.dy, 2)) > DRAG_THRESHOLD;
-      },
-      onPanResponderGrant: () => {
-        // Compensate for drag threshold.
-        pan.setOffset({
-          x: dragOffset.current.x + movingPosition.current.x,
-          y: dragOffset.current.y + movingPosition.current.y,
-        });
-        onMoveStart?.(movingPosition.current);
-      },
-      onPanResponderMove: Animated.event(
-        [null, { dx: pan.x, dy: pan.y }],
-        { useNativeDriver: false },
-      ),
-      onPanResponderRelease: () => {
-        onMoveEnd?.(movingPosition.current);
-        pan.extractOffset();
-      },
-    }),
-  ).current;
+  // Update offset to position only when it changes.
+  useEffect(() => {
+    if (position) {
+      offset.value = position;
+    }
+  }, [position]);
 
-  // Updates to position from props.
-  pan.setOffset(position);
-  movingPosition.current = position;
-
-  // Constrain the token's position to be within its container's layout rect.
   const containerWidth = containerLayout?.width ?? Dimensions.get('window').width;
   const containerHeight = containerLayout?.height ?? Dimensions.get('window').height;
-  const translateX = Animated.diffClamp(pan.x, 0, containerWidth - size);
-  const translateY = Animated.diffClamp(pan.y, 0, containerHeight - size);
-  translateX.addListener(({ value }) => movingPosition.current = { ...movingPosition.current, x: value });
-  translateY.addListener(({ value }) => movingPosition.current = { ...movingPosition.current, y: value });
+
+  const tap = Gesture.Tap()
+    .onStart(() => onPress?.())
+    .runOnJS(true);
+  const pan = Gesture.Pan()
+    .onStart(() => moving.value = true)
+    .onChange((event) => {
+      if (moving.value) {
+        offset.value = {
+          x: _.clamp(offset.value.x + event.changeX, 0, containerWidth - size),
+          y: _.clamp(offset.value.y + event.changeY, 0, containerHeight - size),
+        };
+      }
+    })
+    .onEnd((event) => {
+      moving.value = false;
+      onMove?.({
+        x: (position?.x || 0) + event.translationX,
+        y: (position?.y || 0) + event.translationY,
+      });
+    })
+    .runOnJS(true);
+  const gestures = Gesture.Exclusive(pan, tap);
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: offset.value.x },
+        { translateY: offset.value.y },
+      ],
+    };
+  }, [offset]);
 
   const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
       flexDirection: 'column',
       position: 'absolute',
-      transform: [{ translateX }, { translateY }],
       zIndex: front ? 1 : 0,
     },
     token: {
@@ -135,12 +123,12 @@ function Token(props: PropsWithChildren<TokenProps>) {
     },
   });
   return (
-    <Animated.View style={styles.container} {...panResponder.panHandlers}>
-      <TouchableWithoutFeedback
+    <GestureDetector gesture={gestures}>
+      <Animated.View
         testID={testID}
-        onPress={onPress}
         aria-selected={selected}
-        accessibilityRole="button">
+        accessibilityRole="button"
+        style={[styles.container, animatedStyles]}>
         <View style={styles.token}>
           <ImageBackground
             style={styles.tokenBackground}
@@ -160,8 +148,8 @@ function Token(props: PropsWithChildren<TokenProps>) {
             </ImageBackground>
           </ImageBackground>
         </View>
-      </TouchableWithoutFeedback>
-    </Animated.View>
+      </Animated.View>
+    </GestureDetector>
   );
 }
 

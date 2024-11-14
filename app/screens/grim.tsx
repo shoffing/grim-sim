@@ -16,8 +16,10 @@ import ReminderData from '@/constants/reminder-data';
 import Team from '@/constants/team';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
+import _ from 'lodash';
 import { useState } from 'react';
-import { LayoutChangeEvent, LayoutRectangle, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 import { useImmer } from 'use-immer';
 
@@ -30,12 +32,14 @@ interface GrimCharacterData {
   position: TokenPosition;
   team: Team;
   front: boolean;
+  key: number;
 }
 
 interface GrimReminderData {
   data: ReminderData;
   position: TokenPosition;
   front: boolean;
+  key: number;
 }
 
 const CHARACTER_SIZE = 128;
@@ -55,8 +59,8 @@ function Grim({ theme }: GrimProps) {
   const gameCharacters = characterIds.map(getCharacterById);
 
   /** Current characters on the grimoire "board". */
-  const [characters, setCharacters] = useImmer<GrimCharacterData[]>(gameCharacters.map(char => {
-    return ({ data: char, position: { x: 0, y: 0 }, team: char.team, front: false });
+  const [characters, setCharacters] = useImmer<GrimCharacterData[]>(gameCharacters.map((char, idx) => {
+    return ({ data: char, position: { x: 0, y: 0 }, team: char.team, front: false, key: idx });
   }));
   const setCharacterPosition = (idx: number, position: TokenPosition) => {
     setCharacters(draft => {
@@ -84,6 +88,7 @@ function Grim({ theme }: GrimProps) {
             } :
             { x: 0, y: 0 }
         ),
+        key: (_.last(characters)?.key || 0) + 1,
       });
     });
     selectCharacter(characters.length);
@@ -116,6 +121,7 @@ function Grim({ theme }: GrimProps) {
             } :
             { x: 0, y: 0 }
         ),
+        key: (_.last(reminders)?.key || 0) + 1,
       });
     });
     selectReminder(reminders.length);
@@ -209,9 +215,6 @@ function Grim({ theme }: GrimProps) {
   };
 
   const currentCharacters = characters.map((character, idx) => {
-    const onMoveStart = (pos: TokenPosition) => {
-      setCharacterPosition(idx, pos);
-    };
     const onMoveEnd = (pos: TokenPosition) => {
       setCharacterPosition(idx, pos);
       setCharacterFront(idx);
@@ -221,15 +224,14 @@ function Grim({ theme }: GrimProps) {
     };
     return (
       <Token
-        key={`character-${idx}`}
+        key={`character-${character.key}`}
         testID={`character-${idx}-${character.data.id}`}
         position={character.position}
         front={character.front}
         size={CHARACTER_SIZE}
         selected={idx === selectedCharacterIdx}
         containerLayout={layout}
-        onMoveStart={onMoveStart}
-        onMoveEnd={onMoveEnd}
+        onMove={onMoveEnd}
         onPress={onPress}>
         <Character
           character={character.data}
@@ -241,9 +243,6 @@ function Grim({ theme }: GrimProps) {
   });
 
   const currentReminders = reminders.map((reminder, idx) => {
-    const onMoveStart = (pos: TokenPosition) => {
-      setReminderPosition(idx, pos);
-    };
     const onMoveEnd = (pos: TokenPosition) => {
       setReminderPosition(idx, pos);
       setReminderFront(idx);
@@ -253,15 +252,14 @@ function Grim({ theme }: GrimProps) {
     };
     return (
       <Token
-        key={`reminder-${idx}`}
+        key={`reminder-${reminder.key}`}
         testID={`reminder-${idx}-${reminder.data.label}`}
         position={reminder.position}
         front={reminder.front}
         size={REMINDER_SIZE}
         selected={idx === selectedReminderIdx}
         containerLayout={layout}
-        onMoveStart={onMoveStart}
-        onMoveEnd={onMoveEnd}
+        onMove={onMoveEnd}
         onPress={onPress}>
         <Reminder
           reminder={reminder.data}
@@ -274,6 +272,8 @@ function Grim({ theme }: GrimProps) {
     setCharacters([]);
     setReminders([]);
   };
+
+  const tapGrim = Gesture.Tap().onStart(() => clearSelections()).runOnJS(true);
 
   const styles = StyleSheet.create({
     container: {
@@ -321,12 +321,12 @@ function Grim({ theme }: GrimProps) {
         }
         onDismiss={hideReminderSelect}
         onSelect={onReminderSelect}/>
-      <TouchableWithoutFeedback onPress={clearSelections} testID="grim" onLayout={onLayout}>
-        <Surface mode="elevated" style={styles.container}>
+      <GestureDetector gesture={tapGrim}>
+        <Surface mode="elevated" style={styles.container} testID="grim" onLayout={onLayout}>
           {currentCharacters}
           {currentReminders}
         </Surface>
-      </TouchableWithoutFeedback>
+      </GestureDetector>
     </>
   );
 }

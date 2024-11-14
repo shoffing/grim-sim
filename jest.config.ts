@@ -14,7 +14,7 @@ const config: Config = {
   },
   testTimeout: 30000,
   setupFiles: [
-    './setupJest.js',
+    './jest-setup.js',
   ],
 };
 

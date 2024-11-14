@@ -7,8 +7,9 @@ import {
 } from '@react-navigation/native';
 import merge from 'deepmerge';
 import { Stack } from 'expo-router';
-import { StrictMode } from 'react';
 import { useColorScheme } from 'react-native';
+
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 
@@ -29,18 +30,18 @@ function RootLayout() {
   const paperTheme = colorScheme === 'dark' ? CombinedDarkTheme : CombinedLightTheme;
 
   return (
-    <StrictMode>
-      <ReduxProvider store={store}>
-        <PaperProvider theme={paperTheme}>
-          <ThemeProvider value={paperTheme}>
+    <ReduxProvider store={store}>
+      <PaperProvider theme={paperTheme}>
+        <ThemeProvider value={paperTheme}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
             <Stack>
               <Stack.Screen name="index" options={{ headerShown: false }}/>
               <Stack.Screen name="game-setup" options={{ headerShown: false }}/>
             </Stack>
-          </ThemeProvider>
-        </PaperProvider>
-      </ReduxProvider>
-    </StrictMode>
+          </GestureHandlerRootView>
+        </ThemeProvider>
+      </PaperProvider>
+    </ReduxProvider>
   );
 }
 
