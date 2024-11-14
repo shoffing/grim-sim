@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { ViewStyle } from 'react-native';
 import { Button, Dialog, FAB, MD3Theme, Portal, withTheme } from 'react-native-paper';
 
 interface ReminderControlsProps {
   visible: boolean;
+  fabStyle?: ViewStyle,
   onReplace: () => void;
   onRemove: () => void;
   theme: MD3Theme;
@@ -10,7 +12,7 @@ interface ReminderControlsProps {
 
 export const ACCESSIBILITY_LABEL = 'open reminder controls';
 
-function ReminderControls({ visible, onReplace, onRemove, theme }: ReminderControlsProps) {
+function ReminderControls({ visible, fabStyle, onReplace, onRemove, theme }: ReminderControlsProps) {
   const [open, setOpen] = useState(false);
 
   const [confirmRemove, setConfirmRemove] = useState(false);
@@ -42,6 +44,7 @@ function ReminderControls({ visible, onReplace, onRemove, theme }: ReminderContr
       <FAB.Group
         accessibilityLabel={ACCESSIBILITY_LABEL}
         style={{ transform: [{ scale: 1.1 }], transformOrigin: '100% 100%' }}
+        fabStyle={fabStyle}
         variant="tertiary"
         open={open}
         visible={visible}

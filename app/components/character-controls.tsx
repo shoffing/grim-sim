@@ -1,8 +1,12 @@
+import { TokenPosition } from '@/app/components/token';
 import { useState } from 'react';
-import { Button, Dialog, FAB, MD3Theme, Portal, withTheme } from 'react-native-paper';
+import { Button, Dialog, MD3Theme, Menu, Portal, withTheme } from 'react-native-paper';
 
 interface CharacterControlsProps {
   visible: boolean;
+  position: TokenPosition;
+  onDismiss: () => void;
+  hideControls: () => void;
   onReplace: () => void;
   onAddReminder: () => void;
   onChangeTeam: () => void;
@@ -14,26 +18,45 @@ export const ACCESSIBILITY_LABEL = 'open character controls';
 
 function CharacterControls({
                              visible,
+                             position,
+                             onDismiss,
+                             hideControls,
                              onReplace,
                              onAddReminder,
                              onChangeTeam,
                              onRemove,
                              theme,
                            }: CharacterControlsProps) {
-  const [open, setOpen] = useState(false);
 
   const [confirmRemove, setConfirmRemove] = useState(false);
   const showConfirmRemove = () => setConfirmRemove(true);
-  const hideConfirmRemove = () => setConfirmRemove(false);
+  const hideConfirmRemove = () => {
+    onDismiss();
+    setConfirmRemove(false);
+  };
   const onConfirmRemove = () => {
     hideConfirmRemove();
     onRemove();
   };
 
+  // Hide controls when pressing menu items.
+  const onPress = (wrapped: () => void) => () => {
+    hideControls();
+    wrapped();
+  };
+
   return (
     <Portal>
-      <Dialog visible={confirmRemove} onDismiss={hideConfirmRemove}
-              style={{ bottom: 48, right: 0, position: 'absolute' }}>
+      <Menu
+        anchor={position}
+        visible={visible}
+        onDismiss={onDismiss}>
+        <Menu.Item leadingIcon="swap-horizontal" title="Replace" onPress={onPress(onReplace)}/>
+        <Menu.Item leadingIcon="account-group" title="Change team" onPress={onPress(onChangeTeam)}/>
+        <Menu.Item leadingIcon="information-outline" title="Add reminder" onPress={onPress(onAddReminder)}/>
+        <Menu.Item leadingIcon="delete" title="Remove" onPress={onPress(showConfirmRemove)}/>
+      </Menu>
+      <Dialog visible={confirmRemove} onDismiss={hideConfirmRemove}>
         <Dialog.Title>Are you sure you want to remove this character?</Dialog.Title>
         <Dialog.Actions>
           <Button testID="cancel-remove-character" onPress={hideConfirmRemove}>Cancel</Button>
@@ -48,46 +71,6 @@ function CharacterControls({
           </Button>
         </Dialog.Actions>
       </Dialog>
-      <FAB.Group
-        accessibilityLabel={ACCESSIBILITY_LABEL}
-        style={{ transform: [{ scale: 1.1 }], transformOrigin: '100% 100%' }}
-        variant="secondary"
-        open={open}
-        visible={visible}
-        icon={open ? 'cog-off' : 'account-cog'}
-        actions={[
-          {
-            icon: 'swap-horizontal',
-            label: 'Replace',
-            onPress: onReplace,
-            size: 'medium',
-            testID: 'replace-character',
-          },
-          {
-            icon: 'account-group',
-            label: 'Change team',
-            onPress: onChangeTeam,
-            size: 'medium',
-            testID: 'change-team-character',
-          },
-          {
-            icon: 'information-outline',
-            label: 'Add reminder',
-            onPress: onAddReminder,
-            size: 'medium',
-            testID: 'add-reminder-character',
-          },
-          {
-            icon: 'delete',
-            label: 'Remove',
-            labelTextColor: theme.colors.error,
-            color: theme.colors.error,
-            onPress: showConfirmRemove,
-            size: 'medium',
-            testID: 'delete-character',
-          },
-        ]}
-        onStateChange={({ open }) => setOpen(open)}/>
     </Portal>
   );
 }

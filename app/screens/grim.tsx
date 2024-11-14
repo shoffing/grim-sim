@@ -11,16 +11,16 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
 import ReminderSelect from '@/app/screens/reminder-select';
 import CharacterData from '@/constants/characters/character-data';
-import { getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
+import { CHARACTERS, getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
 import ReminderData from '@/constants/reminder-data';
 import Team from '@/constants/team';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import _ from 'lodash';
 import { useState } from 'react';
-import { LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
+import { LayoutChangeEvent, LayoutRectangle, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { MD3Theme, Surface, withTheme } from 'react-native-paper';
+import { Button, MD3Theme, Menu, Surface, withTheme } from 'react-native-paper';
 import { useImmer } from 'use-immer';
 
 interface GrimProps {
@@ -143,15 +143,17 @@ function Grim({ theme }: GrimProps) {
     setCharacters(draft => {
       draft[selectedCharacterIdx].team = (draft[selectedCharacterIdx].team === Team.Good ? Team.Evil : Team.Good);
     });
+    clearSelections();
   };
   const replaceSelectedCharacterData = (newData: CharacterData) => {
     if (selectedCharacterIdx == null) return;
     setCharacters(draft => void (draft[selectedCharacterIdx].data = newData));
+    clearSelections();
   };
   const removeSelectedCharacter = () => {
     if (selectedCharacterIdx == null) return;
     setCharacters(draft => void (draft.splice(selectedCharacterIdx, 1)));
-    setSelectedCharacterIdx(undefined);
+    clearSelections();
   };
 
   /** Handling character selection. */
@@ -165,6 +167,7 @@ function Grim({ theme }: GrimProps) {
       addCharacter(selectedCharacter);
     }
     hideCharacterSelect();
+    clearSelections();
   };
 
   /** Handling ReminderControls. */
@@ -194,6 +197,7 @@ function Grim({ theme }: GrimProps) {
       addReminder(selectedReminder, selectedCharacterIdx ? characters[selectedCharacterIdx].position : undefined);
     }
     hideReminderSelect();
+    clearSelections();
   };
 
   const [layout, setLayout] = useState<LayoutRectangle>();
@@ -222,6 +226,21 @@ function Grim({ theme }: GrimProps) {
     const onPress = () => {
       selectCharacter(selectedCharacterIdx === idx ? undefined : idx);
     };
+    const controlsPosition = {
+      x: character.position.x,
+      y: character.position.y + CHARACTER_SIZE,
+    };
+    const controls = (visible: boolean, hideControls: () => void) => (
+      <CharacterControls
+        visible={idx === selectedCharacterIdx && visible}
+        position={controlsPosition}
+        hideControls={hideControls}
+        onDismiss={clearSelections}
+        onChangeTeam={swapSelectedCharacterTeam}
+        onReplace={showCharacterSelect}
+        onAddReminder={showReminderSelect}
+        onRemove={removeSelectedCharacter}/>
+    );
     return (
       <Token
         key={`character-${character.key}`}
@@ -232,7 +251,8 @@ function Grim({ theme }: GrimProps) {
         selected={idx === selectedCharacterIdx}
         containerLayout={layout}
         onMove={onMoveEnd}
-        onPress={onPress}>
+        onPress={onPress}
+        controls={controls}>
         <Character
           character={character.data}
           team={character.team}
@@ -291,19 +311,15 @@ function Grim({ theme }: GrimProps) {
   return (
     <>
       <GameControls
-        visible={selectedCharacterIdx == null && selectedReminderIdx == null}
+        visible={true}
+        fabStyle={{ zIndex: 9999 }}
         onAddCharacter={() => showCharacterSelect()}
         onAddReminder={() => showReminderSelect()}
         onGameSetup={() => router.push('/game-setup')}
         onClearGrim={onClearGrim}/>
-      <CharacterControls
-        visible={selectedCharacterIdx != null}
-        onChangeTeam={swapSelectedCharacterTeam}
-        onReplace={showCharacterSelect}
-        onAddReminder={showReminderSelect}
-        onRemove={removeSelectedCharacter}/>
       <ReminderControls
         visible={selectedReminderIdx != null}
+        fabStyle={{ transform: [{ translateX: -68 }] }}
         onReplace={showReminderSelect}
         onRemove={removeSelectedReminder}/>
       <CharacterSelect

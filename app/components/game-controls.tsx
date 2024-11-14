@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { ViewStyle } from 'react-native';
 import { Button, Dialog, FAB, MD3Theme, Portal, withTheme } from 'react-native-paper';
 
 interface GameControlsProps {
   visible: boolean;
+  fabStyle?: ViewStyle,
   onAddCharacter: () => void;
   onAddReminder: () => void;
   onGameSetup: () => void;
@@ -12,7 +14,15 @@ interface GameControlsProps {
 
 export const ACCESSIBILITY_LABEL = 'open game controls';
 
-function GameControls({ visible, onAddCharacter, onAddReminder, onGameSetup, onClearGrim, theme }: GameControlsProps) {
+function GameControls({
+                        visible,
+                        fabStyle,
+                        onAddCharacter,
+                        onAddReminder,
+                        onGameSetup,
+                        onClearGrim,
+                        theme,
+                      }: GameControlsProps) {
   const [open, setOpen] = useState(false);
 
   const [confirmClearGrim, setConfirmClearGrim] = useState(false);
@@ -44,13 +54,26 @@ function GameControls({ visible, onAddCharacter, onAddReminder, onGameSetup, onC
       <FAB.Group
         accessibilityLabel={ACCESSIBILITY_LABEL}
         style={{ transform: [{ scale: 1.1 }], transformOrigin: '100% 100%' }}
+        fabStyle={fabStyle}
         variant="primary"
         open={open}
         visible={visible}
         icon={open ? 'cog-off' : 'cog'}
         actions={[
-          { icon: 'account-plus', label: 'Add character', onPress: onAddCharacter, size: 'medium', testID: 'add-character-game' },
-          { icon: 'information-outline', label: 'Add reminder', onPress: onAddReminder, size: 'medium', testID: 'add-reminder-game' },
+          {
+            icon: 'account-plus',
+            label: 'Add character',
+            onPress: onAddCharacter,
+            size: 'medium',
+            testID: 'add-character-game',
+          },
+          {
+            icon: 'information-outline',
+            label: 'Add reminder',
+            onPress: onAddReminder,
+            size: 'medium',
+            testID: 'add-reminder-game',
+          },
           { icon: 'application-cog', label: 'Game setup', onPress: onGameSetup, size: 'medium', testID: 'setup-game' },
           {
             icon: 'nuke',

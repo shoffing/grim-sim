@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren, ReactNode, useEffect, useState } from 'react';
 import { Dimensions, ImageBackground, LayoutRectangle, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, withTheme } from 'react-native-paper';
@@ -18,6 +18,7 @@ interface TokenProps {
   containerLayout?: LayoutRectangle;
   onMove?: (position: TokenPosition) => void;
   onPress?: () => void;
+  controls?: (visible: boolean, dismissControls: () => void) => ReactNode;
   theme: MD3Theme;
   testID: string;
 }
@@ -31,13 +32,18 @@ function Token(props: PropsWithChildren<TokenProps>) {
     containerLayout,
     onMove,
     onPress,
+    controls,
     theme,
     children,
     testID,
   } = props;
-  const selectedBorderSize = Math.round(size / 16);
-  const offset = useSharedValue(position || {x: 0, y: 0});
+  const [controlsVisible, setControlsVisible] = useState(false);
+  const showControls = () => setControlsVisible(true);
+  const hideControls = () => setControlsVisible(false);
+
+  const offset = useSharedValue(position || { x: 0, y: 0 });
   const moving = useSharedValue(false);
+  const hover = useSharedValue(false);
 
   // Update offset to position only when it changes.
   useEffect(() => {
@@ -50,7 +56,12 @@ function Token(props: PropsWithChildren<TokenProps>) {
   const containerHeight = containerLayout?.height ?? Dimensions.get('window').height;
 
   const tap = Gesture.Tap()
-    .onStart(() => onPress?.())
+    .onBegin(() => hover.value = true)
+    .onStart(() => {
+      showControls();
+      onPress?.();
+    })
+    .onFinalize(() => hover.value = false)
     .runOnJS(true);
   const pan = Gesture.Pan()
     .onStart(() => moving.value = true)
@@ -65,8 +76,8 @@ function Token(props: PropsWithChildren<TokenProps>) {
     .onEnd((event) => {
       moving.value = false;
       onMove?.({
-        x: (position?.x || 0) + event.translationX,
-        y: (position?.y || 0) + event.translationY,
+        x: _.clamp((position?.x || 0) + event.translationX, containerWidth - size),
+        y: _.clamp((position?.y || 0) + event.translationY, containerHeight - size),
       });
     })
     .runOnJS(true);
@@ -78,8 +89,9 @@ function Token(props: PropsWithChildren<TokenProps>) {
         { translateX: offset.value.x },
         { translateY: offset.value.y },
       ],
+      opacity: moving.value || hover.value ? 0.8 : 1,
     };
-  }, [offset]);
+  });
 
   const styles = StyleSheet.create({
     container: {
@@ -90,16 +102,11 @@ function Token(props: PropsWithChildren<TokenProps>) {
     },
     token: {
       alignItems: 'center',
-      backgroundColor: 'green',
       borderColor: theme.colors.primary,
       borderRadius: size * 2,
-      borderStyle: 'solid',
-      borderWidth: selected ? selectedBorderSize : 0,
-      height: size + (selected ? selectedBorderSize * 2 : 0),
+      height: size,
       justifyContent: 'center',
-      left: selected ? -selectedBorderSize : 0,
-      top: selected ? -selectedBorderSize : 0,
-      width: size + (selected ? selectedBorderSize * 2 : 0),
+      width: size,
     },
     tokenBackground: {
       width: '100%',
@@ -123,33 +130,36 @@ function Token(props: PropsWithChildren<TokenProps>) {
     },
   });
   return (
-    <GestureDetector gesture={gestures}>
-      <Animated.View
-        testID={testID}
-        aria-selected={selected}
-        accessibilityRole="button"
-        style={[styles.container, animatedStyles]}>
-        <View style={styles.token}>
-          <ImageBackground
-            style={styles.tokenBackground}
-            imageStyle={styles.tokenBackgroundImageNoise}
-            resizeMethod="auto"
-            resizeMode="stretch"
-            source={require('@/assets/images/character-token-noise.webp')}>
+    <>
+      <GestureDetector gesture={gestures}>
+        <Animated.View
+          testID={testID}
+          aria-selected={selected}
+          accessibilityRole="button"
+          style={[styles.container, animatedStyles]}>
+          <View style={styles.token}>
             <ImageBackground
               style={styles.tokenBackground}
-              imageStyle={styles.tokenBackgroundImageClock}
+              imageStyle={styles.tokenBackgroundImageNoise}
               resizeMethod="auto"
-              resizeMode="contain"
-              source={require('@/assets/images/clockface.webp')}>
-              <View style={styles.tokenContent}>
-                {children}
-              </View>
+              resizeMode="stretch"
+              source={require('@/assets/images/character-token-noise.webp')}>
+              <ImageBackground
+                style={styles.tokenBackground}
+                imageStyle={styles.tokenBackgroundImageClock}
+                resizeMethod="auto"
+                resizeMode="contain"
+                source={require('@/assets/images/clockface.webp')}>
+                <View style={styles.tokenContent}>
+                  {children}
+                </View>
+              </ImageBackground>
             </ImageBackground>
-          </ImageBackground>
-        </View>
-      </Animated.View>
-    </GestureDetector>
+          </View>
+        </Animated.View>
+      </GestureDetector>
+      {controls?.(controlsVisible, hideControls)}
+    </>
   );
 }
 
