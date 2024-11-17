@@ -1,9 +1,13 @@
-import gameReducer from '@/app/game-slice';
+import charactersReducer from '@/app/state/characters-slice';
+import grimReducer from '@/app/state/grim-slice';
+import remindersReducer from '@/app/state/reminders-slice';
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
 export const store = configureStore({
   reducer: {
-    game: gameReducer,
+    grim: grimReducer,
+    characters: charactersReducer,
+    reminders: remindersReducer,
   },
 });
 

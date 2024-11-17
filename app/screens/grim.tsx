@@ -5,23 +5,51 @@ import Player from '@/app/components/player';
 import Reminder from '@/app/components/reminder';
 import ReminderControls from '@/app/components/reminder-controls';
 import Token from '@/app/components/token';
-import * as slice from '@/app/game-slice';
-import { selectGameState } from '@/app/game-slice';
+import { CHARACTER_SIZE, REMINDER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
 import ReminderSelect from '@/app/screens/reminder-select';
-import CharacterData from '@/constants/characters/character-data';
-import { getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
+import {
+  addCharacter,
+  selectCharacters,
+  setCharacterFront,
+  setCharacterId,
+  setCharacterPosition,
+  setCharacters,
+} from '@/app/state/characters-slice';
+import {
+  clearReminderCharacter,
+  clearReplacingCharacter,
+  clearReplacingReminder,
+  clearSelectedCharacter,
+  clearSelectedReminder,
+  selectEdition,
+  selectReminderCharacter,
+  selectReplacingCharacterKey,
+  selectReplacingReminderKey,
+  selectSelectedCharacter,
+  selectSelectedReminder,
+  setLayout,
+  setSelectedCharacter,
+  setSelectedReminder,
+} from '@/app/state/grim-slice';
+import {
+  addReminder,
+  selectReminders,
+  setReminderData,
+  setReminderFront,
+  setReminderPosition,
+  setReminders,
+} from '@/app/state/reminders-slice';
+import CharacterId from '@/constants/characters/character-id';
+import { getCharacterById } from '@/constants/characters/characters';
 import ReminderData from '@/constants/reminder-data';
-import Team from '@/constants/team';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import _ from 'lodash';
 import { useState } from 'react';
-import { LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
+import { LayoutChangeEvent, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
-import { useImmer } from 'use-immer';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -31,24 +59,6 @@ export interface GrimPosition {
   x: number;
   y: number;
 }
-
-interface GrimCharacterData {
-  data: CharacterData;
-  position: GrimPosition;
-  team: Team;
-  front: boolean;
-  key: number;
-}
-
-interface GrimReminderData {
-  data: ReminderData;
-  position: GrimPosition;
-  front: boolean;
-  key: number;
-}
-
-const CHARACTER_SIZE = 128;
-const REMINDER_SIZE = 92;
 
 function Grim({ theme }: GrimProps) {
   const router = useRouter();
@@ -60,206 +70,53 @@ function Grim({ theme }: GrimProps) {
   });
 
   const dispatch = useAppDispatch();
-  const { characters: characterIds, edition, initialize } = useAppSelector(state => selectGameState(state.game));
-  const gameCharacters = characterIds.map(getCharacterById);
+  const characters = useAppSelector(state => selectCharacters(state.characters));
+  const reminders = useAppSelector(state => selectReminders(state.reminders));
 
-  /** Current characters on the grimoire "board". */
-  const [characters, setCharacters] = useImmer<GrimCharacterData[]>(gameCharacters.map((char, idx) => {
-    return ({ data: char, position: { x: 0, y: 0 }, team: char.team, front: false, key: idx });
-  }));
-  const setCharacterPosition = (idx: number, position: GrimPosition) => {
-    setCharacters(draft => {
-      if (draft[idx]) draft[idx].position = position;
-    });
-  };
-  const setCharacterFront = (idx: number) => {
-    setCharacters(draft => {
-      draft.forEach((character, oIdx) => {
-        character.front = oIdx === idx;
-      });
-    });
-  };
-  const addCharacter = (character: CharacterData) => {
-    setCharacters(draft => {
-      draft.push({
-        data: character,
-        front: false,
-        team: character.team,
-        position: (
-          layout ?
-            {
-              x: (layout.width / 2) - CHARACTER_SIZE / 2,
-              y: (layout.height / 2) - CHARACTER_SIZE / 2,
-            } :
-            { x: 0, y: 0 }
-        ),
-        key: (_.last(characters)?.key || 0) + 1,
-      });
-    });
-    selectCharacter(characters.length);
-  };
+  const edition = useAppSelector(state => selectEdition(state.grim));
 
-  /** Current reminders on the grimoire "board". */
-  const [reminders, setReminders] = useImmer<GrimReminderData[]>([]);
-  const setReminderPosition = (idx: number, position: GrimPosition) => {
-    setReminders(draft => {
-      if (draft[idx]) draft[idx].position = position;
-    });
-  };
-  const setReminderFront = (idx: number) => {
-    setReminders(draft => {
-      draft.forEach((reminder, oIdx) => {
-        reminder.front = oIdx === idx;
-      });
-    });
-  };
-  const addReminder = (reminder: ReminderData, position?: GrimPosition) => {
-    setReminders(draft => {
-      draft.push({
-        data: reminder,
-        front: true,
-        position: position || (
-          layout ?
-            {
-              x: (layout.width / 2) - REMINDER_SIZE / 2,
-              y: (layout.height / 2) - REMINDER_SIZE / 2,
-            } :
-            { x: 0, y: 0 }
-        ),
-        key: (_.last(reminders)?.key || 0) + 1,
-      });
-    });
-    selectReminder(reminders.length);
-  };
+  const selectedCharacter = useAppSelector(state => selectSelectedCharacter(state));
+  const replacingCharacterKey = useAppSelector(state => selectReplacingCharacterKey(state.grim));
+  const reminderCharacter = useAppSelector(state => selectReminderCharacter(state));
 
-  const clearSelections = () => {
-    setSelectedCharacterIdx(undefined);
-    setSelectedReminderIdx(undefined);
-  };
+  const selectedReminder = useAppSelector(state => selectSelectedReminder(state));
+  const replacingReminderKey = useAppSelector(state => selectReplacingReminderKey(state.grim));
 
-  /** Handling CharacterControls. */
-  const [selectedCharacterIdx, setSelectedCharacterIdx] = useState<number>();
-  const selectCharacter = (idx?: number) => {
-    clearSelections();
-    setSelectedCharacterIdx(idx);
-  };
-  const swapSelectedCharacterTeam = () => {
-    if (selectedCharacterIdx == null) return;
-    setCharacters(draft => {
-      draft[selectedCharacterIdx].team = (draft[selectedCharacterIdx].team === Team.Good ? Team.Evil : Team.Good);
-    });
-    clearSelections();
-  };
-  const replaceSelectedCharacterData = (newData: CharacterData) => {
-    if (selectedCharacterIdx == null) return;
-    setCharacters(draft => void (draft[selectedCharacterIdx].data = newData));
-    clearSelections();
-  };
-  const removeSelectedCharacter = () => {
-    if (selectedCharacterIdx == null) return;
-    setCharacters(draft => void (draft.splice(selectedCharacterIdx, 1)));
-    clearSelections();
-  };
+  /** Handling adding new character */
+  const [addingNewCharacter, setAddingNewCharacter] = useState(false);
+  const showAddNewCharacter = () => setAddingNewCharacter(true);
+  const hideAddNewCharacter = () => setAddingNewCharacter(false);
 
-  /** Handling character selection. */
-  const [characterSelectVisible, setCharacterSelectVisible] = useState(false);
-  const showCharacterSelect = () => setCharacterSelectVisible(true);
-  const hideCharacterSelect = () => setCharacterSelectVisible(false);
-  const onCharacterSelect = (selectedCharacter: CharacterData) => {
-    if (selectedCharacterIdx != null) {
-      replaceSelectedCharacterData(selectedCharacter);
-    } else {
-      addCharacter(selectedCharacter);
-    }
-    hideCharacterSelect();
-    clearSelections();
-  };
+  /** Handling adding new character */
+  const [addingNewReminder, setAddingNewReminder] = useState(false);
+  const showAddNewReminder = () => setAddingNewReminder(true);
+  const hideAddNewReminder = () => setAddingNewReminder(false);
 
-  /** Handling ReminderControls. */
-  const [selectedReminderIdx, setSelectedReminderIdx] = useState<number>();
-  const selectReminder = (idx?: number) => {
-    clearSelections();
-    setSelectedReminderIdx(idx);
-  };
-  const replaceSelectedReminderData = (newData: ReminderData) => {
-    if (selectedReminderIdx == null) return;
-    setReminders(draft => void (draft[selectedReminderIdx].data = newData));
-  };
-  const removeSelectedReminder = () => {
-    if (selectedReminderIdx == null) return;
-    setReminders(draft => void (draft.splice(selectedReminderIdx, 1)));
-    setSelectedReminderIdx(undefined);
-  };
-
-  /** Handling reminder selection. */
-  const [reminderSelectVisible, setReminderSelectVisible] = useState(false);
-  const showReminderSelect = () => setReminderSelectVisible(true);
-  const hideReminderSelect = () => setReminderSelectVisible(false);
-  const onReminderSelect = (selectedReminder: ReminderData) => {
-    if (selectedReminderIdx != null) {
-      replaceSelectedReminderData(selectedReminder);
-    } else {
-      addReminder(selectedReminder, selectedCharacterIdx ? characters[selectedCharacterIdx].position : undefined);
-    }
-    hideReminderSelect();
-    clearSelections();
-  };
-
-  const [layout, setLayout] = useState<LayoutRectangle>();
   const onLayout = (event: LayoutChangeEvent) => {
-    setLayout(event.nativeEvent.layout);
-
-    if (initialize) {
-      // Position characters in ellipse layout.
-      const { width, height } = event.nativeEvent.layout;
-      characters.forEach((_c, idx) => {
-        const t = idx / characters.length;
-        setCharacterPosition(idx, {
-          x: (width / 2) + Math.cos(2 * t * Math.PI) * 0.8 * (width / 2) - CHARACTER_SIZE / 2,
-          y: (height / 2) + Math.sin(2 * t * Math.PI) * 0.8 * (height / 2) - CHARACTER_SIZE / 2,
-        });
-      });
-      dispatch(slice.setInitialize(false));
-    }
+    dispatch(setLayout(event.nativeEvent.layout));
   };
 
   const currentCharacters = characters.map((character, idx) => {
-    const onMoveEnd = (pos: GrimPosition) => {
-      setCharacterPosition(idx, pos);
-      setCharacterFront(idx);
-    };
     const onPress = () => {
-      selectCharacter(selectedCharacterIdx === idx ? undefined : idx);
+      dispatch(setSelectedCharacter(character.key));
     };
-    const controlsPosition = {
-      x: character.position.x,
-      y: character.position.y + CHARACTER_SIZE,
+    const onMove = (position: GrimPosition) => {
+      dispatch(setCharacterPosition({ key: character.key, position }));
+      dispatch(setCharacterFront(character.key));
     };
-    const controls = (visible: boolean, hideControls: () => void) => (
-      <CharacterControls
-        visible={idx === selectedCharacterIdx && visible}
-        position={controlsPosition}
-        hideControls={hideControls}
-        onDismiss={clearSelections}
-        onChangeTeam={swapSelectedCharacterTeam}
-        onReplace={showCharacterSelect}
-        onAddReminder={showReminderSelect}
-        onRemove={removeSelectedCharacter}/>
-    );
     return (
       <Token
         key={`character-${character.key}`}
-        testID={`character-${idx}-${character.data.id}`}
+        testID={`character-${idx}-${character.id}`}
+        selected={character.key === selectedCharacter?.key}
         position={character.position}
         front={character.front}
         size={CHARACTER_SIZE}
-        selected={idx === selectedCharacterIdx}
-        containerLayout={layout}
-        onMove={onMoveEnd}
+        onMove={onMove}
         onPress={onPress}
-        controls={controls}>
+        controls={<CharacterControls character={character} selectedCharacter={selectedCharacter}/>}>
         <Character
-          character={character.data}
+          character={getCharacterById(character.id)}
           team={character.team}
           nameStyle={{ color: 'black' }}/>
         <Player name="Steve" alive={true}/>
@@ -268,38 +125,24 @@ function Grim({ theme }: GrimProps) {
   });
 
   const currentReminders = reminders.map((reminder, idx) => {
-    const onMoveEnd = (pos: GrimPosition) => {
-      setReminderPosition(idx, pos);
-      setReminderFront(idx);
-    };
     const onPress = () => {
-      selectReminder(selectedReminderIdx === idx ? undefined : idx);
+      dispatch(setSelectedReminder(reminder.key));
     };
-    const controlsPosition = {
-      x: reminder.position.x,
-      y: reminder.position.y + REMINDER_SIZE,
+    const onMove = (position: GrimPosition) => {
+      dispatch(setReminderPosition({ key: reminder.key, position }));
+      dispatch(setReminderFront(reminder.key));
     };
-    const controls = (visible: boolean, hideControls: () => void) => (
-      <ReminderControls
-        visible={idx === selectedReminderIdx && visible}
-        position={controlsPosition}
-        hideControls={hideControls}
-        onDismiss={clearSelections}
-        onReplace={showReminderSelect}
-        onRemove={removeSelectedReminder}/>
-    );
     return (
       <Token
         key={`reminder-${reminder.key}`}
         testID={`reminder-${idx}-${reminder.data.label}`}
+        selected={reminder.key === selectedCharacter?.key}
         position={reminder.position}
         front={reminder.front}
         size={REMINDER_SIZE}
-        selected={idx === selectedReminderIdx}
-        containerLayout={layout}
-        onMove={onMoveEnd}
+        onMove={onMove}
         onPress={onPress}
-        controls={controls}>
+        controls={<ReminderControls reminder={reminder} selectedReminder={selectedReminder}/>}>
         <Reminder
           reminder={reminder.data}
           labelStyle={{ color: 'black' }}/>
@@ -308,11 +151,14 @@ function Grim({ theme }: GrimProps) {
   });
 
   const onClearGrim = () => {
-    setCharacters([]);
-    setReminders([]);
+    dispatch(setCharacters([]));
+    dispatch(setReminders([]));
   };
 
-  const tapGrim = Gesture.Tap().onStart(() => clearSelections()).runOnJS(true);
+  const tapGrim = Gesture.Tap().onStart(() => {
+    dispatch(clearSelectedCharacter());
+    dispatch(clearSelectedReminder());
+  }).runOnJS(true);
 
   const styles = StyleSheet.create({
     container: {
@@ -324,6 +170,40 @@ function Grim({ theme }: GrimProps) {
     },
   });
 
+  const dismissCharacterSelect = () => {
+    dispatch(clearReplacingCharacter());
+    hideAddNewCharacter();
+  };
+  const onCharacterSelect = (id: CharacterId) => {
+    if (replacingCharacterKey != null) {
+      // Replacing an existing character.
+      dispatch(setCharacterId({ key: replacingCharacterKey, id }));
+    } else {
+      // Adding a new character.
+      dispatch(addCharacter({ id }));
+    }
+    dismissCharacterSelect();
+  };
+
+  const dismissReminderSelect = () => {
+    dispatch(clearReplacingReminder());
+    dispatch(clearReminderCharacter());
+    hideAddNewReminder();
+  };
+  const onReminderSelect = (data: ReminderData) => {
+    if (replacingReminderKey != null) {
+      // Replacing an existing reminder.
+      dispatch(setReminderData({ key: replacingReminderKey, data }));
+    } else if (reminderCharacter) {
+      // Adding a new reminder to a character.
+      dispatch(addReminder({ data, position: reminderCharacter.position }));
+    } else {
+      // Adding a new reminder.
+      dispatch(addReminder({ data }));
+    }
+    dismissReminderSelect();
+  };
+
   // Render nothing if this page is not focused.
   if (!focused) return;
 
@@ -332,25 +212,23 @@ function Grim({ theme }: GrimProps) {
       <GameControls
         visible={true}
         fabStyle={{ zIndex: 9999 }}
-        onAddCharacter={() => showCharacterSelect()}
-        onAddReminder={() => showReminderSelect()}
+        onAddCharacter={() => showAddNewCharacter()}
+        onAddReminder={() => showAddNewReminder()}
         onGameSetup={() => router.push('/game-setup')}
         onClearGrim={onClearGrim}/>
       <CharacterSelect
-        visible={characterSelectVisible}
-        characters={getCharactersByEdition(edition)}
-        onDismiss={hideCharacterSelect}
-        onSelect={onCharacterSelect}/>
+        visible={addingNewCharacter || replacingCharacterKey != null}
+        onSelect={onCharacterSelect}
+        onDismiss={dismissCharacterSelect}
+        edition={edition}/>
       <ReminderSelect
-        visible={reminderSelectVisible}
+        visible={addingNewReminder || replacingReminderKey != null || reminderCharacter != null}
         edition={edition}
         characterIds={
-          selectedCharacterIdx ?
-            [characters[selectedCharacterIdx].data.id] :
-            characters.map(c => c.data.id)
+          selectedCharacter ? [selectedCharacter.id] : characters.map(c => c.id)
         }
-        onDismiss={hideReminderSelect}
-        onSelect={onReminderSelect}/>
+        onSelect={onReminderSelect}
+        onDismiss={dismissReminderSelect}/>
       <GestureDetector gesture={tapGrim}>
         <Surface mode="elevated" style={styles.container} testID="grim" onLayout={onLayout}>
           {currentCharacters}

@@ -1,18 +1,20 @@
 import Character from '@/app/components/character';
 import TokenSelect from '@/app/screens/token-select';
-import CharacterData from '@/constants/characters/character-data';
+import CharacterId from '@/constants/characters/character-id';
+import { getCharactersByEdition } from '@/constants/characters/characters';
 import { StyleSheet, View } from 'react-native';
 import { MD3Theme, TouchableRipple, withTheme } from 'react-native-paper';
 
 interface CharacterSelectProps {
   visible: boolean;
-  characters: CharacterData[];
+  edition: string;
+  onSelect: (character: CharacterId) => void;
   onDismiss: () => void;
-  onSelect: (character: CharacterData) => void;
   theme: MD3Theme;
 }
 
-function CharacterSelect({ visible, characters, onDismiss, onSelect, theme }: CharacterSelectProps) {
+function CharacterSelect({ visible, edition, onSelect, onDismiss, theme }: CharacterSelectProps) {
+  const characters = getCharactersByEdition(edition);
   const characterSelectContent = characters.map((character, idx) => {
     const characterStyle = StyleSheet.create({
       touchable: {
@@ -37,7 +39,7 @@ function CharacterSelect({ visible, characters, onDismiss, onSelect, theme }: Ch
       <TouchableRipple
         accessibilityRole="button"
         key={`character-${idx}`}
-        onPress={() => onSelect(character)}
+        onPress={() => onSelect(character.id)}
         style={characterStyle.touchable}
         rippleColor={theme.colors.secondary}
         borderless={true}>

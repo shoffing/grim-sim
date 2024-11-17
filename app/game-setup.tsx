@@ -1,6 +1,9 @@
 import Character from '@/app/components/character';
-import * as slice from '@/app/game-slice';
+import { CHARACTER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { addCharacter, setCharacters } from '@/app/state/characters-slice';
+import { selectLayout } from '@/app/state/grim-slice';
+import { setReminders } from '@/app/state/reminders-slice';
 import CharacterData from '@/constants/characters/character-data';
 import CharacterType from '@/constants/characters/character-type';
 import { getCharactersByEdition } from '@/constants/characters/characters';
@@ -49,19 +52,20 @@ function GameSetup({ theme }: GameSetupProps) {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
+  const layout = useAppSelector(state => selectLayout(state.grim));
 
-  const gameState = useAppSelector(({ game }) => slice.selectGameState(game));
-  const [edition, setEdition] = useState(gameState.edition);
-  const [playerCount, setPlayerCount] = useState(gameState.playerCount);
+  const [edition, setEdition] = useState('tb');
+  const [playerCount, setPlayerCount] = useState(8);
   const [selectedCharacters, setSelectedCharacters] = useState<CharacterData[]>([]);
-  // TODO: these will need to change to support duplicates of characters.
-  const addCharacter = (character: CharacterData) => setSelectedCharacters([...selectedCharacters, character]);
-  const removeCharacter = (character: CharacterData) => setSelectedCharacters(selectedCharacters.filter(c => c.id !== character.id));
+
+  // TODO: these will need to change to support duplicates of characterIds.
+  const selectCharacter = (character: CharacterData) => setSelectedCharacters([...selectedCharacters, character]);
+  const unselectCharacter = (character: CharacterData) => setSelectedCharacters(selectedCharacters.filter(c => c.id !== character.id));
   const toggleCharacter = (character: CharacterData) => {
     if (selectedCharacters.includes(character)) {
-      removeCharacter(character);
+      unselectCharacter(character);
     } else {
-      addCharacter(character);
+      selectCharacter(character);
     }
   };
 
@@ -187,10 +191,19 @@ function GameSetup({ theme }: GameSetupProps) {
   );
 
   const onStartGame = () => {
-    dispatch(slice.setEdition(edition));
-    dispatch(slice.setPlayerCount(playerCount));
-    dispatch(slice.setCharacters(selectedCharacters.map(c => c.id)));
-    dispatch(slice.setInitialize(true));
+    // Clear existing characters and reminders.
+    dispatch(setCharacters([]));
+    dispatch(setReminders([]));
+
+    // Add characters in ellipse layout.
+    selectedCharacters.forEach((character, idx) => {
+      const t = idx / selectedCharacters.length;
+      const position = layout ? {
+        x: (layout.width / 2) + Math.cos(2 * t * Math.PI) * 0.8 * (layout.width / 2) - CHARACTER_SIZE / 2,
+        y: (layout.height / 2) + Math.sin(2 * t * Math.PI) * 0.8 * (layout.height / 2) - CHARACTER_SIZE / 2,
+      } : undefined;
+      dispatch(addCharacter({ id: character.id, position }));
+    });
     router.push('/');
   };
 

@@ -1,6 +1,6 @@
 import { GrimPosition } from '@/app/screens/grim';
 import _ from 'lodash';
-import { PropsWithChildren, ReactNode, useEffect, useState } from 'react';
+import { PropsWithChildren, ReactNode, useEffect } from 'react';
 import { Dimensions, ImageBackground, LayoutRectangle, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, withTheme } from 'react-native-paper';
@@ -14,7 +14,7 @@ interface TokenProps {
   containerLayout?: LayoutRectangle;
   onMove?: (position: GrimPosition) => void;
   onPress?: () => void;
-  controls?: (visible: boolean, dismissControls: () => void) => ReactNode;
+  controls?: ReactNode;
   theme: MD3Theme;
   testID: string;
 }
@@ -33,10 +33,6 @@ function Token(props: PropsWithChildren<TokenProps>) {
     children,
     testID,
   } = props;
-  const [controlsVisible, setControlsVisible] = useState(false);
-  const showControls = () => setControlsVisible(true);
-  const hideControls = () => setControlsVisible(false);
-
   const offset = useSharedValue(position || { x: 0, y: 0 });
   const moving = useSharedValue(false);
   const hover = useSharedValue(false);
@@ -53,12 +49,10 @@ function Token(props: PropsWithChildren<TokenProps>) {
 
   const tap = Gesture.Tap()
     .onBegin(() => hover.value = true)
-    .onStart(() => {
-      showControls();
-      onPress?.();
-    })
+    .onStart(() => onPress?.())
     .onFinalize(() => hover.value = false)
     .runOnJS(true);
+
   const pan = Gesture.Pan()
     .onStart(() => moving.value = true)
     .onChange((event) => {
@@ -77,6 +71,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
       });
     })
     .runOnJS(true);
+
   const gestures = Gesture.Exclusive(pan, tap);
 
   const animatedStyles = useAnimatedStyle(() => {
@@ -154,7 +149,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
           </View>
         </Animated.View>
       </GestureDetector>
-      {controls?.(controlsVisible, hideControls)}
+      {controls}
     </>
   );
 }

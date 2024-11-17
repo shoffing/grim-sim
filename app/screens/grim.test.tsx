@@ -1,9 +1,9 @@
 import { ACCESSIBILITY_LABEL as CHARACTER_CONTROLS_ACCESSIBILITY_LABEL } from '@/app/components/character-controls';
 import { ACCESSIBILITY_LABEL as GAME_CONTROLS_ACCESSIBILITY_LABEL } from '@/app/components/game-controls';
 import { ACCESSIBILITY_LABEL as REMINDER_CONTROLS_ACCESSIBILITY_LABEL } from '@/app/components/reminder-controls';
-import * as slice from '@/app/game-slice';
 import Grim from '@/app/screens/grim';
-import { store } from '@/app/store';
+import * as slice from '@/app/state/setup-slice';
+import { store } from '@/app/state/store';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
 import { act, fireEvent, userEvent } from '@testing-library/react-native';
@@ -62,7 +62,7 @@ describe('<Grim />', () => {
     expect(token).toBeSelected();
   });
 
-  it('renders characters initially in an ellipse', async () => {
+  it('renders characterIds initially in an ellipse', async () => {
     const characters = [
       CharacterId.Imp,
       CharacterId.Poisoner,

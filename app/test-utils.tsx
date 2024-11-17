@@ -1,4 +1,4 @@
-import { store } from '@/app/store';
+import { store } from '@/app/state/store';
 import { Colors } from '@/constants/colors';
 import {
   DarkTheme as NavigationDarkTheme,
