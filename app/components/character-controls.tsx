@@ -11,8 +11,6 @@ interface CharacterControlsProps {
   theme: MD3Theme;
 }
 
-export const ACCESSIBILITY_LABEL = 'open character controls';
-
 function CharacterControls({ character, selectedCharacter, theme }: CharacterControlsProps) {
   const dispatch = useAppDispatch();
 
@@ -43,13 +41,13 @@ function CharacterControls({ character, selectedCharacter, theme }: CharacterCon
         onDismiss={() => dispatch(clearSelectedCharacter())}
         style={{ opacity: selectedCharacter === character ? 1 : 0 }}
         mode="flat">
-        <Menu.Item leadingIcon="swap-horizontal" title="Replace"
+        <Menu.Item leadingIcon="swap-horizontal" title="Replace" testID="replace-character"
                    onPress={onPress(() => dispatch(setReplacingCharacter(character.key)))}/>
-        <Menu.Item leadingIcon="account-group" title="Change team"
+        <Menu.Item leadingIcon="account-group" title="Change team" testID="change-team-character"
                    onPress={onPress(() => dispatch(swapCharacterTeam(character.key)))}/>
-        <Menu.Item leadingIcon="information-outline" title="Add reminder"
+        <Menu.Item leadingIcon="information-outline" title="Add reminder" testID="add-reminder-character"
                    onPress={onPress(() => dispatch(setReminderCharacter(character.key)))}/>
-        <Menu.Item leadingIcon="delete" title="Remove"
+        <Menu.Item leadingIcon="delete" title="Remove" testID="delete-character"
                    onPress={onPress(showConfirmRemove)}/>
       </Menu>
       <Dialog visible={confirmRemove} onDismiss={hideConfirmRemove}>

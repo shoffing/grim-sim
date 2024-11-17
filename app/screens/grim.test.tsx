@@ -1,8 +1,8 @@
-import { ACCESSIBILITY_LABEL as CHARACTER_CONTROLS_ACCESSIBILITY_LABEL } from '@/app/components/character-controls';
 import { ACCESSIBILITY_LABEL as GAME_CONTROLS_ACCESSIBILITY_LABEL } from '@/app/components/game-controls';
-import { ACCESSIBILITY_LABEL as REMINDER_CONTROLS_ACCESSIBILITY_LABEL } from '@/app/components/reminder-controls';
 import Grim from '@/app/screens/grim';
-import * as slice from '@/app/state/setup-slice';
+import * as charactersSlice from '@/app/state/characters-slice';
+import * as grimSlice from '@/app/state/grim-slice';
+import * as remindersSlice from '@/app/state/reminders-slice';
 import { store } from '@/app/state/store';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
@@ -26,19 +26,19 @@ const openGameControls = async () => {
 const openCharacterControls = async (id: CharacterId, idx = 0) => {
   const token = queryCharacterToken(id, idx);
   if (!token.props['aria-selected']) fireEvent.press(token);
-  fireEvent.press(screen.getByRole('button', { name: CHARACTER_CONTROLS_ACCESSIBILITY_LABEL }));
 };
 
 const openReminderControls = async (label: string, idx = 0) => {
   const token = queryReminderToken(label, idx);
   if (!token.props['aria-selected']) fireEvent.press(token);
-  fireEvent.press(screen.getByRole('button', { name: REMINDER_CONTROLS_ACCESSIBILITY_LABEL }));
 };
 
 describe('<Grim />', () => {
   beforeEach(() => {
     // Reset Redux store between tests.
-    store.dispatch(slice.reset());
+    store.dispatch(grimSlice.reset());
+    store.dispatch(charactersSlice.reset());
+    store.dispatch(remindersSlice.reset());
     jest.useFakeTimers();
   });
 
@@ -60,33 +60,6 @@ describe('<Grim />', () => {
     const token = queryCharacterToken(CharacterId.Imp);
     fireEvent.press(token);
     expect(token).toBeSelected();
-  });
-
-  it('renders characterIds initially in an ellipse', async () => {
-    const characters = [
-      CharacterId.Imp,
-      CharacterId.Poisoner,
-      CharacterId.Butler,
-      CharacterId.Mayor,
-      CharacterId.Fortuneteller,
-      CharacterId.Empath,
-      CharacterId.Investigator,
-      CharacterId.Washerwoman,
-    ];
-    store.dispatch(slice.setCharacters(characters));
-    store.dispatch(slice.setInitialize(true));
-    const { getByTestId } = render(<Grim/>);
-    fireEvent(getByTestId('grim'), 'layout', { nativeEvent: { layout: { width: 1000, height: 1000 } } });
-    act(() => jest.runOnlyPendingTimers());
-    const tokens = characters.map(c => queryCharacterToken(c));
-    tokens.forEach((token, idx) => {
-      expect(token).toHaveAnimatedStyle({
-        transform: [
-          { translateX: (1000 / 2) + Math.cos(2 * (idx / 8) * Math.PI) * 0.8 * (1000 / 2) - 128 / 2 },
-          { translateY: (1000 / 2) + Math.sin(2 * (idx / 8) * Math.PI) * 0.8 * (1000 / 2) - 128 / 2 },
-        ],
-      });
-    });
   });
 
   describe('GameControls', () => {

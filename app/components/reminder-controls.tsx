@@ -11,8 +11,6 @@ interface ReminderControlsProps {
   theme: MD3Theme;
 }
 
-export const ACCESSIBILITY_LABEL = 'open reminder controls';
-
 function ReminderControls({ reminder, selectedReminder, theme }: ReminderControlsProps) {
   const dispatch = useAppDispatch();
 
@@ -41,9 +39,9 @@ function ReminderControls({ reminder, selectedReminder, theme }: ReminderControl
         anchor={position}
         visible={selectedReminder === reminder}
         onDismiss={() => dispatch(clearSelectedReminder())}>
-        <Menu.Item leadingIcon="swap-horizontal" title="Replace"
+        <Menu.Item leadingIcon="swap-horizontal" title="Replace" testID="replace-reminder"
                    onPress={onPress(() => dispatch(setReplacingReminder(reminder.key)))}/>
-        <Menu.Item leadingIcon="delete" title="Remove"
+        <Menu.Item leadingIcon="delete" title="Remove" testID="delete-reminder"
                    onPress={onPress(showConfirmRemove)}/>
       </Menu>
       <Dialog visible={confirmRemove} onDismiss={hideConfirmRemove}>

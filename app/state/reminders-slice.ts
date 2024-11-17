@@ -29,7 +29,7 @@ const reminderStateSetter = <T extends keyof ReminderState>(state: RemindersStat
   state.reminders = state.reminders.map(reminder => reminder.key === payload.key ? { ...reminder, ...payload } : reminder);
 };
 
-const nextReminderId = (state: RemindersState) => {
+const nextReminderKey = (state: RemindersState) => {
   const last = _.last(state.reminders);
   return last ? last.key + 1 : 0;
 };
@@ -45,7 +45,7 @@ export const remindersSlice = createSlice({
       state.reminders = [
         ...state.reminders,
         {
-          key: nextReminderId(state),
+          key: nextReminderKey(state),
           position: payload.position || { x: 0, y: 0 },
           data: payload.data,
           front: true,

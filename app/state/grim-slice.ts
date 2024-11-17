@@ -79,6 +79,7 @@ export const {
   clearSelectedReminder,
   setReplacingReminder,
   clearReplacingReminder,
+  reset,
 } = grimSlice.actions;
 
 export const selectLayout = (state: GrimState) => state.layout;

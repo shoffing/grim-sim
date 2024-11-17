@@ -42,7 +42,7 @@ const characterStateSetter = <T extends keyof CharacterState>(state: CharactersS
   state.characters = state.characters.map(character => character.key === payload.key ? { ...character, ...payload } : character);
 };
 
-const nextReminderId = (state: CharactersState) => {
+const nextCharacterKey = (state: CharactersState) => {
   const last = _.last(state.characters);
   return last ? last.key + 1 : 0;
 };
@@ -59,7 +59,7 @@ export const charactersSlice = createSlice({
       state.characters = [
         ...state.characters,
         {
-          key: nextReminderId(state),
+          key: nextCharacterKey(state),
           position: payload.position || { x: 0, y: 0 },
           id: payload.id,
           front: true,
