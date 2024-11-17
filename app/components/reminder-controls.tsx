@@ -1,10 +1,12 @@
+import { GrimPosition } from '@/app/screens/grim';
 import { useState } from 'react';
-import { ViewStyle } from 'react-native';
-import { Button, Dialog, FAB, MD3Theme, Portal, withTheme } from 'react-native-paper';
+import { Button, Dialog, MD3Theme, Menu, Portal, withTheme } from 'react-native-paper';
 
 interface ReminderControlsProps {
   visible: boolean;
-  fabStyle?: ViewStyle,
+  position: GrimPosition;
+  onDismiss: () => void;
+  hideControls: () => void;
   onReplace: () => void;
   onRemove: () => void;
   theme: MD3Theme;
@@ -12,9 +14,7 @@ interface ReminderControlsProps {
 
 export const ACCESSIBILITY_LABEL = 'open reminder controls';
 
-function ReminderControls({ visible, fabStyle, onReplace, onRemove, theme }: ReminderControlsProps) {
-  const [open, setOpen] = useState(false);
-
+function ReminderControls({ visible, position, onDismiss, hideControls, onReplace, onRemove, theme }: ReminderControlsProps) {
   const [confirmRemove, setConfirmRemove] = useState(false);
   const showConfirmRemove = () => setConfirmRemove(true);
   const hideConfirmRemove = () => setConfirmRemove(false);
@@ -23,8 +23,21 @@ function ReminderControls({ visible, fabStyle, onReplace, onRemove, theme }: Rem
     onRemove();
   };
 
+  // Hide controls when pressing menu items.
+  const onPress = (wrapped: () => void) => () => {
+    hideControls();
+    wrapped();
+  };
+
   return (
     <Portal>
+      <Menu
+        anchor={position}
+        visible={visible}
+        onDismiss={onDismiss}>
+        <Menu.Item leadingIcon="swap-horizontal" title="Replace" onPress={onPress(onReplace)}/>
+        <Menu.Item leadingIcon="delete" title="Remove" onPress={onPress(showConfirmRemove)}/>
+      </Menu>
       <Dialog visible={confirmRemove} onDismiss={hideConfirmRemove}
               style={{ bottom: 48, right: 0, position: 'absolute' }}>
         <Dialog.Title>Are you sure you want to remove this reminder?</Dialog.Title>
@@ -41,33 +54,6 @@ function ReminderControls({ visible, fabStyle, onReplace, onRemove, theme }: Rem
           </Button>
         </Dialog.Actions>
       </Dialog>
-      <FAB.Group
-        accessibilityLabel={ACCESSIBILITY_LABEL}
-        style={{ transform: [{ scale: 1.1 }], transformOrigin: '100% 100%' }}
-        fabStyle={fabStyle}
-        variant="tertiary"
-        open={open}
-        visible={visible}
-        icon={open ? 'cog-off' : 'heart-cog'}
-        actions={[
-          {
-            icon: 'swap-horizontal',
-            label: 'Replace',
-            onPress: onReplace,
-            size: 'medium',
-            testID: 'replace-reminder',
-          },
-          {
-            icon: 'delete',
-            label: 'Remove',
-            labelTextColor: theme.colors.error,
-            color: theme.colors.error,
-            onPress: showConfirmRemove,
-            size: 'medium',
-            testID: 'delete-reminder',
-          },
-        ]}
-        onStateChange={({ open }) => setOpen(open)}/>
     </Portal>
   );
 }

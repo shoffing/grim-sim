@@ -1,10 +1,10 @@
-import { TokenPosition } from '@/app/components/token';
+import { GrimPosition } from '@/app/screens/grim';
 import { useState } from 'react';
 import { Button, Dialog, MD3Theme, Menu, Portal, withTheme } from 'react-native-paper';
 
 interface CharacterControlsProps {
   visible: boolean;
-  position: TokenPosition;
+  position: GrimPosition;
   onDismiss: () => void;
   hideControls: () => void;
   onReplace: () => void;

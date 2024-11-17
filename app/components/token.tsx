@@ -1,3 +1,4 @@
+import { GrimPosition } from '@/app/screens/grim';
 import _ from 'lodash';
 import { PropsWithChildren, ReactNode, useEffect, useState } from 'react';
 import { Dimensions, ImageBackground, LayoutRectangle, StyleSheet, View } from 'react-native';
@@ -5,18 +6,13 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, withTheme } from 'react-native-paper';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-export interface TokenPosition {
-  x: number;
-  y: number;
-}
-
 interface TokenProps {
-  position?: TokenPosition;
+  position?: GrimPosition;
   selected: boolean;
   front: boolean;
   size: number;
   containerLayout?: LayoutRectangle;
-  onMove?: (position: TokenPosition) => void;
+  onMove?: (position: GrimPosition) => void;
   onPress?: () => void;
   controls?: (visible: boolean, dismissControls: () => void) => ReactNode;
   theme: MD3Theme;

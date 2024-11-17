@@ -4,32 +4,37 @@ import GameControls from '@/app/components/game-controls';
 import Player from '@/app/components/player';
 import Reminder from '@/app/components/reminder';
 import ReminderControls from '@/app/components/reminder-controls';
-import Token, { TokenPosition } from '@/app/components/token';
+import Token from '@/app/components/token';
 import * as slice from '@/app/game-slice';
 import { selectGameState } from '@/app/game-slice';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
 import ReminderSelect from '@/app/screens/reminder-select';
 import CharacterData from '@/constants/characters/character-data';
-import { CHARACTERS, getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
+import { getCharacterById, getCharactersByEdition } from '@/constants/characters/characters';
 import ReminderData from '@/constants/reminder-data';
 import Team from '@/constants/team';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import _ from 'lodash';
 import { useState } from 'react';
-import { LayoutChangeEvent, LayoutRectangle, StyleSheet, View } from 'react-native';
+import { LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { Button, MD3Theme, Menu, Surface, withTheme } from 'react-native-paper';
+import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 import { useImmer } from 'use-immer';
 
 interface GrimProps {
   theme: MD3Theme,
 }
 
+export interface GrimPosition {
+  x: number;
+  y: number;
+}
+
 interface GrimCharacterData {
   data: CharacterData;
-  position: TokenPosition;
+  position: GrimPosition;
   team: Team;
   front: boolean;
   key: number;
@@ -37,7 +42,7 @@ interface GrimCharacterData {
 
 interface GrimReminderData {
   data: ReminderData;
-  position: TokenPosition;
+  position: GrimPosition;
   front: boolean;
   key: number;
 }
@@ -62,7 +67,7 @@ function Grim({ theme }: GrimProps) {
   const [characters, setCharacters] = useImmer<GrimCharacterData[]>(gameCharacters.map((char, idx) => {
     return ({ data: char, position: { x: 0, y: 0 }, team: char.team, front: false, key: idx });
   }));
-  const setCharacterPosition = (idx: number, position: TokenPosition) => {
+  const setCharacterPosition = (idx: number, position: GrimPosition) => {
     setCharacters(draft => {
       if (draft[idx]) draft[idx].position = position;
     });
@@ -96,7 +101,7 @@ function Grim({ theme }: GrimProps) {
 
   /** Current reminders on the grimoire "board". */
   const [reminders, setReminders] = useImmer<GrimReminderData[]>([]);
-  const setReminderPosition = (idx: number, position: TokenPosition) => {
+  const setReminderPosition = (idx: number, position: GrimPosition) => {
     setReminders(draft => {
       if (draft[idx]) draft[idx].position = position;
     });
@@ -108,7 +113,7 @@ function Grim({ theme }: GrimProps) {
       });
     });
   };
-  const addReminder = (reminder: ReminderData, position?: TokenPosition) => {
+  const addReminder = (reminder: ReminderData, position?: GrimPosition) => {
     setReminders(draft => {
       draft.push({
         data: reminder,
@@ -219,7 +224,7 @@ function Grim({ theme }: GrimProps) {
   };
 
   const currentCharacters = characters.map((character, idx) => {
-    const onMoveEnd = (pos: TokenPosition) => {
+    const onMoveEnd = (pos: GrimPosition) => {
       setCharacterPosition(idx, pos);
       setCharacterFront(idx);
     };
@@ -263,13 +268,26 @@ function Grim({ theme }: GrimProps) {
   });
 
   const currentReminders = reminders.map((reminder, idx) => {
-    const onMoveEnd = (pos: TokenPosition) => {
+    const onMoveEnd = (pos: GrimPosition) => {
       setReminderPosition(idx, pos);
       setReminderFront(idx);
     };
     const onPress = () => {
       selectReminder(selectedReminderIdx === idx ? undefined : idx);
     };
+    const controlsPosition = {
+      x: reminder.position.x,
+      y: reminder.position.y + REMINDER_SIZE,
+    };
+    const controls = (visible: boolean, hideControls: () => void) => (
+      <ReminderControls
+        visible={idx === selectedReminderIdx && visible}
+        position={controlsPosition}
+        hideControls={hideControls}
+        onDismiss={clearSelections}
+        onReplace={showReminderSelect}
+        onRemove={removeSelectedReminder}/>
+    );
     return (
       <Token
         key={`reminder-${reminder.key}`}
@@ -280,7 +298,8 @@ function Grim({ theme }: GrimProps) {
         selected={idx === selectedReminderIdx}
         containerLayout={layout}
         onMove={onMoveEnd}
-        onPress={onPress}>
+        onPress={onPress}
+        controls={controls}>
         <Reminder
           reminder={reminder.data}
           labelStyle={{ color: 'black' }}/>
@@ -317,11 +336,6 @@ function Grim({ theme }: GrimProps) {
         onAddReminder={() => showReminderSelect()}
         onGameSetup={() => router.push('/game-setup')}
         onClearGrim={onClearGrim}/>
-      <ReminderControls
-        visible={selectedReminderIdx != null}
-        fabStyle={{ transform: [{ translateX: -68 }] }}
-        onReplace={showReminderSelect}
-        onRemove={removeSelectedReminder}/>
       <CharacterSelect
         visible={characterSelectVisible}
         characters={getCharactersByEdition(edition)}
