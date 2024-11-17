@@ -9,38 +9,9 @@ import { CHARACTER_SIZE, REMINDER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
 import ReminderSelect from '@/app/screens/reminder-select';
-import {
-  addCharacter,
-  selectCharacters,
-  setCharacterFront,
-  setCharacterId,
-  setCharacterPosition,
-  setCharacters,
-} from '@/app/state/characters-slice';
-import {
-  clearReminderCharacter,
-  clearReplacingCharacter,
-  clearReplacingReminder,
-  clearSelectedCharacter,
-  clearSelectedReminder,
-  selectEdition,
-  selectReminderCharacter,
-  selectReplacingCharacterKey,
-  selectReplacingReminderKey,
-  selectSelectedCharacter,
-  selectSelectedReminder,
-  setLayout,
-  setSelectedCharacter,
-  setSelectedReminder,
-} from '@/app/state/grim-slice';
-import {
-  addReminder,
-  selectReminders,
-  setReminderData,
-  setReminderFront,
-  setReminderPosition,
-  setReminders,
-} from '@/app/state/reminders-slice';
+import * as charactersSlice from '@/app/state/characters-slice';
+import * as grimSlice from '@/app/state/grim-slice';
+import * as remindersSlice from '@/app/state/reminders-slice';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
 import ReminderData from '@/constants/reminder-data';
@@ -70,17 +41,17 @@ function Grim({ theme }: GrimProps) {
   });
 
   const dispatch = useAppDispatch();
-  const characters = useAppSelector(state => selectCharacters(state.characters));
-  const reminders = useAppSelector(state => selectReminders(state.reminders));
+  const characters = useAppSelector(state => charactersSlice.selectCharacters(state.characters));
+  const reminders = useAppSelector(state => remindersSlice.selectReminders(state.reminders));
 
-  const edition = useAppSelector(state => selectEdition(state.grim));
+  const edition = useAppSelector(state => grimSlice.selectEdition(state.grim));
 
-  const selectedCharacter = useAppSelector(state => selectSelectedCharacter(state));
-  const replacingCharacterKey = useAppSelector(state => selectReplacingCharacterKey(state.grim));
-  const reminderCharacter = useAppSelector(state => selectReminderCharacter(state));
+  const selectedCharacter = useAppSelector(state => grimSlice.selectSelectedCharacter(state));
+  const replacingCharacterKey = useAppSelector(state => grimSlice.selectReplacingCharacterKey(state.grim));
+  const reminderCharacter = useAppSelector(state => grimSlice.selectReminderCharacter(state));
 
-  const selectedReminder = useAppSelector(state => selectSelectedReminder(state));
-  const replacingReminderKey = useAppSelector(state => selectReplacingReminderKey(state.grim));
+  const selectedReminder = useAppSelector(state => grimSlice.selectSelectedReminder(state));
+  const replacingReminderKey = useAppSelector(state => grimSlice.selectReplacingReminderKey(state.grim));
 
   /** Handling adding new character */
   const [addingNewCharacter, setAddingNewCharacter] = useState(false);
@@ -93,16 +64,16 @@ function Grim({ theme }: GrimProps) {
   const hideAddNewReminder = () => setAddingNewReminder(false);
 
   const onLayout = (event: LayoutChangeEvent) => {
-    dispatch(setLayout(event.nativeEvent.layout));
+    dispatch(grimSlice.setLayout(event.nativeEvent.layout));
   };
 
   const currentCharacters = characters.map((character, idx) => {
     const onPress = () => {
-      dispatch(setSelectedCharacter(character.key));
+      dispatch(grimSlice.setSelectedCharacter(character.key));
     };
     const onMove = (position: GrimPosition) => {
-      dispatch(setCharacterPosition({ key: character.key, position }));
-      dispatch(setCharacterFront(character.key));
+      dispatch(charactersSlice.setCharacterPosition({ key: character.key, position }));
+      dispatch(charactersSlice.setCharacterFront(character.key));
     };
     return (
       <Token
@@ -126,11 +97,11 @@ function Grim({ theme }: GrimProps) {
 
   const currentReminders = reminders.map((reminder, idx) => {
     const onPress = () => {
-      dispatch(setSelectedReminder(reminder.key));
+      dispatch(grimSlice.setSelectedReminder(reminder.key));
     };
     const onMove = (position: GrimPosition) => {
-      dispatch(setReminderPosition({ key: reminder.key, position }));
-      dispatch(setReminderFront(reminder.key));
+      dispatch(remindersSlice.setReminderPosition({ key: reminder.key, position }));
+      dispatch(remindersSlice.setReminderFront(reminder.key));
     };
     return (
       <Token
@@ -151,13 +122,13 @@ function Grim({ theme }: GrimProps) {
   });
 
   const onClearGrim = () => {
-    dispatch(setCharacters([]));
-    dispatch(setReminders([]));
+    dispatch(charactersSlice.setCharacters([]));
+    dispatch(remindersSlice.setReminders([]));
   };
 
   const tapGrim = Gesture.Tap().onStart(() => {
-    dispatch(clearSelectedCharacter());
-    dispatch(clearSelectedReminder());
+    dispatch(grimSlice.clearSelectedCharacter());
+    dispatch(grimSlice.clearSelectedReminder());
   }).runOnJS(true);
 
   const styles = StyleSheet.create({
@@ -171,35 +142,35 @@ function Grim({ theme }: GrimProps) {
   });
 
   const dismissCharacterSelect = () => {
-    dispatch(clearReplacingCharacter());
+    dispatch(grimSlice.clearReplacingCharacter());
     hideAddNewCharacter();
   };
   const onCharacterSelect = (id: CharacterId) => {
     if (replacingCharacterKey != null) {
       // Replacing an existing character.
-      dispatch(setCharacterId({ key: replacingCharacterKey, id }));
+      dispatch(charactersSlice.setCharacterId({ key: replacingCharacterKey, id }));
     } else {
       // Adding a new character.
-      dispatch(addCharacter({ id }));
+      dispatch(charactersSlice.addCharacter({ id }));
     }
     dismissCharacterSelect();
   };
 
   const dismissReminderSelect = () => {
-    dispatch(clearReplacingReminder());
-    dispatch(clearReminderCharacter());
+    dispatch(grimSlice.clearReplacingReminder());
+    dispatch(grimSlice.clearReminderCharacter());
     hideAddNewReminder();
   };
   const onReminderSelect = (data: ReminderData) => {
     if (replacingReminderKey != null) {
       // Replacing an existing reminder.
-      dispatch(setReminderData({ key: replacingReminderKey, data }));
+      dispatch(remindersSlice.setReminderData({ key: replacingReminderKey, data }));
     } else if (reminderCharacter) {
       // Adding a new reminder to a character.
-      dispatch(addReminder({ data, position: reminderCharacter.position }));
+      dispatch(remindersSlice.addReminder({ data, position: reminderCharacter.position }));
     } else {
       // Adding a new reminder.
-      dispatch(addReminder({ data }));
+      dispatch(remindersSlice.addReminder({ data }));
     }
     dismissReminderSelect();
   };
