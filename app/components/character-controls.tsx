@@ -7,11 +7,11 @@ import { Button, Dialog, MD3Theme, Menu, Portal, withTheme } from 'react-native-
 
 interface CharacterControlsProps {
   character: CharacterState;
-  selectedCharacter?: CharacterState;
+  visible: boolean;
   theme: MD3Theme;
 }
 
-function CharacterControls({ character, selectedCharacter, theme }: CharacterControlsProps) {
+function CharacterControls({ character, visible, theme }: CharacterControlsProps) {
   const dispatch = useAppDispatch();
 
   const [confirmRemove, setConfirmRemove] = useState(false);
@@ -37,9 +37,8 @@ function CharacterControls({ character, selectedCharacter, theme }: CharacterCon
     <Portal>
       <Menu
         anchor={position}
-        visible={selectedCharacter === character}
+        visible={visible}
         onDismiss={() => dispatch(clearSelectedCharacter())}
-        style={{ opacity: selectedCharacter === character ? 1 : 0 }}
         mode="flat">
         <Menu.Item leadingIcon="swap-horizontal" title="Replace" testID="replace-character"
                    onPress={onPress(() => dispatch(setReplacingCharacter(character.key)))}/>

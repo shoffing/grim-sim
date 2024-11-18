@@ -66,45 +66,43 @@ function Grim({ theme }: GrimProps) {
     dispatch(grimSlice.setLayout(event.nativeEvent.layout));
   };
 
-  const currentCharacters = characters.map((character, idx) => {
+  const currentCharacters = Object.values(characters).map((character, idx) => {
+    const selected = character.key === selectedCharacter?.key;
     const onPress = () => {
       dispatch(grimSlice.setSelectedCharacter(character.key));
     };
     const onMove = (position: GrimPosition) => {
-      dispatch(charactersSlice.setCharacterPosition({ key: character.key, position }));
-      dispatch(charactersSlice.setCharacterFront(character.key));
+      dispatch(charactersSlice.moveCharacter({ key: character.key, position }));
     };
     const characterData = getCharacterById(character.id);
+
     return (
       <Token
         key={`character-${character.key}`}
         testID={`character-${idx}-${character.id}`}
-        selected={character.key === selectedCharacter?.key}
         position={character.position}
-        front={character.front}
         size={CHARACTER_SIZE}
         text={characterData.name}
         onMove={onMove}
         onPress={onPress}
-        controls={<CharacterControls character={character} selectedCharacter={selectedCharacter}/>}>
+        controls={<CharacterControls character={character} visible={selected}/>}>
         <Character character={characterData} team={character.team}/>
       </Token>
     );
   });
 
-  const currentReminders = reminders.map((reminder, idx) => {
+  const currentReminders = Object.values(reminders).map((reminder, idx) => {
     const onPress = () => {
       dispatch(grimSlice.setSelectedReminder(reminder.key));
     };
     const onMove = (position: GrimPosition) => {
-      dispatch(remindersSlice.setReminderPosition({ key: reminder.key, position }));
-      dispatch(remindersSlice.setReminderFront(reminder.key));
+      dispatch(remindersSlice.moveReminder({ key: reminder.key, position }));
     };
     return (
       <Token
         key={`reminder-${reminder.key}`}
         testID={`reminder-${idx}-${reminder.data.label}`}
-        selected={reminder.key === selectedCharacter?.key}
+        selected={reminder.key === selectedReminder?.key}
         position={reminder.position}
         front={reminder.front}
         size={REMINDER_SIZE}
@@ -192,7 +190,7 @@ function Grim({ theme }: GrimProps) {
         visible={addingNewReminder || replacingReminderKey != null || reminderCharacter != null}
         edition={edition}
         characterIds={
-          selectedCharacter ? [selectedCharacter.id] : characters.map(c => c.id)
+          selectedCharacter ? [selectedCharacter.id] : Object.values(characters).map(c => c.id)
         }
         onSelect={onReminderSelect}
         onDismiss={dismissReminderSelect}/>

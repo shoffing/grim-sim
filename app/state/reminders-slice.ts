@@ -2,11 +2,11 @@ import { GrimPosition } from '@/app/screens/grim';
 import ReminderData from '@/constants/reminder-data';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import _ from 'lodash';
-
-export type ReminderStateKey = number;
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface ReminderState {
-  key: ReminderStateKey;
+  key: string;
   position: GrimPosition;
   front: boolean;
   data: ReminderData;
@@ -18,20 +18,11 @@ interface NewReminderState {
 }
 
 interface RemindersState {
-  reminders: ReminderState[];
+  reminders: Record<string, ReminderState>;
 }
 
 const initialState: RemindersState = {
-  reminders: [],
-};
-
-const reminderStateSetter = <T extends keyof ReminderState>(state: RemindersState, { payload }: PayloadAction<Pick<ReminderState, 'key' | T>>) => {
-  state.reminders = state.reminders.map(reminder => reminder.key === payload.key ? { ...reminder, ...payload } : reminder);
-};
-
-const nextReminderKey = (state: RemindersState) => {
-  const last = _.last(state.reminders);
-  return last ? last.key + 1 : 0;
+  reminders: {},
 };
 
 export const remindersSlice = createSlice({
@@ -39,26 +30,32 @@ export const remindersSlice = createSlice({
   initialState,
   reducers: {
     setReminders: (state, { payload }: PayloadAction<ReminderState[]>) => {
-      state.reminders = payload;
+      state.reminders = _.keyBy(payload, 'key');
     },
     addReminder: (state, { payload }: PayloadAction<NewReminderState>) => {
-      state.reminders = [
-        ...state.reminders,
-        {
-          key: nextReminderKey(state),
-          position: payload.position || { x: 0, y: 0 },
-          data: payload.data,
-          front: true,
-        },
-      ];
+      const key = uuidv4();
+      state.reminders[key] = {
+        key: key,
+        position: payload.position || { x: 0, y: 0 },
+        data: payload.data,
+        front: true,
+      };
     },
-    setReminderPosition: reminderStateSetter<'position'>,
-    setReminderData: reminderStateSetter<'data'>,
-    setReminderFront: (state, { payload }: PayloadAction<ReminderStateKey>) => {
-      state.reminders = state.reminders.map(reminder => ({ ...reminder, front: reminder.key === payload }));
+    moveReminder: (state, { payload }: PayloadAction<Pick<ReminderState, 'key' | 'position'>>) => {
+      for (const reminder of Object.values(state.reminders)) {
+        if (reminder.key === payload.key) {
+          reminder.position = payload.position;
+          reminder.front = true;
+        } else {
+          reminder.front = false;
+        }
+      }
     },
-    removeReminder: (state, { payload }: PayloadAction<ReminderStateKey>) => {
-      state.reminders = state.reminders.filter(reminder => reminder.key !== payload);
+    setReminderData: (state, { payload }: PayloadAction<Pick<ReminderState, 'key' | 'data'>>) => {
+      state.reminders[payload.key].data = payload.data;
+    },
+    removeReminder: (state, { payload }: PayloadAction<string>) => {
+      delete state.reminders[payload];
     },
     reset: () => initialState,
   },
@@ -67,16 +64,13 @@ export const remindersSlice = createSlice({
 export const {
   setReminders,
   addReminder,
-  setReminderPosition,
+  moveReminder,
   setReminderData,
-  setReminderFront,
   removeReminder,
   reset,
 } = remindersSlice.actions;
 
 export const selectReminders = (state: RemindersState) => state.reminders;
-export const selectReminderByKey = (state: RemindersState, key: ReminderStateKey) => {
-  return selectReminders(state).find(reminder => reminder.key === key);
-};
+export const selectReminderByKey = (state: RemindersState, key: string) => selectReminders(state)[key];
 
 export default remindersSlice.reducer;

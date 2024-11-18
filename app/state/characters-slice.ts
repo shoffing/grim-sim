@@ -3,14 +3,13 @@ import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
 import Team from '@/constants/team';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import 'react-native-get-random-values';
 import _ from 'lodash';
-
-export type CharacterStateKey = number;
+import { v4 as uuidv4 } from 'uuid';
 
 export interface CharacterState {
-  key: CharacterStateKey;
+  key: string;
   position: GrimPosition;
-  front: boolean;
   id: CharacterId;
   team: Team;
   selected: boolean;
@@ -22,29 +21,11 @@ interface NewCharacterState {
 }
 
 interface CharactersState {
-  characters: CharacterState[];
+  characters: Record<string, CharacterState>;
 }
 
 const initialState: CharactersState = {
-  characters: [
-    {
-      key: 0,
-      position: { x: 0, y: 0 },
-      front: false,
-      id: CharacterId.Imp,
-      team: Team.Evil,
-      selected: false,
-    },
-  ],
-};
-
-const characterStateSetter = <T extends keyof CharacterState>(state: CharactersState, { payload }: PayloadAction<Pick<CharacterState, 'key' | T>>) => {
-  state.characters = state.characters.map(character => character.key === payload.key ? { ...character, ...payload } : character);
-};
-
-const nextCharacterKey = (state: CharactersState) => {
-  const last = _.last(state.characters);
-  return last ? last.key + 1 : 0;
+  characters: {},
 };
 
 export const charactersSlice = createSlice({
@@ -52,37 +33,30 @@ export const charactersSlice = createSlice({
   initialState,
   reducers: {
     setCharacters: (state, { payload }: PayloadAction<CharacterState[]>) => {
-      state.characters = payload;
+      state.characters = _.keyBy(payload, 'key');
     },
     addCharacter: (state, { payload }: PayloadAction<NewCharacterState>) => {
       const data = getCharacterById(payload.id);
-      state.characters = [
-        ...state.characters,
-        {
-          key: nextCharacterKey(state),
-          position: payload.position || { x: 0, y: 0 },
-          id: payload.id,
-          front: true,
-          team: data.team,
-          selected: false,
-        },
-      ];
+      const key = uuidv4();
+      state.characters[key] = {
+        key,
+        position: payload.position || { x: 0, y: 0 },
+        id: payload.id,
+        team: data.team,
+        selected: false,
+      };
     },
-    setCharacterPosition: characterStateSetter<'position'>,
-    setCharacterId: characterStateSetter<'id'>,
-    swapCharacterTeam: (state, { payload }: PayloadAction<CharacterStateKey>) => {
-      state.characters = state.characters.map(character => {
-        return character.key === payload ? {
-          ...character,
-          team: character.team === Team.Good ? Team.Evil : Team.Good,
-        } : character;
-      });
+    setCharacterId: (state, { payload }: PayloadAction<Pick<CharacterState, 'key' | 'id'>>) => {
+      state.characters[payload.key].id = payload.id;
     },
-    setCharacterFront: (state, { payload }: PayloadAction<CharacterStateKey>) => {
-      state.characters = state.characters.map(character => ({ ...character, front: character.key === payload }));
+    moveCharacter: (state, { payload }: PayloadAction<Pick<CharacterState, 'key' | 'position'>>) => {
+      state.characters[payload.key].position = payload.position;
     },
-    removeCharacter: (state, { payload }: PayloadAction<CharacterStateKey>) => {
-      state.characters = state.characters.filter(character => character.key !== payload);
+    swapCharacterTeam: (state, { payload }: PayloadAction<string>) => {
+      state.characters[payload].team = state.characters[payload].team === Team.Good ? Team.Evil : Team.Good;
+    },
+    removeCharacter: (state, { payload }: PayloadAction<string>) => {
+      delete state.characters[payload];
     },
     reset: () => initialState,
   },
@@ -91,17 +65,14 @@ export const charactersSlice = createSlice({
 export const {
   setCharacters,
   addCharacter,
-  setCharacterPosition,
+  moveCharacter,
   setCharacterId,
   swapCharacterTeam,
-  setCharacterFront,
   removeCharacter,
   reset,
 } = charactersSlice.actions;
 
 export const selectCharacters = (state: CharactersState) => state.characters;
-export const selectCharacterByKey = (state: CharactersState, key: CharacterStateKey) => {
-  return selectCharacters(state).find(character => character.key === key);
-};
+export const selectCharacterByKey = (state: CharactersState, key: string) => selectCharacters(state)[key];
 
 export default charactersSlice.reducer;

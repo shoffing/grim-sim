@@ -68,7 +68,6 @@ enum CharacterId {
   Marionette = 'marionette',
   Mastermind = 'mastermind',
   Mengpo = 'mengpo',
-  Mephit = 'mephit',
   Mezepheles = 'mezepheles',
   Niangjiushi = 'niangjiushi',
   Organgrinder = 'organgrinder',
