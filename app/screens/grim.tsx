@@ -1,7 +1,6 @@
 import Character from '@/app/components/character';
 import CharacterControls from '@/app/components/character-controls';
 import GameControls from '@/app/components/game-controls';
-import Player from '@/app/components/player';
 import Reminder from '@/app/components/reminder';
 import ReminderControls from '@/app/components/reminder-controls';
 import Token from '@/app/components/token';
@@ -75,6 +74,7 @@ function Grim({ theme }: GrimProps) {
       dispatch(charactersSlice.setCharacterPosition({ key: character.key, position }));
       dispatch(charactersSlice.setCharacterFront(character.key));
     };
+    const characterData = getCharacterById(character.id);
     return (
       <Token
         key={`character-${character.key}`}
@@ -83,13 +83,11 @@ function Grim({ theme }: GrimProps) {
         position={character.position}
         front={character.front}
         size={CHARACTER_SIZE}
+        text={characterData.name}
         onMove={onMove}
         onPress={onPress}
         controls={<CharacterControls character={character} selectedCharacter={selectedCharacter}/>}>
-        <Character
-          character={getCharacterById(character.id)}
-          team={character.team}
-          nameStyle={{ color: 'black' }}/>
+        <Character character={characterData} team={character.team}/>
       </Token>
     );
   });
@@ -110,12 +108,11 @@ function Grim({ theme }: GrimProps) {
         position={reminder.position}
         front={reminder.front}
         size={REMINDER_SIZE}
+        text={reminder.data.label}
         onMove={onMove}
         onPress={onPress}
         controls={<ReminderControls reminder={reminder} selectedReminder={selectedReminder}/>}>
-        <Reminder
-          reminder={reminder.data}
-          labelStyle={{ color: 'black' }}/>
+        <Reminder reminder={reminder.data}/>
       </Token>
     );
   });

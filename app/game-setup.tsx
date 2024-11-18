@@ -144,11 +144,9 @@ function GameSetup({ theme }: GameSetupProps) {
         rippleColor={theme.colors.secondary}
         borderless={true}>
         <View style={characterStyle.container}>
-          <Character
-            character={character}
-            nameStyle={characterStyle.font}>
-          </Character>
-          <Text variant="labelSmall">{character.ability}</Text>
+          <Character character={character}/>
+          <Text variant="titleLarge">{character.name}</Text>
+          <Text variant="bodySmall">{character.ability}</Text>
         </View>
       </TouchableRipple>
     );

@@ -67,6 +67,7 @@ function ReminderSelect({ visible, edition, characterIds, onDismiss, onSelect, t
         borderless={true}>
         <View style={reminderStyle.container}>
           <Reminder reminder={reminder}/>
+          <Text variant="labelLarge" adjustsFontSizeToFit={true} numberOfLines={1}>{reminder.label}</Text>
         </View>
       </TouchableRipple>
     );

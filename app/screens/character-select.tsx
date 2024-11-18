@@ -3,7 +3,7 @@ import TokenSelect from '@/app/screens/token-select';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharactersByEdition } from '@/constants/characters/characters';
 import { StyleSheet, View } from 'react-native';
-import { MD3Theme, TouchableRipple, withTheme } from 'react-native-paper';
+import { MD3Theme, Text, TouchableRipple, withTheme } from 'react-native-paper';
 
 interface CharacterSelectProps {
   visible: boolean;
@@ -31,9 +31,6 @@ function CharacterSelect({ visible, edition, onSelect, onDismiss, theme }: Chara
         flexShrink: 1,
         gap: 8,
       },
-      font: {
-        color: theme.colors.onSurface,
-      },
     });
     return (
       <TouchableRipple
@@ -44,9 +41,8 @@ function CharacterSelect({ visible, edition, onSelect, onDismiss, theme }: Chara
         rippleColor={theme.colors.secondary}
         borderless={true}>
         <View style={characterStyle.container}>
-          <Character
-            character={character}
-            nameStyle={characterStyle.font}/>
+          <Character character={character}/>
+          <Text variant="labelLarge" adjustsFontSizeToFit={true} numberOfLines={1}>{character.name}</Text>
         </View>
       </TouchableRipple>
     );

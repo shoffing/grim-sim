@@ -1,19 +1,16 @@
 import ReminderData from '@/constants/reminder-data';
-import { Image, StyleProp, StyleSheet, TextStyle, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Image, StyleSheet, View } from 'react-native';
 
 interface ReminderProps {
   reminder: ReminderData;
-  labelStyle?: StyleProp<TextStyle>;
 }
 
-function Reminder({ reminder, labelStyle }: ReminderProps) {
+function Reminder({ reminder }: ReminderProps) {
   return (
     <View style={baseStyles.container}>
       <View style={baseStyles.iconContainer}>
         <Image source={reminder.icon} style={baseStyles.icon}/>
       </View>
-      <Text variant="labelSmall" style={StyleSheet.compose(baseStyles.label, labelStyle)}>{reminder.label}</Text>
     </View>
   );
 }
@@ -26,17 +23,16 @@ const baseStyles = StyleSheet.create({
     width: '100%',
   },
   iconContainer: {
-    width: '100%',
+    alignItems: 'center',
     aspectRatio: 1,
     flexShrink: 1,
+    justifyContent: 'center',
+    width: '100%',
   },
   icon: {
-    width: '100%',
-    height: '100%',
+    height: '90%',
     resizeMode: 'contain',
-  },
-  label: {
-    flexGrow: 1,
+    width: '90%',
   },
 });
 

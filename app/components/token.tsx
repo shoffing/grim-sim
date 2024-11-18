@@ -5,12 +5,14 @@ import { Dimensions, ImageBackground, LayoutRectangle, StyleSheet, View } from '
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, withTheme } from 'react-native-paper';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import * as Svg from 'react-native-svg';
 
 interface TokenProps {
   position?: GrimPosition;
   selected: boolean;
   front: boolean;
   size: number;
+  text?: string;
   containerLayout?: LayoutRectangle;
   onMove?: (position: GrimPosition) => void;
   onPress?: () => void;
@@ -25,6 +27,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
     selected,
     front,
     size,
+    text,
     containerLayout,
     onMove,
     onPress,
@@ -84,6 +87,8 @@ function Token(props: PropsWithChildren<TokenProps>) {
     };
   });
 
+
+
   const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
@@ -119,6 +124,13 @@ function Token(props: PropsWithChildren<TokenProps>) {
       width: '70%',
       top: -10,
     },
+    text: {
+      ...theme.fonts.labelLarge,
+      position: 'absolute',
+      inset: 0,
+      letterSpacing: 1,
+      fontSize: 18
+    },
   });
   return (
     <>
@@ -146,6 +158,14 @@ function Token(props: PropsWithChildren<TokenProps>) {
                 </View>
               </ImageBackground>
             </ImageBackground>
+            <Svg.Svg viewBox="0 0 150 150" style={styles.text}>
+              <Svg.Path d="M 13 75 A 1 1 0 0 0 138 75" id="curve" fill="transparent"/>
+              <Svg.Text x="66.6%" textAnchor="middle" fill="black">
+                <Svg.TextPath href="#curve" >
+                  {text}
+                </Svg.TextPath>
+              </Svg.Text>
+            </Svg.Svg>
           </View>
         </Animated.View>
       </GestureDetector>
