@@ -90,7 +90,6 @@ function Grim({ theme }: GrimProps) {
           character={getCharacterById(character.id)}
           team={character.team}
           nameStyle={{ color: 'black' }}/>
-        <Player name="Steve" alive={true}/>
       </Token>
     );
   });

@@ -2,6 +2,7 @@ import CharacterData from '@/constants/characters/character-data';
 import Team from '@/constants/team';
 import { Image, ImageURISource, StyleProp, StyleSheet, TextStyle, View } from 'react-native';
 import { Text } from 'react-native-paper';
+import * as Svg from 'react-native-svg';
 
 interface CharacterProps {
   character?: CharacterData;
@@ -31,7 +32,23 @@ function Character({ character, nameStyle, team }: CharacterProps) {
           style={baseStyles.icon}
           alt={`${character.name} (${team || character.team})`} />
       </View>
-      <Text variant="labelLarge" style={StyleSheet.compose(baseStyles.name, nameStyle)}>{character.name}</Text>
+      <Svg.Svg height="100%" width="100%" viewBox="0 0 100 100" style={baseStyles.name}>
+        <Svg.G id="circle">
+          <Svg.Circle
+            r={50}
+            x={50}
+            y={50}
+            fill="none"
+            stroke="none"
+            strokeWidth={0}
+          />
+        </Svg.G>
+        <Svg.Text fill="#000" fontSize="12" textAnchor="middle">
+          <Svg.TextPath href="#circle">
+            Text along aff
+          </Svg.TextPath>
+        </Svg.Text>
+      </Svg.Svg>
     </View>
   );
 }
@@ -54,7 +71,11 @@ const baseStyles = StyleSheet.create({
     resizeMode: 'contain',
   },
   name: {
-    flexGrow: 1,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
   }
 });
 

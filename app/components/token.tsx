@@ -66,8 +66,8 @@ function Token(props: PropsWithChildren<TokenProps>) {
     .onEnd((event) => {
       moving.value = false;
       onMove?.({
-        x: _.clamp((position?.x || 0) + event.translationX, containerWidth - size),
-        y: _.clamp((position?.y || 0) + event.translationY, containerHeight - size),
+        x: _.clamp((position?.x || 0) + event.translationX, 0, containerWidth - size),
+        y: _.clamp((position?.y || 0) + event.translationY, 0, containerHeight - size),
       });
     })
     .runOnJS(true);
@@ -93,7 +93,6 @@ function Token(props: PropsWithChildren<TokenProps>) {
     },
     token: {
       alignItems: 'center',
-      borderColor: theme.colors.primary,
       borderRadius: size * 2,
       height: size,
       justifyContent: 'center',
@@ -118,6 +117,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
     tokenContent: {
       height: '70%',
       width: '70%',
+      top: -10,
     },
   });
   return (
