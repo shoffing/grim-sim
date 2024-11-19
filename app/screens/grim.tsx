@@ -81,6 +81,7 @@ function Grim({ theme }: GrimProps) {
         key={`character-${character.key}`}
         testID={`character-${idx}-${character.id}`}
         position={character.position}
+        selected={character === selectedCharacter}
         size={CHARACTER_SIZE}
         text={characterData.name}
         onMove={onMove}
@@ -102,9 +103,8 @@ function Grim({ theme }: GrimProps) {
       <Token
         key={`reminder-${reminder.key}`}
         testID={`reminder-${idx}-${reminder.data.label}`}
-        selected={reminder.key === selectedReminder?.key}
         position={reminder.position}
-        front={reminder.front}
+        selected={reminder === selectedReminder}
         size={REMINDER_SIZE}
         text={reminder.data.label}
         onMove={onMove}

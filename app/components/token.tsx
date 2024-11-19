@@ -16,6 +16,7 @@ import * as Svg from 'react-native-svg';
 
 interface TokenProps {
   position: GrimPosition;
+  selected?: boolean;
   size: number;
   text?: string;
   containerLayout?: LayoutRectangle;
@@ -29,6 +30,7 @@ interface TokenProps {
 function Token(props: PropsWithChildren<TokenProps>) {
   const {
     position,
+    selected,
     size,
     text,
     containerLayout,
@@ -48,7 +50,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
     if (position) {
       offset.value = withTiming(position);
     }
-  }, [position]);
+  }, [position, offset]);
 
   const containerWidth = containerLayout?.width ?? Dimensions.get('window').width;
   const containerHeight = containerLayout?.height ?? Dimensions.get('window').height;
@@ -133,6 +135,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
         <Animated.View
           testID={testID}
           accessibilityRole="button"
+          aria-selected={selected}
           style={[styles.container, animatedStyles]}>
           <View style={styles.token}>
             <ImageBackground
