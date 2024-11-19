@@ -7,7 +7,7 @@ import ReminderData from '@/constants/reminder-data';
 
 import characterData from '@/data/characters.json';
 import _ from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MD3Theme, Switch, Text, TouchableRipple, withTheme } from 'react-native-paper';
 
@@ -36,6 +36,9 @@ function ReminderSelect({ visible, edition, characterIds, onDismiss, onSelect, t
   if (!showAll && reminders.length === 0) {
     setShowAll(true);
   }
+
+  // Set show all to false when characterIds changes.
+  useEffect(() => setShowAll(false), [characterIds]);
 
   const reminderSelectContent = reminders.map((reminder, idx) => {
     const reminderStyle = StyleSheet.create({

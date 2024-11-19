@@ -19,7 +19,7 @@ import ReminderData from '@/constants/reminder-data';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { LayoutChangeEvent, StyleSheet } from 'react-native';
+import { LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 
@@ -31,6 +31,16 @@ export interface GrimPosition {
   x: number;
   y: number;
 }
+
+const characterSpawnPos = (layout: LayoutRectangle) => ({
+  x: layout ? layout.width - CHARACTER_SIZE - 64 : 0,
+  y: layout ? layout.height - CHARACTER_SIZE - 64 : 0,
+});
+
+const reminderSpawnPos = (layout: LayoutRectangle) => ({
+  x: layout ? layout.width - REMINDER_SIZE - 64 : 0,
+  y: layout ? layout.height - REMINDER_SIZE - 64 : 0,
+});
 
 function Grim({ theme }: GrimProps) {
   const router = useRouter();
@@ -46,6 +56,8 @@ function Grim({ theme }: GrimProps) {
   const reminders = useAppSelector(state => remindersSlice.selectReminders(state.reminders));
 
   const edition = useAppSelector(state => grimSlice.selectEdition(state.grim));
+
+  const layout = useAppSelector(state => grimSlice.selectLayout(state.grim));
 
   const replacingCharacterKey = useAppSelector(state => grimSlice.selectReplacingCharacterKey(state.grim));
   const reminderCharacter = useAppSelector(state => grimSlice.selectReminderCharacter(state));
@@ -150,7 +162,7 @@ function Grim({ theme }: GrimProps) {
       dispatch(charactersSlice.setCharacterId({ key: replacingCharacterKey, id }));
     } else {
       // Adding a new character.
-      dispatch(charactersSlice.addCharacter({ id }));
+      dispatch(charactersSlice.addCharacter({ id, position: layout ? characterSpawnPos(layout) : undefined }));
     }
     dismissCharacterSelect();
   };
@@ -169,7 +181,7 @@ function Grim({ theme }: GrimProps) {
       dispatch(remindersSlice.addReminder({ data, position: reminderCharacter.position }));
     } else {
       // Adding a new reminder.
-      dispatch(remindersSlice.addReminder({ data }));
+      dispatch(remindersSlice.addReminder({ data, position: layout ? reminderSpawnPos(layout) : undefined }));
     }
     dismissReminderSelect();
   };
@@ -184,7 +196,7 @@ function Grim({ theme }: GrimProps) {
         fabStyle={{ zIndex: 9999 }}
         onAddCharacter={() => showAddNewCharacter()}
         onAddReminder={() => showAddNewReminder()}
-        onGameSetup={() => router.push('/game-setup')}
+        onGameSetup={() => router.navigate('/game-setup')}
         onClearGrim={onClearGrim}/>
       <CharacterSelect
         visible={addingNewCharacter || replacingCharacterKey != null}
@@ -195,7 +207,7 @@ function Grim({ theme }: GrimProps) {
         visible={addingNewReminder || replacingReminderKey != null || reminderCharacter != null}
         edition={edition}
         characterIds={
-          selectedCharacter ? [selectedCharacter.id] : Object.values(characters).map(c => c.id)
+          reminderCharacter ? [reminderCharacter.id] : Object.values(characters).map(c => c.id)
         }
         onSelect={onReminderSelect}
         onDismiss={dismissReminderSelect}/>

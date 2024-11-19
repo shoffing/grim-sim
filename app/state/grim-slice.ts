@@ -1,5 +1,5 @@
 import { CharacterKey, selectCharacterByKey } from '@/app/state/characters-slice';
-import { ReminderKey, selectReminderByKey } from '@/app/state/reminders-slice';
+import { ReminderKey } from '@/app/state/reminders-slice';
 import { RootState } from '@/app/state/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LayoutRectangle } from 'react-native';
@@ -30,12 +30,6 @@ export const grimSlice = createSlice({
       state.layout = payload;
     },
 
-    setSelectedCharacter: (state, { payload }: PayloadAction<CharacterKey>) => {
-      state.selectedCharacterKey = payload;
-    },
-    clearSelectedCharacter: (state) => {
-      state.selectedCharacterKey = undefined;
-    },
     setReplacingCharacter: (state, { payload }: PayloadAction<CharacterKey>) => {
       state.replacingCharacterKey = payload;
     },
@@ -49,12 +43,6 @@ export const grimSlice = createSlice({
       state.reminderCharacterKey = undefined;
     },
 
-    setSelectedReminder: (state, { payload }: PayloadAction<ReminderKey>) => {
-      state.selectedReminderKey = payload;
-    },
-    clearSelectedReminder: (state) => {
-      state.selectedReminderKey = undefined;
-    },
     setReplacingReminder: (state, { payload }: PayloadAction<ReminderKey>) => {
       state.replacingReminderKey = payload;
     },
@@ -69,14 +57,10 @@ export const grimSlice = createSlice({
 export const {
   setLayout,
   setEdition,
-  setSelectedCharacter,
-  clearSelectedCharacter,
   setReplacingCharacter,
   clearReplacingCharacter,
   setReminderCharacter,
   clearReminderCharacter,
-  setSelectedReminder,
-  clearSelectedReminder,
   setReplacingReminder,
   clearReplacingReminder,
   reset,
@@ -84,15 +68,9 @@ export const {
 
 export const selectLayout = (state: GrimState) => state.layout;
 export const selectEdition = (state: GrimState) => state.edition;
-export const selectSelectedCharacter = (state: RootState) => {
-  return state.grim.selectedCharacterKey != null ? selectCharacterByKey(state.characters, state.grim.selectedCharacterKey) : undefined;
-};
 export const selectReplacingCharacterKey = (state: GrimState) => state.replacingCharacterKey;
 export const selectReminderCharacter = (state: RootState) => {
   return state.grim.reminderCharacterKey != null ? selectCharacterByKey(state.characters, state.grim.reminderCharacterKey) : undefined;
-};
-export const selectSelectedReminder = (state: RootState) => {
-  return state.grim.selectedReminderKey != null ? selectReminderByKey(state.reminders, state.grim.selectedReminderKey) : undefined;
 };
 export const selectReplacingReminderKey = (state: GrimState) => state.replacingReminderKey;
 
