@@ -1,4 +1,4 @@
-name: Tests
+name: Continuous Integration
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   unit-test:
-    name: Run Tests
+    name: Run Tests and Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,3 +17,4 @@ jobs:
           node-version: "18"
       - run: npm install
       - run: npm run test
+      - run: npm run lint
