@@ -7,8 +7,10 @@ import 'react-native-get-random-values';
 import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 
+export type CharacterKey = string & { __brand: 'Character Key' };
+
 export interface CharacterState {
-  key: string;
+  key: CharacterKey;
   position: GrimPosition;
   id: CharacterId;
   team: Team;
@@ -21,7 +23,7 @@ interface NewCharacterState {
 }
 
 interface CharactersState {
-  characters: Record<string, CharacterState>;
+  characters: Record<CharacterKey, CharacterState>;
 }
 
 const initialState: CharactersState = {
@@ -37,7 +39,7 @@ export const charactersSlice = createSlice({
     },
     addCharacter: (state, { payload }: PayloadAction<NewCharacterState>) => {
       const data = getCharacterById(payload.id);
-      const key = uuidv4();
+      const key = uuidv4() as CharacterKey;
       state.characters[key] = {
         key,
         position: payload.position || { x: 0, y: 0 },
@@ -52,10 +54,10 @@ export const charactersSlice = createSlice({
     moveCharacter: (state, { payload }: PayloadAction<Pick<CharacterState, 'key' | 'position'>>) => {
       state.characters[payload.key].position = payload.position;
     },
-    swapCharacterTeam: (state, { payload }: PayloadAction<string>) => {
+    swapCharacterTeam: (state, { payload }: PayloadAction<CharacterKey>) => {
       state.characters[payload].team = state.characters[payload].team === Team.Good ? Team.Evil : Team.Good;
     },
-    removeCharacter: (state, { payload }: PayloadAction<string>) => {
+    removeCharacter: (state, { payload }: PayloadAction<CharacterKey>) => {
       delete state.characters[payload];
     },
     reset: () => initialState,
@@ -73,6 +75,6 @@ export const {
 } = charactersSlice.actions;
 
 export const selectCharacters = (state: CharactersState) => state.characters;
-export const selectCharacterByKey = (state: CharactersState, key: string) => selectCharacters(state)[key];
+export const selectCharacterByKey = (state: CharactersState, key?: CharacterKey) => key ? selectCharacters(state)[key] : undefined;
 
 export default charactersSlice.reducer;

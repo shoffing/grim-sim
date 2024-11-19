@@ -5,8 +5,10 @@ import _ from 'lodash';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
+export type ReminderKey = string & { __brand: 'Reminder Key' };
+
 export interface ReminderState {
-  key: string;
+  key: ReminderKey;
   position: GrimPosition;
   front: boolean;
   data: ReminderData;
@@ -18,7 +20,7 @@ interface NewReminderState {
 }
 
 interface RemindersState {
-  reminders: Record<string, ReminderState>;
+  reminders: Record<ReminderKey, ReminderState>;
 }
 
 const initialState: RemindersState = {
@@ -33,7 +35,7 @@ export const remindersSlice = createSlice({
       state.reminders = _.keyBy(payload, 'key');
     },
     addReminder: (state, { payload }: PayloadAction<NewReminderState>) => {
-      const key = uuidv4();
+      const key = uuidv4() as ReminderKey;
       state.reminders[key] = {
         key: key,
         position: payload.position || { x: 0, y: 0 },
@@ -54,7 +56,7 @@ export const remindersSlice = createSlice({
     setReminderData: (state, { payload }: PayloadAction<Pick<ReminderState, 'key' | 'data'>>) => {
       state.reminders[payload.key].data = payload.data;
     },
-    removeReminder: (state, { payload }: PayloadAction<string>) => {
+    removeReminder: (state, { payload }: PayloadAction<ReminderKey>) => {
       delete state.reminders[payload];
     },
     reset: () => initialState,
@@ -71,6 +73,6 @@ export const {
 } = remindersSlice.actions;
 
 export const selectReminders = (state: RemindersState) => state.reminders;
-export const selectReminderByKey = (state: RemindersState, key: string) => selectReminders(state)[key];
+export const selectReminderByKey = (state: RemindersState, key?: ReminderKey) => key ? selectReminders(state)[key] : undefined;
 
 export default remindersSlice.reducer;

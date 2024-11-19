@@ -1,55 +1,56 @@
 import { CHARACTER_SIZE } from '@/app/constants';
-import { useAppDispatch } from '@/app/hooks';
-import { CharacterState, removeCharacter, swapCharacterTeam } from '@/app/state/characters-slice';
-import { clearSelectedCharacter, setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { CharacterKey, removeCharacter, selectCharacterByKey, swapCharacterTeam } from '@/app/state/characters-slice';
+import { setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
 import { useState } from 'react';
 import { Button, Dialog, MD3Theme, Menu, Portal, withTheme } from 'react-native-paper';
 
 interface CharacterControlsProps {
-  character: CharacterState;
-  visible: boolean;
+  characterKey?: CharacterKey;
+  onDismiss: () => void;
   theme: MD3Theme;
 }
 
-function CharacterControls({ character, visible, theme }: CharacterControlsProps) {
+function CharacterControls({ characterKey, onDismiss, theme }: CharacterControlsProps) {
   const dispatch = useAppDispatch();
 
-  const [confirmRemove, setConfirmRemove] = useState(false);
-  const showConfirmRemove = () => setConfirmRemove(true);
-  const hideConfirmRemove = () => setConfirmRemove(false);
+  const [confirmingRemoveKey, setConfirmingRemoveKey] = useState<CharacterKey>();
+  const showConfirmRemove = (key: CharacterKey) => setConfirmingRemoveKey(key);
+  const hideConfirmRemove = () => setConfirmingRemoveKey(undefined);
   const onConfirmRemove = () => {
+    confirmingRemoveKey && dispatch(removeCharacter(confirmingRemoveKey));
     hideConfirmRemove();
-    dispatch(removeCharacter(character.key));
   };
 
   // Clear selections when pressing menu items.
   const onPress = (wrapped: () => void) => () => {
-    dispatch(clearSelectedCharacter());
+    onDismiss();
     wrapped();
   };
 
+  const character = useAppSelector(state => selectCharacterByKey(state.characters, characterKey));
   const position = {
-    x: character.position.x,
-    y: character.position.y + CHARACTER_SIZE,
+    x: character?.position?.x ?? 0,
+    y: (character?.position?.y ?? 0) + CHARACTER_SIZE,
   };
 
   return (
     <Portal>
       <Menu
         anchor={position}
-        visible={visible}
-        onDismiss={() => dispatch(clearSelectedCharacter())}
+        visible={!!characterKey}
+        onDismiss={onDismiss}
         mode="flat">
         <Menu.Item leadingIcon="swap-horizontal" title="Replace" testID="replace-character"
-                   onPress={onPress(() => dispatch(setReplacingCharacter(character.key)))}/>
+                   onPress={onPress(() => characterKey && dispatch(setReplacingCharacter(characterKey)))}/>
         <Menu.Item leadingIcon="account-group" title="Change team" testID="change-team-character"
-                   onPress={onPress(() => dispatch(swapCharacterTeam(character.key)))}/>
+                   onPress={onPress(() => characterKey && dispatch(swapCharacterTeam(characterKey)))}/>
         <Menu.Item leadingIcon="information-outline" title="Add reminder" testID="add-reminder-character"
-                   onPress={onPress(() => dispatch(setReminderCharacter(character.key)))}/>
+                   onPress={onPress(() => characterKey && dispatch(setReminderCharacter(characterKey)))}/>
         <Menu.Item leadingIcon="delete" title="Remove" testID="delete-character"
-                   onPress={onPress(showConfirmRemove)}/>
+                   onPress={onPress(() => characterKey && showConfirmRemove(characterKey))}/>
       </Menu>
-      <Dialog visible={confirmRemove} onDismiss={hideConfirmRemove}>
+      <Dialog visible={!!confirmingRemoveKey} onDismiss={hideConfirmRemove}>
         <Dialog.Title>Are you sure you want to remove this character?</Dialog.Title>
         <Dialog.Actions>
           <Button testID="cancel-remove-character" onPress={hideConfirmRemove}>Cancel</Button>
