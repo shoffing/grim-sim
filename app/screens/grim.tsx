@@ -9,8 +9,10 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
 import ReminderSelect from '@/app/screens/reminder-select';
 import * as charactersSlice from '@/app/state/characters-slice';
+import { CharacterKey } from '@/app/state/characters-slice';
 import * as grimSlice from '@/app/state/grim-slice';
 import * as remindersSlice from '@/app/state/reminders-slice';
+import { ReminderKey } from '@/app/state/reminders-slice';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
 import ReminderData from '@/constants/reminder-data';
@@ -45,12 +47,18 @@ function Grim({ theme }: GrimProps) {
 
   const edition = useAppSelector(state => grimSlice.selectEdition(state.grim));
 
-  const selectedCharacter = useAppSelector(state => grimSlice.selectSelectedCharacter(state));
   const replacingCharacterKey = useAppSelector(state => grimSlice.selectReplacingCharacterKey(state.grim));
   const reminderCharacter = useAppSelector(state => grimSlice.selectReminderCharacter(state));
-
-  const selectedReminder = useAppSelector(state => grimSlice.selectSelectedReminder(state));
   const replacingReminderKey = useAppSelector(state => grimSlice.selectReplacingReminderKey(state.grim));
+
+  /** Handle character selection (and controls display). */
+  const [selectedCharacterKey, setSelectedCharacterKey] = useState<CharacterKey>();
+  const selectedCharacter = useAppSelector(state => charactersSlice.selectCharacterByKey(state.characters, selectedCharacterKey));
+  const clearSelectedCharacter = () => setSelectedCharacterKey(undefined);
+
+  /** Handle reminder selection (and controls display). */
+  const [selectedReminderKey, setSelectedReminderKey] = useState<ReminderKey>();
+  const clearSelectedReminder = () => setSelectedReminderKey(undefined);
 
   /** Handling adding new character */
   const [addingNewCharacter, setAddingNewCharacter] = useState(false);
@@ -67,9 +75,9 @@ function Grim({ theme }: GrimProps) {
   };
 
   const currentCharacters = Object.values(characters).map((character, idx) => {
-    const selected = character.key === selectedCharacter?.key;
+    const selected = character.key === selectedCharacterKey;
     const onPress = () => {
-      dispatch(grimSlice.setSelectedCharacter(character.key));
+      setSelectedCharacterKey(character.key);
     };
     const onMove = (position: GrimPosition) => {
       dispatch(charactersSlice.moveCharacter({ key: character.key, position }));
@@ -81,20 +89,20 @@ function Grim({ theme }: GrimProps) {
         key={`character-${character.key}`}
         testID={`character-${idx}-${character.id}`}
         position={character.position}
-        selected={character === selectedCharacter}
+        selected={selected}
         size={CHARACTER_SIZE}
         text={characterData.name}
         onMove={onMove}
-        onPress={onPress}
-        controls={<CharacterControls character={character} visible={selected}/>}>
+        onPress={onPress}>
         <Character character={characterData} team={character.team}/>
       </Token>
     );
   });
 
   const currentReminders = Object.values(reminders).map((reminder, idx) => {
+    const selected = reminder.key === selectedReminderKey;
     const onPress = () => {
-      dispatch(grimSlice.setSelectedReminder(reminder.key));
+      setSelectedReminderKey(reminder.key);
     };
     const onMove = (position: GrimPosition) => {
       dispatch(remindersSlice.moveReminder({ key: reminder.key, position }));
@@ -104,12 +112,11 @@ function Grim({ theme }: GrimProps) {
         key={`reminder-${reminder.key}`}
         testID={`reminder-${idx}-${reminder.data.label}`}
         position={reminder.position}
-        selected={reminder === selectedReminder}
+        selected={selected}
         size={REMINDER_SIZE}
         text={reminder.data.label}
         onMove={onMove}
-        onPress={onPress}
-        controls={<ReminderControls reminder={reminder} selectedReminder={selectedReminder}/>}>
+        onPress={onPress}>
         <Reminder reminder={reminder.data}/>
       </Token>
     );
@@ -121,15 +128,13 @@ function Grim({ theme }: GrimProps) {
   };
 
   const tapGrim = Gesture.Tap().onStart(() => {
-    dispatch(grimSlice.clearSelectedCharacter());
-    dispatch(grimSlice.clearSelectedReminder());
+    clearSelectedCharacter();
+    clearSelectedReminder();
   }).runOnJS(true);
 
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
-      borderRadius: theme.roundness,
-      flex: 1,
       height: '100%',
       width: '100%',
     },
@@ -194,6 +199,8 @@ function Grim({ theme }: GrimProps) {
         }
         onSelect={onReminderSelect}
         onDismiss={dismissReminderSelect}/>
+      <CharacterControls characterKey={selectedCharacterKey} onDismiss={clearSelectedCharacter}/>
+      <ReminderControls reminderKey={selectedReminderKey} onDismiss={clearSelectedReminder}/>
       <GestureDetector gesture={tapGrim}>
         <Surface mode="elevated" style={styles.container} testID="grim" onLayout={onLayout}>
           {currentCharacters}

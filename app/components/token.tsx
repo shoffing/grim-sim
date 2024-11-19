@@ -1,5 +1,5 @@
 import { GrimPosition } from '@/app/screens/grim';
-import { PropsWithChildren, ReactNode, useEffect } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { Dimensions, ImageBackground, LayoutRectangle, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, withTheme } from 'react-native-paper';
@@ -22,7 +22,6 @@ interface TokenProps {
   containerLayout?: LayoutRectangle;
   onMove?: (position: GrimPosition) => void;
   onPress?: () => void;
-  controls?: ReactNode;
   theme: MD3Theme;
   testID: string;
 }
@@ -36,7 +35,6 @@ function Token(props: PropsWithChildren<TokenProps>) {
     containerLayout,
     onMove,
     onPress,
-    controls,
     theme,
     children,
     testID,
@@ -57,23 +55,19 @@ function Token(props: PropsWithChildren<TokenProps>) {
 
   const tap = Gesture.Tap()
     .onBegin(() => interacting.value = true)
-    .onStart(() => onPress && runOnJS(onPress)())
+    .onEnd(() => onPress && runOnJS(onPress)())
     .onFinalize(() => interacting.value = false);
 
   const pan = Gesture.Pan()
-    .onStart(() => {
-      interacting.value = true;
-    })
+    .onBegin(() => interacting.value = true)
     .onChange((event) => {
       offset.value = {
         x: clamp(position.x + event.translationX, 0, containerWidth - size),
         y: clamp(position.y + event.translationY, 0, containerHeight - size),
       };
     })
-    .onFinalize(() => {
-      interacting.value = false;
-      onMove && runOnJS(onMove)(offset.value);
-    });
+    .onEnd(() => onMove && runOnJS(onMove)(offset.value))
+    .onFinalize(() => interacting.value = false);
 
   const gestures = Gesture.Exclusive(pan, tap);
 
@@ -130,44 +124,41 @@ function Token(props: PropsWithChildren<TokenProps>) {
     },
   });
   return (
-    <>
-      <GestureDetector gesture={gestures}>
-        <Animated.View
-          testID={testID}
-          accessibilityRole="button"
-          aria-selected={selected}
-          style={[styles.container, animatedStyles]}>
-          <View style={styles.token}>
+    <GestureDetector gesture={gestures}>
+      <Animated.View
+        testID={testID}
+        accessibilityRole="button"
+        aria-selected={selected}
+        style={[styles.container, animatedStyles]}>
+        <View style={styles.token}>
+          <ImageBackground
+            style={styles.tokenBackground}
+            imageStyle={styles.tokenBackgroundImageNoise}
+            resizeMethod="auto"
+            resizeMode="stretch"
+            source={require('@/assets/images/character-token-noise.webp')}>
             <ImageBackground
               style={styles.tokenBackground}
-              imageStyle={styles.tokenBackgroundImageNoise}
+              imageStyle={styles.tokenBackgroundImageClock}
               resizeMethod="auto"
-              resizeMode="stretch"
-              source={require('@/assets/images/character-token-noise.webp')}>
-              <ImageBackground
-                style={styles.tokenBackground}
-                imageStyle={styles.tokenBackgroundImageClock}
-                resizeMethod="auto"
-                resizeMode="contain"
-                source={require('@/assets/images/clockface.webp')}>
-                <View style={styles.tokenContent}>
-                  {children}
-                </View>
-              </ImageBackground>
+              resizeMode="contain"
+              source={require('@/assets/images/clockface.webp')}>
+              <View style={styles.tokenContent}>
+                {children}
+              </View>
             </ImageBackground>
-            <Svg.Svg viewBox="0 0 150 150" style={styles.text}>
-              <Svg.Path d="M 13 75 A 1 1 0 0 0 138 75" id="curve" fill="transparent"/>
-              <Svg.Text x="66.6%" textAnchor="middle" fill="black">
-                <Svg.TextPath href="#curve">
-                  {text}
-                </Svg.TextPath>
-              </Svg.Text>
-            </Svg.Svg>
-          </View>
-        </Animated.View>
-      </GestureDetector>
-      {controls}
-    </>
+          </ImageBackground>
+          <Svg.Svg viewBox="0 0 150 150" style={styles.text}>
+            <Svg.Path d="M 13 75 A 1 1 0 0 0 138 75" id="curve" fill="transparent"/>
+            <Svg.Text x="66.6%" textAnchor="middle" fill="black">
+              <Svg.TextPath href="#curve">
+                {text}
+              </Svg.TextPath>
+            </Svg.Text>
+          </Svg.Svg>
+        </View>
+      </Animated.View>
+    </GestureDetector>
   );
 }
 

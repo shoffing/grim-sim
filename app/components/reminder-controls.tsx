@@ -1,50 +1,51 @@
 import { REMINDER_SIZE } from '@/app/constants';
-import { useAppDispatch } from '@/app/hooks';
-import { clearSelectedReminder, setReplacingReminder } from '@/app/state/grim-slice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { setReplacingReminder } from '@/app/state/grim-slice';
 import { useState } from 'react';
 import { Button, Dialog, MD3Theme, Menu, Portal, withTheme } from 'react-native-paper';
-import { ReminderState, removeReminder } from '../state/reminders-slice';
+import { ReminderKey, removeReminder, selectReminderByKey } from '../state/reminders-slice';
 
 interface ReminderControlsProps {
-  reminder: ReminderState;
-  selectedReminder?: ReminderState;
+  reminderKey?: ReminderKey;
+  onDismiss: () => void;
   theme: MD3Theme;
 }
 
-function ReminderControls({ reminder, selectedReminder, theme }: ReminderControlsProps) {
+function ReminderControls({ reminderKey, onDismiss, theme }: ReminderControlsProps) {
   const dispatch = useAppDispatch();
 
-  const [confirmRemove, setConfirmRemove] = useState(false);
-  const showConfirmRemove = () => setConfirmRemove(true);
-  const hideConfirmRemove = () => setConfirmRemove(false);
+  const [confirmingRemoveKey, setConfirmingRemoveKey] = useState<ReminderKey>();
+  const showConfirmRemove = (key: ReminderKey) => setConfirmingRemoveKey(key);
+  const hideConfirmRemove = () => setConfirmingRemoveKey(undefined);
   const onConfirmRemove = () => {
+    confirmingRemoveKey && dispatch(removeReminder(confirmingRemoveKey));
     hideConfirmRemove();
-    dispatch(removeReminder(reminder.key));
   };
 
   // Hide controls when pressing menu items.
   const onPress = (wrapped: () => void) => () => {
-    dispatch(clearSelectedReminder());
+    onDismiss();
     wrapped();
   };
 
+  const reminder = useAppSelector(state => selectReminderByKey(state.reminders, reminderKey));
   const position = {
-    x: reminder.position.x,
-    y: reminder.position.y + REMINDER_SIZE,
+    x: reminder?.position?.x ?? 0,
+    y: (reminder?.position?.y ?? 0) + REMINDER_SIZE,
   };
 
   return (
     <Portal>
       <Menu
         anchor={position}
-        visible={selectedReminder === reminder}
-        onDismiss={() => dispatch(clearSelectedReminder())}>
+        visible={!!reminderKey}
+        onDismiss={onDismiss}>
         <Menu.Item leadingIcon="swap-horizontal" title="Replace" testID="replace-reminder"
-                   onPress={onPress(() => dispatch(setReplacingReminder(reminder.key)))}/>
+                   onPress={onPress(() => reminderKey && dispatch(setReplacingReminder(reminderKey)))}/>
         <Menu.Item leadingIcon="delete" title="Remove" testID="delete-reminder"
-                   onPress={onPress(showConfirmRemove)}/>
+                   onPress={onPress(() => reminderKey && showConfirmRemove(reminderKey))}/>
       </Menu>
-      <Dialog visible={confirmRemove} onDismiss={hideConfirmRemove}>
+      <Dialog visible={!!confirmingRemoveKey} onDismiss={hideConfirmRemove}>
         <Dialog.Title>Are you sure you want to remove this reminder?</Dialog.Title>
         <Dialog.Actions>
           <Button onPress={hideConfirmRemove} testID="cancel-delete-reminder">Cancel</Button>
