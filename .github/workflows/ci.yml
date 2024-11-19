@@ -1,0 +1,20 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  unit-test:
+    name: Run Tests and Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "18"
+      - run: npm install
+      - run: npm run test
+      - run: npm run lint
