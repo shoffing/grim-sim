@@ -10,7 +10,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest",
-    "lint": "expo lint"
+    "check-types": "tsc --noemit",
+    "lint": "expo lint && npm run check-types"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",

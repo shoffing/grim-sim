@@ -4,7 +4,6 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
   NavigationContainer,
-  ThemeProvider,
 } from '@react-navigation/native';
 import merge from 'deepmerge';
 import { Stack } from 'expo-router';
@@ -33,17 +32,15 @@ function RootLayout() {
   return (
     <ReduxProvider store={store}>
       <PaperProvider theme={paperTheme}>
-        <ThemeProvider value={paperTheme}>
-          <StatusBar hidden={true}/>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <NavigationContainer theme={NavigationDarkTheme}>
-              <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }}/>
-                <Stack.Screen name="game-setup" options={{ headerShown: false }}/>
-              </Stack>
-            </NavigationContainer>
-          </GestureHandlerRootView>
-        </ThemeProvider>
+        <StatusBar hidden={true}/>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <NavigationContainer theme={NavigationDarkTheme}>
+            <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }}/>
+              <Stack.Screen name="game-setup" options={{ headerShown: false }}/>
+            </Stack>
+          </NavigationContainer>
+        </GestureHandlerRootView>
       </PaperProvider>
     </ReduxProvider>
   );

@@ -1,5 +1,5 @@
-import { CharacterStateKey, selectCharacterByKey } from '@/app/state/characters-slice';
-import { ReminderStateKey, selectReminderByKey } from '@/app/state/reminders-slice';
+import { selectCharacterByKey } from '@/app/state/characters-slice';
+import { selectReminderByKey } from '@/app/state/reminders-slice';
 import { RootState } from '@/app/state/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LayoutRectangle } from 'react-native';
@@ -7,11 +7,11 @@ import { LayoutRectangle } from 'react-native';
 interface GrimState {
   edition: string;
   layout?: LayoutRectangle;
-  selectedCharacterKey?: CharacterStateKey;
-  replacingCharacterKey?: CharacterStateKey;
-  reminderCharacterKey?: CharacterStateKey;
-  selectedReminderKey?: ReminderStateKey;
-  replacingReminderKey?: ReminderStateKey;
+  selectedCharacterKey?: string;
+  replacingCharacterKey?: string;
+  reminderCharacterKey?: string;
+  selectedReminderKey?: string;
+  replacingReminderKey?: string;
 }
 
 const initialState: GrimState = {
@@ -30,32 +30,32 @@ export const grimSlice = createSlice({
       state.layout = payload;
     },
 
-    setSelectedCharacter: (state, { payload }: PayloadAction<CharacterStateKey>) => {
+    setSelectedCharacter: (state, { payload }: PayloadAction<string>) => {
       state.selectedCharacterKey = payload;
     },
     clearSelectedCharacter: (state) => {
       state.selectedCharacterKey = undefined;
     },
-    setReplacingCharacter: (state, { payload }: PayloadAction<CharacterStateKey>) => {
+    setReplacingCharacter: (state, { payload }: PayloadAction<string>) => {
       state.replacingCharacterKey = payload;
     },
     clearReplacingCharacter: (state) => {
       state.replacingCharacterKey = undefined;
     },
-    setReminderCharacter: (state, { payload }: PayloadAction<CharacterStateKey>) => {
+    setReminderCharacter: (state, { payload }: PayloadAction<string>) => {
       state.reminderCharacterKey = payload;
     },
     clearReminderCharacter: (state) => {
       state.reminderCharacterKey = undefined;
     },
 
-    setSelectedReminder: (state, { payload }: PayloadAction<ReminderStateKey>) => {
+    setSelectedReminder: (state, { payload }: PayloadAction<string>) => {
       state.selectedReminderKey = payload;
     },
     clearSelectedReminder: (state) => {
       state.selectedReminderKey = undefined;
     },
-    setReplacingReminder: (state, { payload }: PayloadAction<ReminderStateKey>) => {
+    setReplacingReminder: (state, { payload }: PayloadAction<string>) => {
       state.replacingReminderKey = payload;
     },
     clearReplacingReminder: (state) => {

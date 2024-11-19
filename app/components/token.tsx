@@ -48,7 +48,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
   // Update offset to position only when it changes.
   useEffect(() => {
     if (position) {
-      offset.value = withTiming(position);
+      offset.value = withTiming({ ...position });
     }
   }, [position, offset]);
 
@@ -57,7 +57,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
 
   const tap = Gesture.Tap()
     .onBegin(() => interacting.value = true)
-    .onStart(() => runOnJS(onPress)?.())
+    .onStart(() => onPress && runOnJS(onPress)())
     .onFinalize(() => interacting.value = false);
 
   const pan = Gesture.Pan()
@@ -72,7 +72,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
     })
     .onFinalize(() => {
       interacting.value = false;
-      runOnJS(onMove)?.(offset.value);
+      onMove && runOnJS(onMove)(offset.value);
     });
 
   const gestures = Gesture.Exclusive(pan, tap);
