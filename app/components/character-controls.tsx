@@ -2,10 +2,14 @@ import { CHARACTER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
   CharacterKey,
+  killPlayer,
   removeCharacter,
+  restorePlayerGhostVote,
+  revivePlayer,
   selectCharacterByKey,
   setPlayerName,
   swapCharacterTeam,
+  usePlayerGhostVote,
 } from '@/app/state/characters-slice';
 import { setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
 import { useEffect, useState } from 'react';
@@ -54,6 +58,9 @@ function CharacterControls({ characterKey, onDismiss, theme }: CharacterControls
     y: (character?.position?.y ?? 0) + CHARACTER_SIZE,
   };
 
+  const alive = character?.player?.alive ?? true;
+  const ghostVote = character?.player?.ghostVote ?? true;
+
   return (
     <Portal>
       <Menu
@@ -72,6 +79,21 @@ function CharacterControls({ characterKey, onDismiss, theme }: CharacterControls
         <Divider/>
         <Menu.Item leadingIcon="account-edit" title="Set player name" testID="set-player-name-character"
                    onPress={onPress(() => characterKey && showSetName(characterKey))}/>
+        <Menu.Item
+          leadingIcon={alive ? 'grave-stone' : 'emoticon-excited'}
+          title={alive ? 'Kill player' : 'Revive player'}
+          testID={alive ? 'kill-player-character' : 'revive-player-character'}
+          titleStyle={alive ? { color: theme.colors.error } : undefined}
+          onPress={onPress(() => characterKey && dispatch(alive ? killPlayer(characterKey) : revivePlayer(characterKey)))}/>
+        {
+          /** If dead... */
+          !alive &&
+          <Menu.Item
+            leadingIcon={ghostVote ? 'ghost-off' : 'ghost'}
+            title={ghostVote ? 'Use ghost vote' : 'Restore ghost vote'}
+            testID={ghostVote ? 'revive-player-character' : 'restore-ghost-vote-character'}
+            onPress={onPress(() => characterKey && dispatch(ghostVote ? usePlayerGhostVote(characterKey) : restorePlayerGhostVote(characterKey)))}/>
+        }
       </Menu>
 
       <Dialog visible={!!confirmingRemoveKey} onDismiss={hideConfirmRemove}>

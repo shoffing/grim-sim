@@ -19,9 +19,9 @@ import ReminderData from '@/constants/reminder-data';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
+import { Image, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { MD3Theme, Surface, withTheme, Text } from 'react-native-paper';
+import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -43,6 +43,25 @@ const reminderSpawnPos = (layout: LayoutRectangle) => ({
 });
 
 function Grim({ theme }: GrimProps) {
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: theme.colors.background,
+      height: '100%',
+      width: '100%',
+    },
+    shroud: {
+      height: CHARACTER_SIZE / 1.5,
+      resizeMode: 'contain',
+      width: CHARACTER_SIZE / 1.5,
+    },
+    ghostVote: {
+      borderColor: theme.colors.tertiary,
+      borderRadius: CHARACTER_SIZE,
+      borderStyle: 'dotted',
+      borderWidth: CHARACTER_SIZE / 20,
+    },
+  });
+
   const router = useRouter();
 
   const [focused, setFocused] = useState(true);
@@ -95,6 +114,9 @@ function Grim({ theme }: GrimProps) {
     };
     const characterData = getCharacterById(character.id);
 
+    const alive = character.player.alive;
+    const ghostVote = character.player.ghostVote;
+
     return (
       <Token
         key={`character-${character.key}`}
@@ -102,12 +124,14 @@ function Grim({ theme }: GrimProps) {
         position={character.position}
         selected={selected}
         size={CHARACTER_SIZE}
+        topCenterContent={!alive ?
+          <Image style={styles.shroud} source={require('@/assets/images/token/shroud.webp')}/> : undefined}
+        centerContent={<Character character={characterData} team={character.team}/>}
         bottomText={characterData.name}
         belowText={character?.player?.name}
+        tokenStyle={(!alive && ghostVote) ? styles.ghostVote : undefined}
         onMove={onMove}
-        onPress={onPress}>
-        <Character character={characterData} team={character.team}/>
-      </Token>
+        onPress={onPress}/>
     );
   });
 
@@ -126,11 +150,10 @@ function Grim({ theme }: GrimProps) {
         position={reminder.position}
         selected={selected}
         size={REMINDER_SIZE}
+        centerContent={<Reminder reminder={reminder.data}/>}
         bottomText={reminder.data.label}
         onMove={onMove}
-        onPress={onPress}>
-        <Reminder reminder={reminder.data}/>
-      </Token>
+        onPress={onPress}/>
     );
   });
 
@@ -143,14 +166,6 @@ function Grim({ theme }: GrimProps) {
     clearSelectedCharacter();
     clearSelectedReminder();
   }).runOnJS(true);
-
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: theme.colors.background,
-      height: '100%',
-      width: '100%',
-    },
-  });
 
   const dismissCharacterSelect = () => {
     dispatch(grimSlice.clearReplacingCharacter());

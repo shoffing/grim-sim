@@ -1,6 +1,7 @@
-# Welcome to your Expo app 👋
+# GrimSim
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simulated grimoire for Blood on the Clocktower.
+Built with React Native.
 
 ## Get started
 
@@ -23,28 +24,26 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+You can start developing by editing the files inside the **app** directory. This project
+uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
+## Icon Variants
 
-When you're ready, run:
+Because React Native cannot dynamically modify images in a way that is sufficient for changing character icon team
+colors, a script needs to be run to generate red and blue variants for all the character icons:
 
 ```bash
-npm run reset-project
+npm run icon-variants
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+This will use ImageMagick to convert all the icons to their red/blue variants. Note that ImageMagick must be installed
+locally for this to work.
 
-## Learn more
+ ## Acknowledgements
 
-To learn more about developing your project with Expo, look at the following resources:
+GrimSim uses assets taken from the wonderful "Pocket Grimoire" project by Skateside.
+Check it out!
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+https://www.pocketgrimoire.co.uk/
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+https://github.com/Skateside/pocket-grimoire

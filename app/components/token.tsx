@@ -1,8 +1,8 @@
 import { GrimPosition } from '@/app/screens/grim';
-import { PropsWithChildren, useEffect } from 'react';
-import { Dimensions, ImageBackground, LayoutRectangle, StyleSheet, View } from 'react-native';
+import { ReactNode, useEffect } from 'react';
+import { Dimensions, ImageBackground, LayoutRectangle, StyleSheet, View, ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { MD3Theme, withTheme, Text } from 'react-native-paper';
+import { MD3Theme, Text, withTheme } from 'react-native-paper';
 import Animated, {
   clamp,
   Easing,
@@ -18,27 +18,32 @@ interface TokenProps {
   position: GrimPosition;
   selected?: boolean;
   size: number;
+  centerContent?: ReactNode;
+  topCenterContent?: ReactNode;
   bottomText?: string;
   belowText?: string;
   containerLayout?: LayoutRectangle;
+  tokenStyle?: ViewStyle;
   onMove?: (position: GrimPosition) => void;
   onPress?: () => void;
   theme: MD3Theme;
   testID: string;
 }
 
-function Token(props: PropsWithChildren<TokenProps>) {
+function Token(props: TokenProps) {
   const {
     position,
     selected,
     size,
+    centerContent,
+    topCenterContent,
     bottomText,
     belowText,
     containerLayout,
+    tokenStyle,
     onMove,
     onPress,
     theme,
-    children,
     testID,
   } = props;
   const offset = useSharedValue(position || { x: 0, y: 0 });
@@ -96,6 +101,7 @@ function Token(props: PropsWithChildren<TokenProps>) {
       height: size,
       justifyContent: 'center',
       width: size,
+      ...tokenStyle,
     },
     tokenBackground: {
       width: '100%',
@@ -113,7 +119,15 @@ function Token(props: PropsWithChildren<TokenProps>) {
       opacity: 0.15,
       transform: [{ scale: 0.9 }],
     },
-    tokenContent: {
+    topCenterContent: {
+      alignItems: 'flex-start',
+      flexDirection: 'row',
+      height: '100%',
+      justifyContent: 'center',
+      position: 'absolute',
+      width: '100%',
+    },
+    centerContent: {
       height: '70%',
       width: '70%',
       top: -10,
@@ -142,15 +156,18 @@ function Token(props: PropsWithChildren<TokenProps>) {
             imageStyle={styles.tokenBackgroundImageNoise}
             resizeMethod="auto"
             resizeMode="stretch"
-            source={require('@/assets/images/character-token-noise.webp')}>
+            source={require('@/assets/images/token/character-token-noise.webp')}>
             <ImageBackground
               style={styles.tokenBackground}
               imageStyle={styles.tokenBackgroundImageClock}
               resizeMethod="auto"
               resizeMode="contain"
-              source={require('@/assets/images/clockface.webp')}>
-              <View style={styles.tokenContent}>
-                {children}
+              source={require('@/assets/images/token/clockface.webp')}>
+              <View style={styles.centerContent}>
+                {centerContent}
+              </View>
+              <View style={styles.topCenterContent}>
+                {topCenterContent}
               </View>
             </ImageBackground>
           </ImageBackground>

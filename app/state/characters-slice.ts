@@ -11,8 +11,8 @@ export type CharacterKey = string & { __brand: 'Character Key' };
 
 export interface PlayerState {
   name?: string;
-  alive?: boolean;
-  ghostVote?: boolean;
+  alive: boolean;
+  ghostVote: boolean;
 }
 
 export interface CharacterState {
@@ -54,7 +54,10 @@ export const charactersSlice = createSlice({
         id: payload.id,
         team: data.team,
         selected: false,
-        player: {},
+        player: {
+          alive: true,
+          ghostVote: true,
+        },
       };
     },
     setCharacterId: (state, { payload }: PayloadAction<Pick<CharacterState, 'key' | 'id'>>) => {
@@ -72,6 +75,20 @@ export const charactersSlice = createSlice({
     setPlayerName: (state, { payload }: PayloadAction<Pick<CharacterState, 'key'> & Pick<PlayerState, 'name'>>) => {
       state.characters[payload.key].player.name = payload.name;
     },
+    killPlayer: (state, { payload }: PayloadAction<CharacterKey>) => {
+      state.characters[payload].player.alive = false;
+      state.characters[payload].player.ghostVote = true;
+    },
+    revivePlayer: (state, { payload }: PayloadAction<CharacterKey>) => {
+      state.characters[payload].player.alive = true;
+      state.characters[payload].player.ghostVote = true;
+    },
+    usePlayerGhostVote: (state, { payload }: PayloadAction<CharacterKey>) => {
+      state.characters[payload].player.ghostVote = false;
+    },
+    restorePlayerGhostVote: (state, { payload }: PayloadAction<CharacterKey>) => {
+      state.characters[payload].player.ghostVote = true;
+    },
     reset: () => initialState,
   },
 });
@@ -84,6 +101,10 @@ export const {
   swapCharacterTeam,
   removeCharacter,
   setPlayerName,
+  killPlayer,
+  revivePlayer,
+  usePlayerGhostVote,
+  restorePlayerGhostVote,
   reset,
 } = charactersSlice.actions;
 
