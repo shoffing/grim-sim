@@ -2,7 +2,7 @@ import { GrimPosition } from '@/app/screens/grim';
 import { PropsWithChildren, useEffect } from 'react';
 import { Dimensions, ImageBackground, LayoutRectangle, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { MD3Theme, withTheme } from 'react-native-paper';
+import { MD3Theme, withTheme, Text } from 'react-native-paper';
 import Animated, {
   clamp,
   Easing,
@@ -18,7 +18,8 @@ interface TokenProps {
   position: GrimPosition;
   selected?: boolean;
   size: number;
-  text?: string;
+  bottomText?: string;
+  belowText?: string;
   containerLayout?: LayoutRectangle;
   onMove?: (position: GrimPosition) => void;
   onPress?: () => void;
@@ -31,7 +32,8 @@ function Token(props: PropsWithChildren<TokenProps>) {
     position,
     selected,
     size,
-    text,
+    bottomText,
+    belowText,
     containerLayout,
     onMove,
     onPress,
@@ -116,11 +118,15 @@ function Token(props: PropsWithChildren<TokenProps>) {
       width: '70%',
       top: -10,
     },
-    text: {
+    bottomText: {
       ...theme.fonts.labelLarge,
       position: 'absolute',
       letterSpacing: 1,
       fontSize: 18,
+    },
+    belowText: {
+      color: theme.colors.primary,
+      padding: 8,
     },
   });
   return (
@@ -148,15 +154,16 @@ function Token(props: PropsWithChildren<TokenProps>) {
               </View>
             </ImageBackground>
           </ImageBackground>
-          <Svg.Svg viewBox="0 0 150 150" style={styles.text}>
+          <Svg.Svg viewBox="0 0 150 150" style={styles.bottomText}>
             <Svg.Path d="M 13 75 A 1 1 0 0 0 138 75" id="curve" fill="transparent"/>
             <Svg.Text x="66.6%" textAnchor="middle" fill="black">
               <Svg.TextPath href="#curve">
-                {text}
+                {bottomText}
               </Svg.TextPath>
             </Svg.Text>
           </Svg.Svg>
         </View>
+        <Text variant="labelMedium" style={styles.belowText}>{belowText}</Text>
       </Animated.View>
     </GestureDetector>
   );

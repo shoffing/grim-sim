@@ -9,17 +9,25 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type CharacterKey = string & { __brand: 'Character Key' };
 
+export interface PlayerState {
+  name?: string;
+  alive?: boolean;
+  ghostVote?: boolean;
+}
+
 export interface CharacterState {
   key: CharacterKey;
   position: GrimPosition;
   id: CharacterId;
   team: Team;
   selected: boolean;
+  player: PlayerState;
 }
 
 interface NewCharacterState {
   id: CharacterId;
   position?: GrimPosition;
+  player?: PlayerState;
 }
 
 interface CharactersState {
@@ -46,6 +54,7 @@ export const charactersSlice = createSlice({
         id: payload.id,
         team: data.team,
         selected: false,
+        player: {},
       };
     },
     setCharacterId: (state, { payload }: PayloadAction<Pick<CharacterState, 'key' | 'id'>>) => {
@@ -60,6 +69,9 @@ export const charactersSlice = createSlice({
     removeCharacter: (state, { payload }: PayloadAction<CharacterKey>) => {
       delete state.characters[payload];
     },
+    setPlayerName: (state, { payload }: PayloadAction<Pick<CharacterState, 'key'> & Pick<PlayerState, 'name'>>) => {
+      state.characters[payload.key].player.name = payload.name;
+    },
     reset: () => initialState,
   },
 });
@@ -71,6 +83,7 @@ export const {
   setCharacterId,
   swapCharacterTeam,
   removeCharacter,
+  setPlayerName,
   reset,
 } = charactersSlice.actions;
 

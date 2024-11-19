@@ -21,7 +21,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { MD3Theme, Surface, withTheme } from 'react-native-paper';
+import { MD3Theme, Surface, withTheme, Text } from 'react-native-paper';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -65,7 +65,6 @@ function Grim({ theme }: GrimProps) {
 
   /** Handle character selection (and controls display). */
   const [selectedCharacterKey, setSelectedCharacterKey] = useState<CharacterKey>();
-  const selectedCharacter = useAppSelector(state => charactersSlice.selectCharacterByKey(state.characters, selectedCharacterKey));
   const clearSelectedCharacter = () => setSelectedCharacterKey(undefined);
 
   /** Handle reminder selection (and controls display). */
@@ -103,7 +102,8 @@ function Grim({ theme }: GrimProps) {
         position={character.position}
         selected={selected}
         size={CHARACTER_SIZE}
-        text={characterData.name}
+        bottomText={characterData.name}
+        belowText={character?.player?.name}
         onMove={onMove}
         onPress={onPress}>
         <Character character={characterData} team={character.team}/>
@@ -126,7 +126,7 @@ function Grim({ theme }: GrimProps) {
         position={reminder.position}
         selected={selected}
         size={REMINDER_SIZE}
-        text={reminder.data.label}
+        bottomText={reminder.data.label}
         onMove={onMove}
         onPress={onPress}>
         <Reminder reminder={reminder.data}/>

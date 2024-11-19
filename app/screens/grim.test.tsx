@@ -149,6 +149,41 @@ describe('<Grim />', () => {
       expect(() => imp.findByProps({ alt: 'Imp (good)' })).not.toThrow();
       expect(() => imp.findByProps({ alt: 'Imp (evil)' })).toThrow();
     });
+
+    it('sets player names', async () => {
+      const { getByTestId, queryByText } = render(<Grim/>);
+      await addCharacter(CharacterId.Imp);
+      await addCharacter(CharacterId.Fortuneteller);
+      await addCharacter(CharacterId.Butler);
+
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('set-player-name-character', { includeHiddenElements: true }));
+      await userEvent.clear(getByTestId('name-text-input'));
+      await userEvent.type(getByTestId('name-text-input'), 'James Bond', {submitEditing: true});
+
+      await openCharacterControls(CharacterId.Fortuneteller);
+      await userEvent.press(getByTestId('set-player-name-character', { includeHiddenElements: true }));
+      await userEvent.clear(getByTestId('name-text-input'));
+      await userEvent.type(getByTestId('name-text-input'), 'Jimmy Testerino');
+      await userEvent.press(getByTestId('confirm-set-name'));
+
+      await openCharacterControls(CharacterId.Butler);
+      await userEvent.press(getByTestId('set-player-name-character', { includeHiddenElements: true }));
+      await userEvent.clear(getByTestId('name-text-input'));
+      await userEvent.type(getByTestId('name-text-input'), 'Pepper Pancakes');
+      await userEvent.press(getByTestId('confirm-set-name'));
+
+      await openCharacterControls(CharacterId.Butler);
+      await userEvent.press(getByTestId('set-player-name-character', { includeHiddenElements: true }));
+      await userEvent.clear(getByTestId('name-text-input'));
+      await userEvent.type(getByTestId('name-text-input'), 'Renamed Renamer');
+      await userEvent.press(getByTestId('confirm-set-name'));
+
+      expect(queryByText('James Bond')).toBeOnTheScreen();
+      expect(queryByText('Jimmy Testerino')).toBeOnTheScreen();
+      expect(queryByText('Pepper Pancakes')).toBeNull();
+      expect(queryByText('Renamed Renamer')).toBeOnTheScreen();
+    });
   });
 
   describe('ReminderControls', () => {
