@@ -4,7 +4,6 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
   NavigationContext,
-  ThemeProvider,
 } from '@react-navigation/native';
 import { render, RenderOptions } from '@testing-library/react-native';
 import merge from 'deepmerge';
@@ -46,9 +45,7 @@ const AllTheProviders = ({ children }: PropsWithChildren) => {
     <NavigationContext.Provider value={navContext}>
       <ReduxProvider store={store}>
         <PaperProvider theme={paperTheme}>
-          <ThemeProvider value={paperTheme}>
-            {children}
-          </ThemeProvider>
+          {children}
         </PaperProvider>
       </ReduxProvider>
     </NavigationContext.Provider>
