@@ -29,10 +29,10 @@ function ReminderControls({ reminderKey, onDismiss, theme }: ReminderControlsPro
   };
 
   const reminder = useAppSelector(state => selectReminderByKey(state.reminders, reminderKey));
-  const position = {
-    x: reminder?.position?.x ?? 0,
-    y: (reminder?.position?.y ?? 0) + REMINDER_SIZE,
-  };
+  const position = reminder?.position ? {
+    x: reminder.position.x + REMINDER_SIZE / 2,
+    y: reminder.position.y + REMINDER_SIZE / 2,
+  } : { x: 0, y: 0 };
 
   return (
     <Portal>

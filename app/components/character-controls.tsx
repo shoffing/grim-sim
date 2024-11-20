@@ -1,6 +1,7 @@
 import { CHARACTER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
+  castPlayerGhostVote,
   CharacterKey,
   killPlayer,
   removeCharacter,
@@ -9,9 +10,8 @@ import {
   selectCharacterByKey,
   setPlayerName,
   swapCharacterTeam,
-  castPlayerGhostVote,
 } from '@/app/state/characters-slice';
-import { setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
+import { selectLayout, setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
 import { useEffect, useState } from 'react';
 import { Button, Dialog, Divider, MD3Theme, Menu, Portal, TextInput, withTheme } from 'react-native-paper';
 
@@ -24,6 +24,7 @@ interface CharacterControlsProps {
 function CharacterControls({ characterKey, onDismiss, theme }: CharacterControlsProps) {
   const dispatch = useAppDispatch();
   const character = useAppSelector(state => selectCharacterByKey(state.characters, characterKey));
+  const layout = useAppSelector(state => selectLayout(state.grim));
 
   // Confirmation dialog for remving this character.
   const [confirmingRemoveKey, setConfirmingRemoveKey] = useState<CharacterKey>();
@@ -53,10 +54,10 @@ function CharacterControls({ characterKey, onDismiss, theme }: CharacterControls
     wrapped();
   };
 
-  const position = {
-    x: character?.position?.x ?? 0,
-    y: (character?.position?.y ?? 0) + CHARACTER_SIZE,
-  };
+  const position = character?.position ? {
+    x: character.position.x + CHARACTER_SIZE / 2,
+    y: character.position.y + CHARACTER_SIZE / 2,
+  } : { x: 0, y: 0 };
 
   const alive = character?.player?.alive ?? true;
   const ghostVote = character?.player?.ghostVote ?? true;

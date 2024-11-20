@@ -125,7 +125,8 @@ function Grim({ theme }: GrimProps) {
         selected={selected}
         size={CHARACTER_SIZE}
         topCenterContent={!alive ?
-          <Image style={styles.shroud} source={require('@/assets/images/token/shroud.webp')} testID="shroud"/> : undefined}
+          <Image style={styles.shroud} source={require('@/assets/images/token/shroud.webp')}
+                 testID="shroud"/> : undefined}
         centerContent={<Character character={characterData} team={character.team}/>}
         bottomText={characterData.name}
         belowText={character?.player?.name}
