@@ -19,7 +19,7 @@ interface NewReminderState {
   position?: GrimPosition;
 }
 
-interface RemindersState {
+export interface RemindersState {
   reminders: Record<ReminderKey, ReminderState>;
 }
 

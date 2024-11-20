@@ -20,7 +20,6 @@ export interface CharacterState {
   position: GrimPosition;
   id: CharacterId;
   team: Team;
-  selected: boolean;
   player: PlayerState;
 }
 
@@ -30,7 +29,7 @@ interface NewCharacterState {
   player?: PlayerState;
 }
 
-interface CharactersState {
+export interface CharactersState {
   characters: Record<CharacterKey, CharacterState>;
 }
 
@@ -53,7 +52,6 @@ export const charactersSlice = createSlice({
         position: payload.position || { x: 0, y: 0 },
         id: payload.id,
         team: data.team,
-        selected: false,
         player: {
           alive: true,
           ghostVote: true,

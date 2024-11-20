@@ -1,10 +1,10 @@
 import { CharacterKey, selectCharacterByKey } from '@/app/state/characters-slice';
-import { ReminderKey } from '@/app/state/reminders-slice';
+import { ReminderKey, selectReminderByKey } from '@/app/state/reminders-slice';
 import { RootState } from '@/app/state/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LayoutRectangle } from 'react-native';
 
-interface GrimState {
+export interface GrimState {
   edition: string;
   layout?: LayoutRectangle;
   selectedCharacterKey?: CharacterKey;
@@ -69,9 +69,15 @@ export const {
 export const selectLayout = (state: GrimState) => state.layout;
 export const selectEdition = (state: GrimState) => state.edition;
 export const selectReplacingCharacterKey = (state: GrimState) => state.replacingCharacterKey;
+export const selectReplacingReminderKey = (state: GrimState) => state.replacingReminderKey;
+export const selectReplacingCharacter = (state: RootState) => {
+  return state.grim.replacingCharacterKey != null ? selectCharacterByKey(state.characters, state.grim.replacingCharacterKey) : undefined;
+};
+export const selectReplacingReminder = (state: RootState) => {
+  return state.grim.replacingReminderKey != null ? selectReminderByKey(state.reminders, state.grim.replacingReminderKey) : undefined;
+};
 export const selectReminderCharacter = (state: RootState) => {
   return state.grim.reminderCharacterKey != null ? selectCharacterByKey(state.characters, state.grim.reminderCharacterKey) : undefined;
 };
-export const selectReplacingReminderKey = (state: GrimState) => state.replacingReminderKey;
 
 export default grimSlice.reducer;
