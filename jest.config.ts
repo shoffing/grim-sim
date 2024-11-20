@@ -16,6 +16,7 @@ const config: Config = {
   setupFiles: [
     './jest-setup.js',
   ],
+  workerIdleMemoryLimit: '512MB',
 };
 
 export default config;
