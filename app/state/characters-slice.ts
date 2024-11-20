@@ -83,7 +83,7 @@ export const charactersSlice = createSlice({
       state.characters[payload].player.alive = true;
       state.characters[payload].player.ghostVote = true;
     },
-    usePlayerGhostVote: (state, { payload }: PayloadAction<CharacterKey>) => {
+    castPlayerGhostVote: (state, { payload }: PayloadAction<CharacterKey>) => {
       state.characters[payload].player.ghostVote = false;
     },
     restorePlayerGhostVote: (state, { payload }: PayloadAction<CharacterKey>) => {
@@ -103,7 +103,7 @@ export const {
   setPlayerName,
   killPlayer,
   revivePlayer,
-  usePlayerGhostVote,
+  castPlayerGhostVote,
   restorePlayerGhostVote,
   reset,
 } = charactersSlice.actions;

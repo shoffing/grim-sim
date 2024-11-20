@@ -9,7 +9,7 @@ import {
   selectCharacterByKey,
   setPlayerName,
   swapCharacterTeam,
-  usePlayerGhostVote,
+  castPlayerGhostVote,
 } from '@/app/state/characters-slice';
 import { setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
 import { useEffect, useState } from 'react';
@@ -94,7 +94,7 @@ function CharacterControls({ characterKey, onDismiss, theme }: CharacterControls
             leadingIcon={ghostVote ? 'ghost-off' : 'ghost'}
             title={ghostVote ? 'Use ghost vote' : 'Restore ghost vote'}
             testID={ghostVote ? 'revive-player-character' : 'restore-ghost-vote-character'}
-            onPress={onPress(() => characterKey && dispatch(ghostVote ? usePlayerGhostVote(characterKey) : restorePlayerGhostVote(characterKey)))}/>
+            onPress={onPress(() => characterKey && dispatch(ghostVote ? castPlayerGhostVote(characterKey) : restorePlayerGhostVote(characterKey)))}/>
         }
       </Menu>
 
