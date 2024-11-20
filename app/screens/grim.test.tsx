@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import { ACCESSIBILITY_LABEL as GAME_CONTROLS_ACCESSIBILITY_LABEL } from '@/app/components/game-controls';
 import Grim from '@/app/screens/grim';
 import * as charactersSlice from '@/app/state/characters-slice';
@@ -7,6 +8,7 @@ import { store } from '@/app/state/store';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
 import { act, fireEvent, userEvent } from '@testing-library/react-native';
+import { ReactTestInstance } from 'react-test-renderer';
 import { render, screen } from '../test-utils';
 import '@testing-library/react-native/extend-expect';
 
@@ -179,6 +181,101 @@ describe('<Grim />', () => {
       expect(queryByText('Jimmy Testerino')).toBeOnTheScreen();
       expect(queryByText('Pepper Pancakes')).toBeNull();
       expect(queryByText('Renamed Renamer')).toBeOnTheScreen();
+    });
+
+    it('kills a player', async () => {
+      const { getByTestId } = render(<Grim/>);
+      const token = await addCharacter(CharacterId.Imp);
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('kill-player-character'));
+      expect(getByTestId('shroud')).toBeOnTheScreen();
+      expect((token.children[0] as ReactTestInstance).props['style']['borderStyle']).toEqual('dotted'); // ghost vote
+    });
+
+    it('revives a player', async () => {
+      const { getByTestId, queryByTestId } = render(<Grim/>);
+      const token = await addCharacter(CharacterId.Imp);
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('kill-player-character'));
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('revive-player-character'));
+      expect(queryByTestId('shroud')).toBeNull();
+      expect((token.children[0] as ReactTestInstance).props['style']['borderStyle']).not.toEqual('dotted'); // no ghost vote
+    });
+
+    it('uses a dead player\'s ghost vote', async () => {
+      const { getByTestId } = render(<Grim/>);
+      const token = await addCharacter(CharacterId.Imp);
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('kill-player-character'));
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('use-ghost-vote-character'));
+      expect((token.children[0] as ReactTestInstance).props['style']['borderStyle']).not.toEqual('dotted'); // no ghost vote
+      expect(getByTestId('shroud')).toBeOnTheScreen();
+    });
+
+    it('restores a dead player\'s ghost vote', async () => {
+      const { getByTestId } = render(<Grim/>);
+      const token = await addCharacter(CharacterId.Imp);
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('kill-player-character'));
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('use-ghost-vote-character'));
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('restore-ghost-vote-character'));
+      expect((token.children[0] as ReactTestInstance).props['style']['borderStyle']).toEqual('dotted'); // no ghost vote
+      expect(getByTestId('shroud')).toBeOnTheScreen();
+    });
+
+    it('has the correct menu options for alive players', async () => {
+      const { queryByTestId } = render(<Grim/>);
+      await addCharacter(CharacterId.Imp);
+      await openCharacterControls(CharacterId.Imp);
+      expect(queryByTestId('replace-character')).not.toBeNull();
+      expect(queryByTestId('change-team-character')).not.toBeNull();
+      expect(queryByTestId('add-reminder-character')).not.toBeNull();
+      expect(queryByTestId('delete-character')).not.toBeNull();
+      expect(queryByTestId('set-player-name-character')).not.toBeNull();
+      expect(queryByTestId('kill-player-character')).not.toBeNull();
+      expect(queryByTestId('revive-player-character')).toBeNull();
+      expect(queryByTestId('use-ghost-vote-character')).toBeNull();
+      expect(queryByTestId('restore-ghost-vote-character')).toBeNull();
+    });
+
+    it('has the correct menu options for dead players', async () => {
+      const { queryByTestId, getByTestId } = render(<Grim/>);
+      await addCharacter(CharacterId.Imp);
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('kill-player-character'));
+      await openCharacterControls(CharacterId.Imp);
+      expect(queryByTestId('replace-character')).not.toBeNull();
+      expect(queryByTestId('change-team-character')).not.toBeNull();
+      expect(queryByTestId('add-reminder-character')).not.toBeNull();
+      expect(queryByTestId('delete-character')).not.toBeNull();
+      expect(queryByTestId('set-player-name-character')).not.toBeNull();
+      expect(queryByTestId('kill-player-character')).toBeNull();
+      expect(queryByTestId('revive-player-character')).not.toBeNull();
+      expect(queryByTestId('use-ghost-vote-character')).not.toBeNull();
+      expect(queryByTestId('restore-ghost-vote-character')).toBeNull();
+    });
+
+    it('has the correct menu options for dead players without ghost votes', async () => {
+      const { queryByTestId, getByTestId } = render(<Grim/>);
+      await addCharacter(CharacterId.Imp);
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('kill-player-character'));
+      await openCharacterControls(CharacterId.Imp);
+      await userEvent.press(getByTestId('use-ghost-vote-character'));
+      await openCharacterControls(CharacterId.Imp);
+      expect(queryByTestId('replace-character')).not.toBeNull();
+      expect(queryByTestId('change-team-character')).not.toBeNull();
+      expect(queryByTestId('add-reminder-character')).not.toBeNull();
+      expect(queryByTestId('delete-character')).not.toBeNull();
+      expect(queryByTestId('set-player-name-character')).not.toBeNull();
+      expect(queryByTestId('kill-player-character')).toBeNull();
+      expect(queryByTestId('revive-player-character')).not.toBeNull();
+      expect(queryByTestId('use-ghost-vote-character')).toBeNull();
+      expect(queryByTestId('restore-ghost-vote-character')).not.toBeNull();
     });
   });
 

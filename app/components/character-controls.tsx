@@ -93,7 +93,7 @@ function CharacterControls({ characterKey, onDismiss, theme }: CharacterControls
           <Menu.Item
             leadingIcon={ghostVote ? 'ghost-off' : 'ghost'}
             title={ghostVote ? 'Use ghost vote' : 'Restore ghost vote'}
-            testID={ghostVote ? 'revive-player-character' : 'restore-ghost-vote-character'}
+            testID={ghostVote ? 'use-ghost-vote-character' : 'restore-ghost-vote-character'}
             onPress={onPress(() => characterKey && dispatch(ghostVote ? castPlayerGhostVote(characterKey) : restorePlayerGhostVote(characterKey)))}/>
         }
       </Menu>
