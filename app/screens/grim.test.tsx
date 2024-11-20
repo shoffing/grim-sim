@@ -35,16 +35,16 @@ const openReminderControls = async (label: string, idx = 0) => {
 
 const addCharacter = async (id: CharacterId) => {
   await openGameControls();
-  fireEvent.press(screen.getByTestId('add-character-game', { includeHiddenElements: true }));
-  fireEvent.press(screen.getByRole('button', { name: getCharacterById(id).name }));
+  await userEvent.press(screen.getByTestId('add-character-game', { includeHiddenElements: true }));
+  await userEvent.press(screen.getByRole('button', { name: getCharacterById(id).name }));
   return queryCharacterToken(id);
 };
 
 const addReminder = async (label: string) => {
   await openGameControls();
-  fireEvent.press(screen.getByTestId('add-reminder-game', { includeHiddenElements: true }));
+  await userEvent.press(screen.getByTestId('add-reminder-game', { includeHiddenElements: true }));
   fireEvent(screen.getByTestId('reminders-show-all'), 'valueChange', true);
-  fireEvent.press(screen.getByRole('button', { name: label }));
+  await userEvent.press(screen.getByRole('button', { name: label }));
   return queryReminderToken(label);
 };
 
@@ -65,7 +65,6 @@ describe('<Grim />', () => {
   describe('GameControls', () => {
     it('adds and selects a new character', async () => {
       render(<Grim/>);
-      userEvent.setup();
       const token = await addCharacter(CharacterId.Beggar);
       expect(token).toBeOnTheScreen();
       fireEvent.press(token);
@@ -74,7 +73,6 @@ describe('<Grim />', () => {
 
     it('adds and selects a new reminder', async () => {
       render(<Grim/>);
-      userEvent.setup();
       const token = await addReminder('Red herring');
       expect(token).toBeOnTheScreen();
       fireEvent.press(token);
@@ -83,15 +81,14 @@ describe('<Grim />', () => {
 
     it('clears the grim', async () => {
       const { getByTestId } = render(<Grim/>);
-      userEvent.setup();
       await addCharacter(CharacterId.Imp);
       await addCharacter(CharacterId.Empath);
       await addCharacter(CharacterId.Fortuneteller);
       await addReminder('Red herring');
       await addReminder('Dead');
       await openGameControls();
-      fireEvent.press(getByTestId('clear-grim-game', { includeHiddenElements: true }));
-      fireEvent.press(getByTestId('confirm-clear-grim'));
+      await userEvent.press(getByTestId('clear-grim-game', { includeHiddenElements: true }));
+      await userEvent.press(getByTestId('confirm-clear-grim'));
       expect(queryCharacterToken(CharacterId.Imp)).toBeNull();
       expect(queryCharacterToken(CharacterId.Empath)).toBeNull();
       expect(queryCharacterToken(CharacterId.Fortuneteller)).toBeNull();
@@ -105,8 +102,8 @@ describe('<Grim />', () => {
       const { getByRole, getByTestId } = render(<Grim/>);
       await addCharacter(CharacterId.Imp);
       await openCharacterControls(CharacterId.Imp);
-      fireEvent.press(getByTestId('replace-character', { includeHiddenElements: true }));
-      fireEvent.press(getByRole('button', { name: getCharacterById(CharacterId.Mayor).name }));
+      await userEvent.press(getByTestId('replace-character', { includeHiddenElements: true }));
+      await userEvent.press(getByRole('button', { name: getCharacterById(CharacterId.Mayor).name }));
       expect(queryCharacterToken(CharacterId.Mayor)).toBeOnTheScreen();
       expect(queryCharacterToken(CharacterId.Imp)).toBeNull();
     });
@@ -115,8 +112,8 @@ describe('<Grim />', () => {
       const { getByTestId } = render(<Grim/>);
       await addCharacter(CharacterId.Imp);
       await openCharacterControls(CharacterId.Imp);
-      fireEvent.press(getByTestId('delete-character', { includeHiddenElements: true }));
-      fireEvent.press(getByTestId('confirm-remove-character'));
+      await userEvent.press(getByTestId('delete-character', { includeHiddenElements: true }));
+      await userEvent.press(getByTestId('confirm-remove-character'));
       expect(queryCharacterToken(CharacterId.Imp)).toBeNull();
     });
 
@@ -124,8 +121,8 @@ describe('<Grim />', () => {
       const { getByRole, getByTestId } = render(<Grim/>);
       await addCharacter(CharacterId.Imp);
       await openCharacterControls(CharacterId.Imp);
-      fireEvent.press(getByTestId('add-reminder-character', { includeHiddenElements: true }));
-      fireEvent.press(getByRole('button', { name: 'Dead' }));
+      await userEvent.press(getByTestId('add-reminder-character', { includeHiddenElements: true }));
+      await userEvent.press(getByRole('button', { name: 'Dead' }));
       expect(queryReminderToken('Dead')).toBeOnTheScreen();
     });
 
@@ -133,18 +130,17 @@ describe('<Grim />', () => {
       const { getByRole, getByTestId } = render(<Grim/>);
       await addCharacter(CharacterId.Imp);
       await openCharacterControls(CharacterId.Imp);
-      fireEvent.press(getByTestId('add-reminder-character', { includeHiddenElements: true }));
+      await userEvent.press(getByTestId('add-reminder-character', { includeHiddenElements: true }));
       fireEvent(getByTestId('reminders-show-all'), 'valueChange', true);
-      fireEvent.press(getByRole('button', { name: 'Executed' }));
+      await userEvent.press(getByRole('button', { name: 'Executed' }));
       expect(queryReminderToken('Executed')).toBeOnTheScreen();
     });
 
     it('changes the Imp to Good team', async () => {
       const { getByTestId } = render(<Grim/>);
-      userEvent.setup();
       await addCharacter(CharacterId.Imp);
       await openCharacterControls(CharacterId.Imp);
-      fireEvent.press(getByTestId('change-team-character', { includeHiddenElements: true }));
+      await userEvent.press(getByTestId('change-team-character', { includeHiddenElements: true }));
       const imp = queryCharacterToken(CharacterId.Imp);
       expect(() => imp.findByProps({ alt: 'Imp (good)' })).not.toThrow();
       expect(() => imp.findByProps({ alt: 'Imp (evil)' })).toThrow();
@@ -159,7 +155,7 @@ describe('<Grim />', () => {
       await openCharacterControls(CharacterId.Imp);
       await userEvent.press(getByTestId('set-player-name-character', { includeHiddenElements: true }));
       await userEvent.clear(getByTestId('name-text-input'));
-      await userEvent.type(getByTestId('name-text-input'), 'James Bond', {submitEditing: true});
+      await userEvent.type(getByTestId('name-text-input'), 'James Bond', { submitEditing: true });
 
       await openCharacterControls(CharacterId.Fortuneteller);
       await userEvent.press(getByTestId('set-player-name-character', { includeHiddenElements: true }));
@@ -191,8 +187,8 @@ describe('<Grim />', () => {
       const { getByRole, getByTestId } = render(<Grim/>);
       await addReminder('Red herring');
       await openReminderControls('Red herring');
-      fireEvent.press(getByTestId('replace-reminder', { includeHiddenElements: true }));
-      fireEvent.press(getByRole('button', { name: 'Outsider' }));
+      await userEvent.press(getByTestId('replace-reminder', { includeHiddenElements: true }));
+      await userEvent.press(getByRole('button', { name: 'Outsider' }));
       expect(queryReminderToken('Outsider')).toBeOnTheScreen();
       expect(queryReminderToken('Red herring')).not.toBeOnTheScreen();
     });
@@ -201,8 +197,8 @@ describe('<Grim />', () => {
       const { getByTestId } = render(<Grim/>);
       await addReminder('Red herring');
       await openReminderControls('Red herring');
-      fireEvent.press(getByTestId('delete-reminder', { includeHiddenElements: true }));
-      fireEvent.press(getByTestId('confirm-delete-reminder'));
+      await userEvent.press(getByTestId('delete-reminder', { includeHiddenElements: true }));
+      await userEvent.press(getByTestId('confirm-delete-reminder'));
       expect(queryReminderToken('Red herring')).not.toBeOnTheScreen();
     });
   });

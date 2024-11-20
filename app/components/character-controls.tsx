@@ -76,7 +76,9 @@ function CharacterControls({ characterKey, onDismiss, theme }: CharacterControls
                    onPress={onPress(() => characterKey && dispatch(setReminderCharacter(characterKey)))}/>
         <Menu.Item leadingIcon="delete" title="Remove" testID="delete-character"
                    onPress={onPress(() => characterKey && showConfirmRemove(characterKey))}/>
+
         <Divider/>
+
         <Menu.Item leadingIcon="account-edit" title="Set player name" testID="set-player-name-character"
                    onPress={onPress(() => characterKey && showSetName(characterKey))}/>
         <Menu.Item
