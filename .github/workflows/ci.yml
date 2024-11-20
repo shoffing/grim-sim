@@ -17,6 +17,4 @@ jobs:
           node-version: "18"
       - run: npm install
       - run: npm run test
-        env:
-          NODE_OPTIONS: "--max_old_space_size=4096"
       - run: npm run lint

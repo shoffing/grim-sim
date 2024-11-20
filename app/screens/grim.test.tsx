@@ -1,4 +1,3 @@
-import 'react-native-get-random-values';
 import { ACCESSIBILITY_LABEL as GAME_CONTROLS_ACCESSIBILITY_LABEL } from '@/app/components/game-controls';
 import Grim from '@/app/screens/grim';
 import * as charactersSlice from '@/app/state/characters-slice';
