@@ -9,17 +9,25 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type CharacterKey = string & { __brand: 'Character Key' };
 
+export interface PlayerState {
+  name?: string;
+  alive: boolean;
+  ghostVote: boolean;
+}
+
 export interface CharacterState {
   key: CharacterKey;
   position: GrimPosition;
   id: CharacterId;
   team: Team;
   selected: boolean;
+  player: PlayerState;
 }
 
 interface NewCharacterState {
   id: CharacterId;
   position?: GrimPosition;
+  player?: PlayerState;
 }
 
 interface CharactersState {
@@ -46,6 +54,10 @@ export const charactersSlice = createSlice({
         id: payload.id,
         team: data.team,
         selected: false,
+        player: {
+          alive: true,
+          ghostVote: true,
+        },
       };
     },
     setCharacterId: (state, { payload }: PayloadAction<Pick<CharacterState, 'key' | 'id'>>) => {
@@ -60,6 +72,23 @@ export const charactersSlice = createSlice({
     removeCharacter: (state, { payload }: PayloadAction<CharacterKey>) => {
       delete state.characters[payload];
     },
+    setPlayerName: (state, { payload }: PayloadAction<Pick<CharacterState, 'key'> & Pick<PlayerState, 'name'>>) => {
+      state.characters[payload.key].player.name = payload.name;
+    },
+    killPlayer: (state, { payload }: PayloadAction<CharacterKey>) => {
+      state.characters[payload].player.alive = false;
+      state.characters[payload].player.ghostVote = true;
+    },
+    revivePlayer: (state, { payload }: PayloadAction<CharacterKey>) => {
+      state.characters[payload].player.alive = true;
+      state.characters[payload].player.ghostVote = true;
+    },
+    castPlayerGhostVote: (state, { payload }: PayloadAction<CharacterKey>) => {
+      state.characters[payload].player.ghostVote = false;
+    },
+    restorePlayerGhostVote: (state, { payload }: PayloadAction<CharacterKey>) => {
+      state.characters[payload].player.ghostVote = true;
+    },
     reset: () => initialState,
   },
 });
@@ -71,6 +100,11 @@ export const {
   setCharacterId,
   swapCharacterTeam,
   removeCharacter,
+  setPlayerName,
+  killPlayer,
+  revivePlayer,
+  castPlayerGhostVote,
+  restorePlayerGhostVote,
   reset,
 } = charactersSlice.actions;
 

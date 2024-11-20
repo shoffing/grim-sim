@@ -2,7 +2,7 @@ import Character from '@/app/components/character';
 import { CHARACTER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { addCharacter, setCharacters } from '@/app/state/characters-slice';
-import { selectLayout } from '@/app/state/grim-slice';
+import { selectLayout, setEdition as setStateEdition } from '@/app/state/grim-slice';
 import { setReminders } from '@/app/state/reminders-slice';
 import CharacterData from '@/constants/characters/character-data';
 import CharacterType from '@/constants/characters/character-type';
@@ -193,6 +193,9 @@ function GameSetup({ theme }: GameSetupProps) {
     dispatch(setCharacters([]));
     dispatch(setReminders([]));
 
+    // Set edition
+    dispatch(setStateEdition(edition));
+
     // Add characters in ellipse layout.
     selectedCharacters.forEach((character, idx) => {
       const t = idx / selectedCharacters.length;
@@ -202,7 +205,7 @@ function GameSetup({ theme }: GameSetupProps) {
       } : undefined;
       dispatch(addCharacter({ id: character.id, position }));
     });
-    router.push('/');
+    router.navigate('/');
   };
 
   return (

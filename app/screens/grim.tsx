@@ -19,7 +19,7 @@ import ReminderData from '@/constants/reminder-data';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { LayoutChangeEvent, StyleSheet } from 'react-native';
+import { Image, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
 
@@ -32,7 +32,36 @@ export interface GrimPosition {
   y: number;
 }
 
+const characterSpawnPos = (layout: LayoutRectangle) => ({
+  x: layout ? layout.width - CHARACTER_SIZE - 64 : 0,
+  y: layout ? layout.height - CHARACTER_SIZE - 64 : 0,
+});
+
+const reminderSpawnPos = (layout: LayoutRectangle) => ({
+  x: layout ? layout.width - REMINDER_SIZE - 64 : 0,
+  y: layout ? layout.height - REMINDER_SIZE - 64 : 0,
+});
+
 function Grim({ theme }: GrimProps) {
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: theme.colors.background,
+      height: '100%',
+      width: '100%',
+    },
+    shroud: {
+      height: CHARACTER_SIZE / 1.5,
+      resizeMode: 'contain',
+      width: CHARACTER_SIZE / 1.5,
+    },
+    ghostVote: {
+      borderColor: theme.colors.tertiary,
+      borderRadius: CHARACTER_SIZE,
+      borderStyle: 'dotted',
+      borderWidth: CHARACTER_SIZE / 20,
+    },
+  });
+
   const router = useRouter();
 
   const [focused, setFocused] = useState(true);
@@ -47,13 +76,14 @@ function Grim({ theme }: GrimProps) {
 
   const edition = useAppSelector(state => grimSlice.selectEdition(state.grim));
 
+  const layout = useAppSelector(state => grimSlice.selectLayout(state.grim));
+
   const replacingCharacterKey = useAppSelector(state => grimSlice.selectReplacingCharacterKey(state.grim));
   const reminderCharacter = useAppSelector(state => grimSlice.selectReminderCharacter(state));
   const replacingReminderKey = useAppSelector(state => grimSlice.selectReplacingReminderKey(state.grim));
 
   /** Handle character selection (and controls display). */
   const [selectedCharacterKey, setSelectedCharacterKey] = useState<CharacterKey>();
-  const selectedCharacter = useAppSelector(state => charactersSlice.selectCharacterByKey(state.characters, selectedCharacterKey));
   const clearSelectedCharacter = () => setSelectedCharacterKey(undefined);
 
   /** Handle reminder selection (and controls display). */
@@ -84,6 +114,9 @@ function Grim({ theme }: GrimProps) {
     };
     const characterData = getCharacterById(character.id);
 
+    const alive = character.player.alive;
+    const ghostVote = character.player.ghostVote;
+
     return (
       <Token
         key={`character-${character.key}`}
@@ -91,11 +124,14 @@ function Grim({ theme }: GrimProps) {
         position={character.position}
         selected={selected}
         size={CHARACTER_SIZE}
-        text={characterData.name}
+        topCenterContent={!alive ?
+          <Image style={styles.shroud} source={require('@/assets/images/token/shroud.webp')} testID="shroud"/> : undefined}
+        centerContent={<Character character={characterData} team={character.team}/>}
+        bottomText={characterData.name}
+        belowText={character?.player?.name}
+        tokenStyle={(!alive && ghostVote) ? styles.ghostVote : undefined}
         onMove={onMove}
-        onPress={onPress}>
-        <Character character={characterData} team={character.team}/>
-      </Token>
+        onPress={onPress}/>
     );
   });
 
@@ -114,11 +150,10 @@ function Grim({ theme }: GrimProps) {
         position={reminder.position}
         selected={selected}
         size={REMINDER_SIZE}
-        text={reminder.data.label}
+        centerContent={<Reminder reminder={reminder.data}/>}
+        bottomText={reminder.data.label}
         onMove={onMove}
-        onPress={onPress}>
-        <Reminder reminder={reminder.data}/>
-      </Token>
+        onPress={onPress}/>
     );
   });
 
@@ -132,14 +167,6 @@ function Grim({ theme }: GrimProps) {
     clearSelectedReminder();
   }).runOnJS(true);
 
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: theme.colors.background,
-      height: '100%',
-      width: '100%',
-    },
-  });
-
   const dismissCharacterSelect = () => {
     dispatch(grimSlice.clearReplacingCharacter());
     hideAddNewCharacter();
@@ -150,7 +177,7 @@ function Grim({ theme }: GrimProps) {
       dispatch(charactersSlice.setCharacterId({ key: replacingCharacterKey, id }));
     } else {
       // Adding a new character.
-      dispatch(charactersSlice.addCharacter({ id }));
+      dispatch(charactersSlice.addCharacter({ id, position: layout ? characterSpawnPos(layout) : undefined }));
     }
     dismissCharacterSelect();
   };
@@ -169,7 +196,7 @@ function Grim({ theme }: GrimProps) {
       dispatch(remindersSlice.addReminder({ data, position: reminderCharacter.position }));
     } else {
       // Adding a new reminder.
-      dispatch(remindersSlice.addReminder({ data }));
+      dispatch(remindersSlice.addReminder({ data, position: layout ? reminderSpawnPos(layout) : undefined }));
     }
     dismissReminderSelect();
   };
@@ -184,7 +211,7 @@ function Grim({ theme }: GrimProps) {
         fabStyle={{ zIndex: 9999 }}
         onAddCharacter={() => showAddNewCharacter()}
         onAddReminder={() => showAddNewReminder()}
-        onGameSetup={() => router.push('/game-setup')}
+        onGameSetup={() => router.navigate('/game-setup')}
         onClearGrim={onClearGrim}/>
       <CharacterSelect
         visible={addingNewCharacter || replacingCharacterKey != null}
@@ -195,7 +222,7 @@ function Grim({ theme }: GrimProps) {
         visible={addingNewReminder || replacingReminderKey != null || reminderCharacter != null}
         edition={edition}
         characterIds={
-          selectedCharacter ? [selectedCharacter.id] : Object.values(characters).map(c => c.id)
+          reminderCharacter ? [reminderCharacter.id] : Object.values(characters).map(c => c.id)
         }
         onSelect={onReminderSelect}
         onDismiss={dismissReminderSelect}/>
