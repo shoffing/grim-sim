@@ -1,5 +1,7 @@
 import Character from '@/app/components/character';
+import { useAppSelector } from '@/app/hooks';
 import TokenSelect from '@/app/screens/token-select';
+import { selectReplacingCharacter } from '@/app/state/grim-slice';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharactersByEdition } from '@/constants/characters/characters';
 import { StyleSheet, View } from 'react-native';
@@ -14,22 +16,28 @@ interface CharacterSelectProps {
 }
 
 function CharacterSelect({ visible, edition, onSelect, onDismiss, theme }: CharacterSelectProps) {
+  const replacingCharacter = useAppSelector(state => selectReplacingCharacter(state));
+
   const characters = getCharactersByEdition(edition);
   const characterSelectContent = characters.map((character, idx) => {
+    const replacing = replacingCharacter?.id === character.id;
     const characterStyle = StyleSheet.create({
       touchable: {
         borderRadius: 16,
       },
       container: {
-        width: 120,
-        height: 'auto',
-        borderRadius: 16,
-        padding: 16,
-        justifyContent: 'center',
         alignItems: 'center',
+        borderColor: replacing ? theme.colors.outline : undefined,
+        borderRadius: 16,
+        borderWidth: replacing ? 2 : undefined,
         flexDirection: 'column',
         flexShrink: 1,
         gap: 8,
+        height: 'auto',
+        justifyContent: 'center',
+        opacity: replacing ? 0.666 : 1,
+        padding: 16,
+        width: 120,
       },
     });
     return (
@@ -39,7 +47,8 @@ function CharacterSelect({ visible, edition, onSelect, onDismiss, theme }: Chara
         onPress={() => onSelect(character.id)}
         style={characterStyle.touchable}
         rippleColor={theme.colors.secondary}
-        borderless={true}>
+        borderless={true}
+        testID={replacing ? 'replacing' : undefined}>
         <View style={characterStyle.container}>
           <Character character={character}/>
           <Text variant="labelLarge" adjustsFontSizeToFit={true} numberOfLines={1}>{character.name}</Text>

@@ -1,5 +1,7 @@
 import Reminder from '@/app/components/reminder';
+import { useAppSelector } from '@/app/hooks';
 import TokenSelect from '@/app/screens/token-select';
+import { selectReplacingReminder } from '@/app/state/grim-slice';
 import CharacterId from '@/constants/characters/character-id';
 import CharacterType, { SCRIPT_ORDER } from '@/constants/characters/character-type';
 import { getCharacterById } from '@/constants/characters/characters';
@@ -21,6 +23,8 @@ interface ReminderSelectProps {
 }
 
 function ReminderSelect({ visible, edition, characterIds, onDismiss, onSelect, theme }: ReminderSelectProps) {
+  const replacingReminder = useAppSelector(state => selectReplacingReminder(state));
+
   const [showAll, setShowAll] = useState(false);
 
   const reminders: ReminderData[] = _(characterData)
@@ -41,20 +45,24 @@ function ReminderSelect({ visible, edition, characterIds, onDismiss, onSelect, t
   useEffect(() => setShowAll(false), [characterIds]);
 
   const reminderSelectContent = reminders.map((reminder, idx) => {
+    const replacing = _.isEqual(replacingReminder?.data, reminder);
     const reminderStyle = StyleSheet.create({
       touchable: {
         borderRadius: 16,
       },
       container: {
-        width: 120,
-        height: 'auto',
-        borderRadius: 16,
-        padding: 16,
-        justifyContent: 'center',
         alignItems: 'center',
+        borderColor: replacing ? theme.colors.outline : undefined,
+        borderRadius: 16,
+        borderWidth: replacing ? 2 : undefined,
         flexDirection: 'column',
         flexShrink: 1,
         gap: 8,
+        height: 'auto',
+        justifyContent: 'center',
+        opacity: replacing ? 0.666 : 1,
+        padding: 16,
+        width: 120,
       },
       font: {
         color: theme.colors.onSurface,
@@ -67,7 +75,8 @@ function ReminderSelect({ visible, edition, characterIds, onDismiss, onSelect, t
         onPress={() => onSelect(reminder)}
         style={reminderStyle.touchable}
         rippleColor={theme.colors.secondary}
-        borderless={true}>
+        borderless={true}
+        testID={replacing ? 'replacing' : undefined}>
         <View style={reminderStyle.container}>
           <Reminder reminder={reminder}/>
           <Text variant="labelLarge" adjustsFontSizeToFit={true} numberOfLines={1}>{reminder.label}</Text>
