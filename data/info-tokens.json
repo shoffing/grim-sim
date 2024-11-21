@@ -36,6 +36,18 @@
     "showCharacters": true
   },
   {
+    "text": "You are GOOD",
+    "color": "blue",
+    "icon": "thumb-up",
+    "showCharacters": false
+  },
+  {
+    "text": "You are EVIL",
+    "color": "red",
+    "icon": "thumb-down",
+    "showCharacters": false
+  },
+  {
     "text": "Did you nominate today?",
     "color": "orange",
     "icon": "chat-question",
