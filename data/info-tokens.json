@@ -2,41 +2,49 @@
   {
     "text": "This is the Demon",
     "color": "red",
-    "icon": "emoticon-devil"
+    "icon": "emoticon-devil",
+    "showCharacters": false
   },
   {
     "text": "These are your Minions",
     "color": "red",
-    "icon": "account-group"
+    "icon": "account-group",
+    "showCharacters": false
   },
   {
     "text": "These characters are not in play",
     "color": "blueGrey",
-    "icon": "account-off"
+    "icon": "account-off",
+    "showCharacters": true
   },
   {
     "text": "This character selected you",
     "color": "green",
-    "icon": "hand-pointing-right"
+    "icon": "hand-pointing-right",
+    "showCharacters": true
   },
   {
     "text": "This player is",
     "color": "pink",
-    "icon": "account-question"
+    "icon": "account-question",
+    "showCharacters": true
   },
   {
     "text": "You are",
     "color": "purple",
-    "icon": "account-circle"
+    "icon": "account-circle",
+    "showCharacters": true
   },
   {
     "text": "Did you nominate today?",
     "color": "orange",
-    "icon": "chat-question"
+    "icon": "chat-question",
+    "showCharacters": false
   },
   {
     "text": "Did you vote today?",
     "color": "brown",
-    "icon": "vote"
+    "icon": "vote",
+    "showCharacters": false
   }
 ]
