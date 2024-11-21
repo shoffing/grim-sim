@@ -7,6 +7,7 @@ interface GameControlsProps {
   fabStyle?: ViewStyle,
   onAddCharacter: () => void;
   onAddReminder: () => void;
+  onInfoTokens: () => void;
   onDemonBluffs: () => void;
   onGameSetup: () => void;
   onClearGrim: () => void;
@@ -20,6 +21,7 @@ function GameControls({
                         fabStyle,
                         onAddCharacter,
                         onAddReminder,
+                        onInfoTokens,
                         onDemonBluffs,
                         onGameSetup,
                         onClearGrim,
@@ -75,6 +77,13 @@ function GameControls({
             onPress: onAddReminder,
             size: 'medium',
             testID: 'add-reminder-game',
+          },
+          {
+            icon: 'chat',
+            label: 'Info tokens',
+            onPress: onInfoTokens,
+            size: 'medium',
+            testID: 'info-tokens-game',
           },
           {
             icon: 'emoticon-devil',
