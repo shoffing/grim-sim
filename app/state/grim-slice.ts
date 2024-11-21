@@ -14,13 +14,13 @@ export interface GrimState {
   replacingReminderKey?: ReminderKey;
 }
 
-const initialState: GrimState = {
+export const initialGrimState: GrimState = {
   edition: 'tb',
 };
 
 export const grimSlice = createSlice({
   name: 'grim',
-  initialState,
+  initialState: initialGrimState,
   reducers: {
     setEdition: (state, { payload }: PayloadAction<string>) => {
       state.edition = payload;
@@ -50,7 +50,7 @@ export const grimSlice = createSlice({
       state.replacingReminderKey = undefined;
     },
 
-    reset: () => initialState,
+    reset: () => initialGrimState,
   },
 });
 

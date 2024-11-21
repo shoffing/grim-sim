@@ -12,11 +12,11 @@ const config: Config = {
   moduleNameMapper: {
     '\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/__mocks__/fileMock.js',
   },
-  testTimeout: 30000,
   setupFiles: [
     './jest-setup.js',
     './node_modules/react-native-gesture-handler/jestSetup.js',
   ],
+  testTimeout: 30000,
   workerIdleMemoryLimit: '512MB',
 };
 

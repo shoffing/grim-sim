@@ -23,13 +23,13 @@ export interface RemindersState {
   reminders: Record<ReminderKey, ReminderState>;
 }
 
-const initialState: RemindersState = {
+export const initialRemindersState: RemindersState = {
   reminders: {},
 };
 
 export const remindersSlice = createSlice({
   name: 'reminders',
-  initialState,
+  initialState: initialRemindersState,
   reducers: {
     setReminders: (state, { payload }: PayloadAction<ReminderState[]>) => {
       state.reminders = _.keyBy(payload, 'key');
@@ -59,7 +59,7 @@ export const remindersSlice = createSlice({
     removeReminder: (state, { payload }: PayloadAction<ReminderKey>) => {
       delete state.reminders[payload];
     },
-    reset: () => initialState,
+    reset: () => initialRemindersState,
   },
 });
 
