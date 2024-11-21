@@ -31,15 +31,17 @@ interface NewCharacterState {
 
 export interface CharactersState {
   characters: Record<CharacterKey, CharacterState>;
+  demonBluffs: CharacterId[];
 }
 
-const initialState: CharactersState = {
+export const initialCharactersState: CharactersState = {
   characters: {},
+  demonBluffs: [],
 };
 
 export const charactersSlice = createSlice({
   name: 'characters',
-  initialState,
+  initialState: initialCharactersState,
   reducers: {
     setCharacters: (state, { payload }: PayloadAction<CharacterState[]>) => {
       state.characters = _.keyBy(payload, 'key');
@@ -57,6 +59,9 @@ export const charactersSlice = createSlice({
           ghostVote: true,
         },
       };
+    },
+    setDemonBluffs: (state, { payload }: PayloadAction<CharacterId[]>) => {
+      state.demonBluffs = payload;
     },
     setCharacterId: (state, { payload }: PayloadAction<Pick<CharacterState, 'key' | 'id'>>) => {
       state.characters[payload.key].id = payload.id;
@@ -87,13 +92,14 @@ export const charactersSlice = createSlice({
     restorePlayerGhostVote: (state, { payload }: PayloadAction<CharacterKey>) => {
       state.characters[payload].player.ghostVote = true;
     },
-    reset: () => initialState,
+    reset: () => initialCharactersState,
   },
 });
 
 export const {
   setCharacters,
   addCharacter,
+  setDemonBluffs,
   moveCharacter,
   setCharacterId,
   swapCharacterTeam,
@@ -108,5 +114,7 @@ export const {
 
 export const selectCharacters = (state: CharactersState) => state.characters;
 export const selectCharacterByKey = (state: CharactersState, key?: CharacterKey) => key ? selectCharacters(state)[key] : undefined;
+
+export const selectDemonBluffs = (state: CharactersState) => state.demonBluffs;
 
 export default charactersSlice.reducer;

@@ -1,5 +1,6 @@
 import Character from '@/app/components/character';
 import CharacterControls from '@/app/components/character-controls';
+import CharacterTokenShower from '@/app/screens/character-token-shower';
 import GameControls from '@/app/components/game-controls';
 import Reminder from '@/app/components/reminder';
 import ReminderControls from '@/app/components/reminder-controls';
@@ -7,6 +8,7 @@ import Token from '@/app/components/token';
 import { CHARACTER_SIZE, REMINDER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
+import DemonBluffs from '@/app/screens/demon-bluffs';
 import ReminderSelect from '@/app/screens/reminder-select';
 import * as charactersSlice from '@/app/state/characters-slice';
 import { CharacterKey } from '@/app/state/characters-slice';
@@ -16,9 +18,8 @@ import { ReminderKey } from '@/app/state/reminders-slice';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
 import ReminderData from '@/constants/reminder-data';
-import { useFocusEffect } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
 import { Image, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, Surface, withTheme } from 'react-native-paper';
@@ -41,6 +42,15 @@ const reminderSpawnPos = (layout: LayoutRectangle) => ({
   x: layout ? layout.width - REMINDER_SIZE - 64 : 0,
   y: layout ? layout.height - REMINDER_SIZE - 64 : 0,
 });
+
+// To prevent issues with zIndex overlapping, make sure to show only one screen at a time.
+enum Screen {
+  Grim,
+  CharacterSelect,
+  ReminderSelect,
+  DemonBluffs,
+  TokenShower,
+}
 
 function Grim({ theme }: GrimProps) {
   const styles = StyleSheet.create({
@@ -65,14 +75,17 @@ function Grim({ theme }: GrimProps) {
   const router = useRouter();
 
   const [focused, setFocused] = useState(true);
-  useFocusEffect(() => {
-    setFocused(true);
-    return () => setFocused(false);
-  });
+  useFocusEffect(
+    useCallback(() => {
+      setFocused(true);
+      return () => setFocused(false);
+    }, []),
+  );
 
   const dispatch = useAppDispatch();
   const characters = useAppSelector(state => charactersSlice.selectCharacters(state.characters));
   const reminders = useAppSelector(state => remindersSlice.selectReminders(state.reminders));
+  const demonBluffs = useAppSelector(state => charactersSlice.selectDemonBluffs(state.characters));
 
   const edition = useAppSelector(state => grimSlice.selectEdition(state.grim));
 
@@ -99,6 +112,23 @@ function Grim({ theme }: GrimProps) {
   const [addingNewReminder, setAddingNewReminder] = useState(false);
   const showAddNewReminder = () => setAddingNewReminder(true);
   const hideAddNewReminder = () => setAddingNewReminder(false);
+
+  /** Handling demon bluffs */
+  const [demonBluffsVisible, setDemonBluffsVisible] = useState(false);
+  const showDemonBluffs = () => setDemonBluffsVisible(true);
+  const hideDemonBluffs = () => setDemonBluffsVisible(false);
+  const showDemonBluffTokens = () => {
+    setShowingCharactersText('These characters are not in play.');
+    setShowingCharacterIds(demonBluffs);
+  };
+
+  /** Handling showing characters in full-screen */
+  const [showingCharacterIds, setShowingCharacterIds] = useState<CharacterId[]>([]);
+  const [showingCharactersText, setShowingCharactersText] = useState<string>();
+  const hideShowingCharacters = () => {
+    setShowingCharacterIds([]);
+    setShowingCharactersText(undefined);
+  };
 
   const onLayout = (event: LayoutChangeEvent) => {
     dispatch(grimSlice.setLayout(event.nativeEvent.layout));
@@ -202,39 +232,62 @@ function Grim({ theme }: GrimProps) {
     dismissReminderSelect();
   };
 
+  /** Handle screen visibility. Order these conditionals by screen precedence. */
+  let currentScreen: Screen = Screen.Grim;
+  if (showingCharacterIds.length > 0) {
+    currentScreen = Screen.TokenShower;
+  } else if (addingNewCharacter || replacingCharacterKey != null) {
+    currentScreen = Screen.CharacterSelect;
+  } else if (addingNewReminder || replacingReminderKey != null || reminderCharacter != null) {
+    currentScreen = Screen.ReminderSelect;
+  } else if (demonBluffsVisible) {
+    currentScreen = Screen.DemonBluffs;
+  }
+
   // Render nothing if this page is not focused.
   if (!focused) return;
 
   return (
     <>
-      <GameControls
-        visible={true}
-        fabStyle={{ zIndex: 9999 }}
-        onAddCharacter={() => showAddNewCharacter()}
-        onAddReminder={() => showAddNewReminder()}
-        onGameSetup={() => router.navigate('/game-setup')}
-        onClearGrim={onClearGrim}/>
-      <CharacterSelect
-        visible={addingNewCharacter || replacingCharacterKey != null}
-        onSelect={onCharacterSelect}
-        onDismiss={dismissCharacterSelect}
-        edition={edition}/>
-      <ReminderSelect
-        visible={addingNewReminder || replacingReminderKey != null || reminderCharacter != null}
-        edition={edition}
-        characterIds={
-          reminderCharacter ? [reminderCharacter.id] : Object.values(characters).map(c => c.id)
-        }
-        onSelect={onReminderSelect}
-        onDismiss={dismissReminderSelect}/>
-      <CharacterControls characterKey={selectedCharacterKey} onDismiss={clearSelectedCharacter}/>
-      <ReminderControls reminderKey={selectedReminderKey} onDismiss={clearSelectedReminder}/>
       <GestureDetector gesture={tapGrim}>
         <Surface mode="elevated" style={styles.container} testID="grim" onLayout={onLayout}>
           {currentCharacters}
           {currentReminders}
         </Surface>
       </GestureDetector>
+
+      <GameControls
+        visible={focused && currentScreen === Screen.Grim}
+        onAddCharacter={showAddNewCharacter}
+        onAddReminder={showAddNewReminder}
+        onDemonBluffs={showDemonBluffs}
+        onGameSetup={() => router.navigate('/game-setup')}
+        onClearGrim={onClearGrim}/>
+      <CharacterControls characterKey={selectedCharacterKey} onDismiss={clearSelectedCharacter}/>
+      <ReminderControls reminderKey={selectedReminderKey} onDismiss={clearSelectedReminder}/>
+
+      <CharacterSelect
+        visible={currentScreen === Screen.CharacterSelect}
+        onSelect={onCharacterSelect}
+        onDismiss={dismissCharacterSelect}
+        edition={edition}/>
+      <ReminderSelect
+        visible={currentScreen === Screen.ReminderSelect}
+        edition={edition}
+        characterIds={
+          reminderCharacter ? [reminderCharacter.id] : Object.values(characters).map(c => c.id)
+        }
+        onSelect={onReminderSelect}
+        onDismiss={dismissReminderSelect}/>
+      <DemonBluffs
+        visible={currentScreen === Screen.DemonBluffs}
+        onShowBluffs={showDemonBluffTokens}
+        onDismiss={hideDemonBluffs}/>
+      <CharacterTokenShower
+        visible={currentScreen === Screen.TokenShower}
+        characterIds={showingCharacterIds}
+        text={showingCharactersText}
+        onDismiss={hideShowingCharacters}/>
     </>
   );
 }

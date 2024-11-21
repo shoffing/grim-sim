@@ -17,6 +17,4 @@ jobs:
           node-version: "22"
       - run: npm install
       - run: npm run test
-        env:
-          NODE_OPTIONS: "--max_old_space_size=12288"
       - run: npm run lint

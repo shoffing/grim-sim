@@ -15,6 +15,7 @@ const config: Config = {
   testTimeout: 30000,
   setupFiles: [
     './jest-setup.js',
+    './node_modules/react-native-gesture-handler/jestSetup.js',
   ],
   workerIdleMemoryLimit: '512MB',
 };

@@ -9,6 +9,7 @@ import { render, RenderOptions } from '@testing-library/react-native';
 import merge from 'deepmerge';
 import React, { PropsWithChildren } from 'react';
 import { useColorScheme } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 
@@ -59,7 +60,9 @@ function customRender(
       <NavigationContext.Provider value={navContext}>
         <ReduxProvider store={store}>
           <PaperProvider theme={paperTheme}>
-            {children}
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              {children}
+            </GestureHandlerRootView>
           </PaperProvider>
         </ReduxProvider>
       </NavigationContext.Provider>

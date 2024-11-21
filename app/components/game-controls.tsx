@@ -7,6 +7,7 @@ interface GameControlsProps {
   fabStyle?: ViewStyle,
   onAddCharacter: () => void;
   onAddReminder: () => void;
+  onDemonBluffs: () => void;
   onGameSetup: () => void;
   onClearGrim: () => void;
   theme: MD3Theme;
@@ -19,6 +20,7 @@ function GameControls({
                         fabStyle,
                         onAddCharacter,
                         onAddReminder,
+                        onDemonBluffs,
                         onGameSetup,
                         onClearGrim,
                         theme,
@@ -36,7 +38,7 @@ function GameControls({
   return (
     <Portal>
       <Dialog visible={confirmClearGrim} onDismiss={hideConfirmClearGrim}
-              style={{ bottom: 48, right: 0, position: 'absolute' }}>
+              style={{ bottom: 48, position: 'absolute', right: 0 }}>
         <Dialog.Title>Are you sure you want to clear the grimoire?</Dialog.Title>
         <Dialog.Actions>
           <Button testID="cancel-clear-grim" onPress={hideConfirmClearGrim}>Cancel</Button>
@@ -58,7 +60,7 @@ function GameControls({
         variant="primary"
         open={open}
         visible={visible}
-        icon={open ? 'cog-off' : 'cog'}
+        icon={open ? 'arrow-collapse-down' : 'book-open-blank-variant'}
         actions={[
           {
             icon: 'account-plus',
@@ -74,7 +76,20 @@ function GameControls({
             size: 'medium',
             testID: 'add-reminder-game',
           },
-          { icon: 'application-cog', label: 'Game setup', onPress: onGameSetup, size: 'medium', testID: 'setup-game' },
+          {
+            icon: 'emoticon-devil',
+            label: 'Demon bluffs',
+            onPress: onDemonBluffs,
+            size: 'medium',
+            testID: 'demon-bluffs-game',
+          },
+          {
+            icon: 'application-cog',
+            label: 'Game setup',
+            onPress: onGameSetup,
+            size: 'medium',
+            testID: 'setup-game',
+          },
           {
             icon: 'nuke',
             label: 'Clear grimoire',
