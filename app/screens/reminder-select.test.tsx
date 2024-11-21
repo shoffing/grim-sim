@@ -1,6 +1,6 @@
 import ReminderSelect from '@/app/screens/reminder-select';
-import { GrimState } from '@/app/state/grim-slice';
-import { RemindersState } from '@/app/state/reminders-slice';
+import { initialGrimState } from '@/app/state/grim-slice';
+import { initialRemindersState, ReminderKey } from '@/app/state/reminders-slice';
 import CharacterId from '@/constants/characters/character-id';
 import { act, fireEvent, userEvent } from '@testing-library/react-native';
 import { render } from '../test-utils';
@@ -101,15 +101,19 @@ describe('<ReminderSelect />', () => {
         preloadedState: {
           reminders: {
             reminders: {
-              'abc123': {
+              ...initialRemindersState,
+              ['abc123' as ReminderKey]: {
                 data: {
                   icon: 'test-file-stub',
                   label: 'Minion',
                 },
               },
             },
-          } as RemindersState,
-          grim: { replacingReminderKey: 'abc123' } as GrimState,
+          },
+          grim: {
+            ...initialGrimState,
+            replacingReminderKey: 'abc123' as ReminderKey,
+          },
         },
       },
     );

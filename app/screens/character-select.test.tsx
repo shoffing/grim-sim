@@ -1,6 +1,6 @@
 import CharacterSelect from '@/app/screens/character-select';
-import { CharactersState } from '@/app/state/characters-slice';
-import { GrimState } from '@/app/state/grim-slice';
+import { CharacterKey, CharacterState, initialCharactersState } from '@/app/state/characters-slice';
+import { initialGrimState } from '@/app/state/grim-slice';
 import CharacterId from '@/constants/characters/character-id';
 import { act, userEvent } from '@testing-library/react-native';
 import { render } from '../test-utils';
@@ -72,8 +72,14 @@ describe('<CharacterSelect />', () => {
         onDismiss={jest.fn()}/>,
       {
         preloadedState: {
-          characters: { characters: { 'abc123': { id: CharacterId.Imp } } } as CharactersState,
-          grim: { replacingCharacterKey: 'abc123' } as GrimState,
+          characters: {
+            ...initialCharactersState,
+            characters: { ['abc123' as CharacterKey]: { id: CharacterId.Imp } as CharacterState },
+          },
+          grim: {
+            ...initialGrimState,
+            replacingCharacterKey: 'abc123' as CharacterKey,
+          },
         },
       },
     );

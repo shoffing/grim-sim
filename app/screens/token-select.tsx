@@ -1,3 +1,4 @@
+import { baseModalCloseButton, baseModalContainer, baseModalContent, baseModalScroll } from '@/app/styles/modals';
 import { ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { IconButton, MD3Theme, Modal, Portal, Surface, withTheme } from 'react-native-paper';
@@ -12,30 +13,10 @@ interface TokenSelectProps {
 
 function TokenSelect({ visible, onDismiss, tokens, actions, theme }: TokenSelectProps) {
   const styles = StyleSheet.create({
-    modalContainer: {
-      alignItems: 'center',
-      flexDirection: 'column',
-      justifyContent: 'center',
-    },
-    modalContent: {
-      backgroundColor: theme.colors.surface,
-      flexBasis: 'auto',
-      flexDirection: 'column',
-      maxHeight: '80%',
-      width: '80%',
-      alignItems: 'flex-start',
-      padding: 16,
-    },
-    modalScroll: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      flex: 0,
-    },
-    closeButton: {
-      position: 'absolute',
-      top: -16,
-      right: -16,
-    },
+    modalContainer: baseModalContainer(theme),
+    modalContent: baseModalContent(theme),
+    modalScroll: baseModalScroll(theme),
+    closeButton: baseModalCloseButton(theme),
   });
 
   return (

@@ -15,7 +15,8 @@ import Animated, {
 import * as Svg from 'react-native-svg';
 
 interface TokenProps {
-  position: GrimPosition;
+  position?: GrimPosition;
+  fixed?: boolean;
   selected?: boolean;
   size: number;
   centerContent?: ReactNode;
@@ -27,12 +28,13 @@ interface TokenProps {
   onMove?: (position: GrimPosition) => void;
   onPress?: () => void;
   theme: MD3Theme;
-  testID: string;
+  testID?: string;
 }
 
 function Token(props: TokenProps) {
   const {
     position,
+    fixed,
     selected,
     size,
     centerContent,
@@ -68,21 +70,23 @@ function Token(props: TokenProps) {
   const pan = Gesture.Pan()
     .onBegin(() => interacting.value = true)
     .onChange((event) => {
-      offset.value = {
-        x: clamp(position.x + event.translationX, 0, containerWidth - size),
-        y: clamp(position.y + event.translationY, 0, containerHeight - size),
-      };
+      if (position) {
+        offset.value = {
+          x: clamp(position.x + event.translationX, 0, containerWidth - size),
+          y: clamp(position.y + event.translationY, 0, containerHeight - size),
+        };
+      }
     })
     .onEnd(() => onMove && runOnJS(onMove)(offset.value))
     .onFinalize(() => interacting.value = false);
 
-  const gestures = Gesture.Exclusive(pan, tap);
+  const gestures = fixed ? tap : Gesture.Exclusive(pan, tap);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [
-        { translateX: offset.value.x },
-        { translateY: offset.value.y },
+        { translateX: fixed ? 0 : offset.value.x },
+        { translateY: fixed ? 0 : offset.value.y },
       ],
       opacity: opacity.value,
       zIndex: interacting.value ? 999 : 0,
@@ -93,7 +97,7 @@ function Token(props: TokenProps) {
     container: {
       alignItems: 'center',
       flexDirection: 'column',
-      position: 'absolute',
+      position: fixed ? 'relative' : 'absolute',
     },
     token: {
       alignItems: 'center',
@@ -171,7 +175,12 @@ function Token(props: TokenProps) {
               </View>
             </ImageBackground>
           </ImageBackground>
-          <Svg.Svg viewBox="0 0 150 150" style={styles.bottomText}>
+          <Svg.Svg
+            viewBox="0 0 150 150"
+            style={styles.bottomText}
+            accessible
+            role="presentation"
+            accessibilityLabel={bottomText}>
             <Svg.Path d="M 13 75 A 1 1 0 0 0 138 75" id="curve" fill="transparent"/>
             <Svg.Text x="66.6%" textAnchor="middle" fill="black">
               <Svg.TextPath href="#curve">

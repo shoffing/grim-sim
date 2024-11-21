@@ -11,7 +11,7 @@ import {
   setPlayerName,
   swapCharacterTeam,
 } from '@/app/state/characters-slice';
-import { selectLayout, setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
+import { setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
 import { useEffect, useState } from 'react';
 import { Button, Dialog, Divider, MD3Theme, Menu, Portal, TextInput, withTheme } from 'react-native-paper';
 
@@ -24,7 +24,6 @@ interface CharacterControlsProps {
 function CharacterControls({ characterKey, onDismiss, theme }: CharacterControlsProps) {
   const dispatch = useAppDispatch();
   const character = useAppSelector(state => selectCharacterByKey(state.characters, characterKey));
-  const layout = useAppSelector(state => selectLayout(state.grim));
 
   // Confirmation dialog for remving this character.
   const [confirmingRemoveKey, setConfirmingRemoveKey] = useState<CharacterKey>();

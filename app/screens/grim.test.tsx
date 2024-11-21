@@ -11,6 +11,8 @@ import { ReactTestInstance } from 'react-test-renderer';
 import { render, screen } from '../test-utils';
 import '@testing-library/react-native/extend-expect';
 
+jest.mock('expo-router');
+
 const queryCharacterToken = (id: CharacterId, idx = 0) => {
   return screen.queryAllByTestId(new RegExp(`character-\\d+-${id}`))[idx] ?? null;
 };
@@ -78,6 +80,23 @@ describe('<Grim />', () => {
       expect(token).toBeOnTheScreen();
       fireEvent.press(token);
       expect(token).toBeSelected();
+    });
+
+    it('opens demon bluffs, shows correct options, and shows bluffs', async () => {
+      const { getByRole, queryByTestId, getByTestId, getByText } = render(<Grim/>);
+      await addCharacter(CharacterId.Empath);
+      await addCharacter(CharacterId.Fortuneteller);
+      await addCharacter(CharacterId.Saint);
+      await openGameControls();
+      await userEvent.press(getByTestId('demon-bluffs-game', { includeHiddenElements: true }));
+      await userEvent.press(getByText('Add bluff'));
+      expect(queryByTestId('select-empath')).toBeNull();
+      expect(queryByTestId('select-fortuneteller')).toBeNull();
+      expect(queryByTestId('select-saint')).toBeNull();
+      await userEvent.press(getByTestId('select-ravenkeeper'));
+      await userEvent.press(getByText('Show bluffs'));
+      expect(getByText('These characters are not in play.')).toBeOnTheScreen();
+      expect(getByRole('presentation', { name: 'Ravenkeeper' })).toBeOnTheScreen();
     });
 
     it('clears the grim', async () => {
