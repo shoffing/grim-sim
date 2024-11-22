@@ -6,7 +6,7 @@ import { selectEdition } from '@/app/state/grim-slice';
 import { baseModalCloseButton, baseModalContainer, baseModalContent, baseModalScroll } from '@/app/styles/modals';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
-import { ColorContainerType, Colors } from '@/constants/colors';
+import { colorContainer, ColorContainerType, Colors, onColorContainer } from '@/constants/colors';
 
 import infoTokens from '@/data/info-tokens.json';
 import _ from 'lodash';
@@ -81,8 +81,8 @@ function InfoTokens({ visible, onDismiss, theme }: InfoTokensProps) {
   const containerImage = showingCharacters.length > 0 ? require('@/assets/images/info-token/info-token-container-tall.webp') : require('@/assets/images/info-token/info-token-container.webp');
   const containerBackgroundImage = showingCharacters.length > 0 ? require('@/assets/images/info-token/info-token-container-tall-bg.webp') : require('@/assets/images/info-token/info-token-container-bg.webp');
 
-  const showingInfoBackground = Colors.colorContainer(theme.dark)[showingInfo?.color as ColorContainerType];
-  const showingInfoForeground = Colors.onColorContainer(theme.dark)[showingInfo?.color as ColorContainerType];
+  const showingInfoBackground = colorContainer(theme.dark, showingInfo?.color);
+  const showingInfoForeground = onColorContainer(theme.dark, showingInfo?.color);
 
   const showModalStyle: ViewStyle | null = (!!showingInfo ? {
     backgroundColor: showingInfoBackground,
@@ -101,8 +101,8 @@ function InfoTokens({ visible, onDismiss, theme }: InfoTokensProps) {
   } : null);
 
   const infoTokenButtons = infoTokens.map((info, idx) => {
-    const background = Colors.colorContainer(theme.dark)[info.color as ColorContainerType];
-    const foreground = Colors.onColorContainer(theme.dark)[info.color as ColorContainerType];
+    const background = colorContainer(theme.dark, info.color);
+    const foreground = onColorContainer(theme.dark, info.color);
     return (
       <Button
         key={`info-token-button-${idx}`}

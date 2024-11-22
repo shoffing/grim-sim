@@ -262,48 +262,48 @@ const material = {
 
 const DARK_LEVEL = 900;
 const COLOR_DARK = {
-  red: material[`red${DARK_LEVEL}`],
-  pink: material[`pink${DARK_LEVEL}`],
-  purple: material[`purple${DARK_LEVEL}`],
-  deepPurple: material[`deepPurple${DARK_LEVEL}`],
-  indigo: material[`indigo${DARK_LEVEL}`],
-  blue: material[`blue${DARK_LEVEL}`],
-  lightBlue: material[`lightBlue${DARK_LEVEL}`],
-  cyan: material[`cyan${DARK_LEVEL}`],
-  teal: material[`teal${DARK_LEVEL}`],
-  green: material[`green${DARK_LEVEL}`],
-  lightGreen: material[`lightGreen${DARK_LEVEL}`],
-  lime: material[`lime${DARK_LEVEL}`],
-  yellow: material[`yellow${DARK_LEVEL}`],
-  amber: material[`amber${DARK_LEVEL}`],
-  orange: material[`orange${DARK_LEVEL}`],
-  deepOrange: material[`deepOrange${DARK_LEVEL}`],
-  brown: material[`brown${DARK_LEVEL}`],
-  grey: material[`grey${DARK_LEVEL}`],
-  blueGrey: material[`blueGrey${DARK_LEVEL}`],
+  'red': material[`red${DARK_LEVEL}`],
+  'pink': material[`pink${DARK_LEVEL}`],
+  'purple': material[`purple${DARK_LEVEL}`],
+  'deepPurple': material[`deepPurple${DARK_LEVEL}`],
+  'indigo': material[`indigo${DARK_LEVEL}`],
+  'blue': material[`blue${DARK_LEVEL}`],
+  'lightBlue': material[`lightBlue${DARK_LEVEL}`],
+  'cyan': material[`cyan${DARK_LEVEL}`],
+  'teal': material[`teal${DARK_LEVEL}`],
+  'green': material[`green${DARK_LEVEL}`],
+  'lightGreen': material[`lightGreen${DARK_LEVEL}`],
+  'lime': material[`lime${DARK_LEVEL}`],
+  'yellow': material[`yellow${DARK_LEVEL}`],
+  'amber': material[`amber${DARK_LEVEL}`],
+  'orange': material[`orange${DARK_LEVEL}`],
+  'deepOrange': material[`deepOrange${DARK_LEVEL}`],
+  'brown': material[`brown${DARK_LEVEL}`],
+  'grey': material[`grey${DARK_LEVEL}`],
+  'blueGrey': material[`blueGrey${DARK_LEVEL}`],
 };
 
 const LIGHT_LEVEL = 50;
 const COLOR_LIGHT = {
-  red: material[`red${LIGHT_LEVEL}`],
-  pink: material[`pink${LIGHT_LEVEL}`],
-  purple: material[`purple${LIGHT_LEVEL}`],
-  deepPurple: material[`deepPurple${LIGHT_LEVEL}`],
-  indigo: material[`indigo${LIGHT_LEVEL}`],
-  blue: material[`blue${LIGHT_LEVEL}`],
-  lightBlue: material[`lightBlue${LIGHT_LEVEL}`],
-  cyan: material[`cyan${LIGHT_LEVEL}`],
-  teal: material[`teal${LIGHT_LEVEL}`],
-  green: material[`green${LIGHT_LEVEL}`],
-  lightGreen: material[`lightGreen${LIGHT_LEVEL}`],
-  lime: material[`lime${LIGHT_LEVEL}`],
-  yellow: material[`yellow${LIGHT_LEVEL}`],
-  amber: material[`amber${LIGHT_LEVEL}`],
-  orange: material[`orange${LIGHT_LEVEL}`],
-  deepOrange: material[`deepOrange${LIGHT_LEVEL}`],
-  brown: material[`brown${LIGHT_LEVEL}`],
-  grey: material[`grey${LIGHT_LEVEL}`],
-  blueGrey: material[`blueGrey${LIGHT_LEVEL}`],
+  'red': material[`red${LIGHT_LEVEL}`],
+  'pink': material[`pink${LIGHT_LEVEL}`],
+  'purple': material[`purple${LIGHT_LEVEL}`],
+  'deepPurple': material[`deepPurple${LIGHT_LEVEL}`],
+  'indigo': material[`indigo${LIGHT_LEVEL}`],
+  'blue': material[`blue${LIGHT_LEVEL}`],
+  'lightBlue': material[`lightBlue${LIGHT_LEVEL}`],
+  'cyan': material[`cyan${LIGHT_LEVEL}`],
+  'teal': material[`teal${LIGHT_LEVEL}`],
+  'green': material[`green${LIGHT_LEVEL}`],
+  'lightGreen': material[`lightGreen${LIGHT_LEVEL}`],
+  'lime': material[`lime${LIGHT_LEVEL}`],
+  'yellow': material[`yellow${LIGHT_LEVEL}`],
+  'amber': material[`amber${LIGHT_LEVEL}`],
+  'orange': material[`orange${LIGHT_LEVEL}`],
+  'deepOrange': material[`deepOrange${LIGHT_LEVEL}`],
+  'brown': material[`brown${LIGHT_LEVEL}`],
+  'grey': material[`grey${LIGHT_LEVEL}`],
+  'blueGrey': material[`blueGrey${LIGHT_LEVEL}`],
 };
 
 export const Colors = {
@@ -312,7 +312,7 @@ export const Colors = {
     background: 'rgb(255, 251, 255)',
     elevation: {
       level0: 'transparent',
-      level1: 'rgb(251, 241, 24 size, color }2)',
+      level1: 'rgb(251, 241, 242)',
       level2: 'rgb(249, 235, 235)',
       level3: 'rgb(246, 229, 227)',
       level4: 'rgb(246, 226, 224)',
@@ -392,8 +392,22 @@ export const Colors = {
     tertiaryContainer: 'rgb(92, 67, 0)',
   },
   material,
-  colorContainer: (dark: boolean) => dark ? COLOR_DARK : COLOR_LIGHT,
-  onColorContainer: (dark: boolean) => dark ? COLOR_LIGHT : COLOR_DARK,
 };
 
-export type ColorContainerType = (keyof ReturnType<typeof Colors.colorContainer> & keyof ReturnType<typeof Colors.onColorContainer>);
+export type ColorContainerType = (keyof typeof COLOR_DARK & keyof typeof COLOR_LIGHT);
+
+export const colorContainer = (dark: boolean, color: string) => {
+  if (color in COLOR_DARK && color in COLOR_LIGHT) {
+    const validColor = color as ColorContainerType;
+    return dark ? COLOR_DARK[validColor] : COLOR_LIGHT[validColor];
+  }
+  return dark ? COLOR_DARK['blue'] : COLOR_LIGHT['blue'];
+};
+
+export const onColorContainer = (dark: boolean, color: string) => {
+  if (color in COLOR_DARK && color in COLOR_LIGHT) {
+    const validColor = color as ColorContainerType;
+    return dark ? COLOR_LIGHT[validColor] : COLOR_DARK[validColor];
+  }
+  return dark ? COLOR_LIGHT['blue'] : COLOR_DARK['blue'];
+};
