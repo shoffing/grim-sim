@@ -1,4 +1,4 @@
-import { store } from '@/app/state/store';
+import { persistor, store } from '@/app/state/store';
 import { Colors } from '@/constants/colors';
 import {
   DarkTheme as NavigationDarkTheme,
@@ -8,12 +8,19 @@ import {
 import merge from 'deepmerge';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar, useColorScheme } from 'react-native';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import {
+  ActivityIndicator,
+  adaptNavigationTheme,
+  MD3DarkTheme,
+  MD3LightTheme,
+  PaperProvider,
+} from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const customLightTheme = { ...MD3LightTheme, colors: Colors.light };
 const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
@@ -49,17 +56,19 @@ function RootLayout() {
 
   return (
     <ReduxProvider store={store}>
-      <PaperProvider theme={paperTheme}>
-        <StatusBar hidden={true}/>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <NavigationContainer theme={NavigationDarkTheme}>
-            <Stack>
-              <Stack.Screen name="index" options={{ headerShown: false }}/>
-              <Stack.Screen name="game-setup" options={{ headerShown: false }}/>
-            </Stack>
-          </NavigationContainer>
-        </GestureHandlerRootView>
-      </PaperProvider>
+      <PersistGate loading={<ActivityIndicator/>} persistor={persistor}>
+        <PaperProvider theme={paperTheme}>
+          <StatusBar hidden={true}/>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <NavigationContainer theme={NavigationDarkTheme}>
+              <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }}/>
+                <Stack.Screen name="game-setup" options={{ headerShown: false }}/>
+              </Stack>
+            </NavigationContainer>
+          </GestureHandlerRootView>
+        </PaperProvider>
+      </PersistGate>
     </ReduxProvider>
   );
 }
