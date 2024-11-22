@@ -395,19 +395,21 @@ export const Colors = {
 };
 
 export type ColorContainerType = (keyof typeof COLOR_DARK & keyof typeof COLOR_LIGHT);
+export const COLOR_CONTAINER_COLORS = Object.keys({ ...COLOR_DARK, ...COLOR_LIGHT });
 
-export const colorContainer = (dark: boolean, color: string) => {
-  if (color in COLOR_DARK && color in COLOR_LIGHT) {
+export const colorContainer = (dark: boolean, color?: string) => {
+  if (color && color in COLOR_DARK && color in COLOR_LIGHT) {
     const validColor = color as ColorContainerType;
     return dark ? COLOR_DARK[validColor] : COLOR_LIGHT[validColor];
   }
   return dark ? COLOR_DARK['blue'] : COLOR_LIGHT['blue'];
 };
 
-export const onColorContainer = (dark: boolean, color: string) => {
-  if (color in COLOR_DARK && color in COLOR_LIGHT) {
+export const onColorContainer = (dark: boolean, color?: string) => {
+  if (color && color in COLOR_DARK && color in COLOR_LIGHT) {
     const validColor = color as ColorContainerType;
     return dark ? COLOR_LIGHT[validColor] : COLOR_DARK[validColor];
   }
   return dark ? COLOR_LIGHT['blue'] : COLOR_DARK['blue'];
 };
+

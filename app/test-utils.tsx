@@ -1,4 +1,4 @@
-import { AppStore, RootState, setupStore } from '@/app/state/store';
+import { AppStore, persistor, RootState, setupStore } from '@/app/state/store';
 import { Colors } from '@/constants/colors';
 import {
   DarkTheme as NavigationDarkTheme,
@@ -10,8 +10,15 @@ import merge from 'deepmerge';
 import React, { PropsWithChildren } from 'react';
 import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { adaptNavigationTheme, MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import {
+  ActivityIndicator,
+  adaptNavigationTheme,
+  MD3DarkTheme,
+  MD3LightTheme,
+  PaperProvider,
+} from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const customLightTheme = { ...MD3LightTheme, colors: Colors.light };
 const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
@@ -59,11 +66,13 @@ function customRender(
     return (
       <NavigationContext.Provider value={navContext}>
         <ReduxProvider store={store}>
-          <PaperProvider theme={paperTheme}>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              {children}
-            </GestureHandlerRootView>
-          </PaperProvider>
+          <PersistGate loading={<ActivityIndicator/>} persistor={persistor}>
+            <PaperProvider theme={paperTheme}>
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                {children}
+              </GestureHandlerRootView>
+            </PaperProvider>
+          </PersistGate>
         </ReduxProvider>
       </NavigationContext.Provider>
     );

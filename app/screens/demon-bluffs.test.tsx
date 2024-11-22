@@ -19,7 +19,6 @@ describe('<DemonBluffs />', () => {
     const { queryByTestId } = render(
       <DemonBluffs
         visible={false}
-        onShowBluffs={jest.fn()}
         onDismiss={jest.fn()}/>,
     );
     expect(queryByTestId('add-bluff-button')).toBeNull();
@@ -29,7 +28,6 @@ describe('<DemonBluffs />', () => {
     const { getByTestId, getByText } = render(
       <DemonBluffs
         visible
-        onShowBluffs={jest.fn()}
         onDismiss={jest.fn()}/>,
     );
     await userEvent.press(getByTestId('add-bluff-button'));
@@ -50,7 +48,6 @@ describe('<DemonBluffs />', () => {
     const { getByText, queryByText } = render(
       <DemonBluffs
         visible
-        onShowBluffs={jest.fn()}
         onDismiss={jest.fn()}/>,
       {
         preloadedState: {
@@ -73,7 +70,6 @@ describe('<DemonBluffs />', () => {
     const { getByText, queryByText, getByTestId } = render(
       <DemonBluffs
         visible
-        onShowBluffs={jest.fn()}
         onDismiss={jest.fn()}/>,
       {
         preloadedState: {
@@ -92,12 +88,10 @@ describe('<DemonBluffs />', () => {
   });
 
   it('shows bluffs', async () => {
-    const onShowBluffs = jest.fn();
     const onDismiss = jest.fn();
     const { getByTestId } = render(
       <DemonBluffs
         visible
-        onShowBluffs={onShowBluffs}
         onDismiss={onDismiss}/>,
       {
         preloadedState: {
@@ -109,21 +103,17 @@ describe('<DemonBluffs />', () => {
       },
     );
     await userEvent.press(getByTestId('show-bluffs'));
-    expect(onShowBluffs).toHaveBeenCalled();
     expect(onDismiss).not.toHaveBeenCalled();
   });
 
   it('dismisses modal', async () => {
-    const onShowBluffs = jest.fn();
     const onDismiss = jest.fn();
     const { getByTestId } = render(
       <DemonBluffs
         visible
-        onShowBluffs={onShowBluffs}
         onDismiss={onDismiss}/>,
     );
     await userEvent.press(getByTestId('close-demon-bluffs'));
     expect(onDismiss).toHaveBeenCalled();
-    expect(onShowBluffs).not.toHaveBeenCalled();
   });
 });
