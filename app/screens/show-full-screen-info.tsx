@@ -2,19 +2,20 @@ import Character from '@/app/components/character';
 import Token from '@/app/components/token';
 import { useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
+import ShowFullScreen from '@/app/screens/show-full-screen';
 import { selectEdition } from '@/app/state/grim-slice';
 import { InfoToken, removeCustomToken } from '@/app/state/info-tokens-slice';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
-import { colorContainer, onColorContainer } from '@/constants/colors';
+import { colorContainer, ColorContainerType, onColorContainer } from '@/constants/colors';
 import _ from 'lodash';
 import React, { useState } from 'react';
-import { ImageBackground, StyleSheet, TextStyle, useWindowDimensions, View, ViewStyle } from 'react-native';
+import { StyleSheet, TextStyle, useWindowDimensions, View, ViewStyle } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { FAB, Icon, IconButton, MD3Theme, Modal, Portal, Text, withTheme } from 'react-native-paper';
+import { FAB, Icon, IconButton, MD3Theme, Text, withTheme } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 
-interface InfoTokenShowerProps {
+interface ShowFullScreenInfoProps {
   visible: boolean;
   infoToken?: InfoToken;
   characters?: CharacterId[];
@@ -23,7 +24,7 @@ interface InfoTokenShowerProps {
   theme: MD3Theme;
 }
 
-function InfoTokenShower({ visible, infoToken, characters, custom, onDismiss, theme }: InfoTokenShowerProps) {
+function ShowFullScreenInfo({ visible, infoToken, characters, custom, onDismiss, theme }: ShowFullScreenInfoProps) {
   const dispatch = useDispatch();
   const edition = useAppSelector(state => selectEdition(state.grim));
 
@@ -55,9 +56,6 @@ function InfoTokenShower({ visible, infoToken, characters, custom, onDismiss, th
   // Show characters if they were passed in as props, otherwise show the characters that have been added manually.
   const displayCharacters = characters ?? showingCharacters;
 
-  const containerImage = displayCharacters.length > 0 ? require('@/assets/images/info-token/info-token-container-tall.webp') : require('@/assets/images/info-token/info-token-container.webp');
-  const containerBackgroundImage = displayCharacters.length > 0 ? require('@/assets/images/info-token/info-token-container-tall-bg.webp') : require('@/assets/images/info-token/info-token-container-bg.webp');
-
   const showingInfoBackground = colorContainer(theme.dark, infoToken?.color);
   const showingInfoForeground = onColorContainer(theme.dark, infoToken?.color);
 
@@ -76,14 +74,6 @@ function InfoTokenShower({ visible, infoToken, characters, custom, onDismiss, th
     },
   });
 
-  const showModalStyle: ViewStyle | null = (!!infoToken ? {
-    backgroundColor: showingInfoBackground,
-  } : null);
-  const showModalContentStyle: ViewStyle | null = (!!infoToken ? {
-    alignItems: 'center',
-    gap: 32,
-    height: '100%',
-  } : null);
   const showModalTextStyle: TextStyle | null = (!!infoToken ? {
     color: showingInfoForeground,
     textAlign: 'center',
@@ -115,69 +105,38 @@ function InfoTokenShower({ visible, infoToken, characters, custom, onDismiss, th
   });
 
   return (
-    <Portal>
-      <Modal
-        visible={visible}
-        dismissable={false}
-        dismissableBackButton={true}
-        onDismiss={handleDismiss}
-        style={showModalStyle}
-        contentContainerStyle={showModalContentStyle}>
-        <ImageBackground
-          source={require('@/assets/images/info-token/info-token-background.png')}
-          style={{ alignItems: 'center', height: '100%', width: '100%' }}
-          imageStyle={{ opacity: 0.33, resizeMode: 'repeat' }}
-          fadeDuration={0}>
-          <ImageBackground
-            source={containerBackgroundImage}
-            style={{ alignItems: 'center', height: '100%', width: '95%' }}
-            imageStyle={{ resizeMode: 'contain', width: '100%' }}
-            tintColor={showingInfoBackground}
-            testID="container-background-image">
-            <ImageBackground
-              source={containerImage}
-              style={{ alignItems: 'center', height: '100%', justifyContent: 'center', width: '100%' }}
-              imageStyle={{ resizeMode: 'contain', width: '100%' }}>
-              <View style={{ alignItems: 'center', padding: 64, position: 'relative', gap: 12 }} testID="showing-content">
-                <Icon source={infoToken?.icon} size={128} testID={`info-token-icon-${infoToken?.icon}`}/>
-                <Text variant="displayLarge" style={showModalTextStyle} adjustsFontSizeToFit>{infoToken?.text}</Text>
-                <GestureHandlerRootView style={{ flex: 0, alignItems: 'center', gap: 12 }}>
-                  <View style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    gap: 12,
-                    justifyContent: 'center',
-                  }}>
-                    {showingCharacterTokens}
-                  </View>
-                  {
-                    infoToken?.showCharacters && characters == null ?
-                      <IconButton icon="plus" mode="contained" size={64} onPress={showCharacterSelect}/> : null
-                  }
-                </GestureHandlerRootView>
-              </View>
-            </ImageBackground>
-          </ImageBackground>
-        </ImageBackground>
-        <FAB
-          mode="elevated"
-          icon="eye-off"
-          onPress={handleDismiss}
-          size="large"
-          style={styles.showInfoCloseButton}
-          testID="close-showing"/>
+    <ShowFullScreen visible={visible}
+                    color={(infoToken?.color ?? 'deepPurple') as ColorContainerType}
+                    tall={displayCharacters.length > 0}
+                    actions={
+                      custom ?
+                        <FAB
+                          mode="flat"
+                          icon="delete-outline"
+                          onPress={removeCustomInfoToken}
+                          size="medium"
+                          style={styles.deleteCustomInfoButton}
+                          testID="delete-custom-token"/> :
+                        null
+                    }
+                    onDismiss={handleDismiss}>
+      <Icon source={infoToken?.icon} size={128} testID={`info-token-icon-${infoToken?.icon}`}/>
+      <Text variant="displayLarge" style={showModalTextStyle} adjustsFontSizeToFit>{infoToken?.text}</Text>
+      <GestureHandlerRootView style={{ flex: 0, alignItems: 'center', gap: 12 }}>
+        <View style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 12,
+          justifyContent: 'center',
+        }}>
+          {showingCharacterTokens}
+        </View>
         {
-          custom ?
-            <FAB
-              mode="flat"
-              icon="delete-outline"
-              onPress={removeCustomInfoToken}
-              size="medium"
-              style={styles.deleteCustomInfoButton}
-              testID="delete-custom-token"/> :
-            null
+          infoToken?.showCharacters && characters == null ?
+            <IconButton icon="plus" mode="contained" size={64} onPress={showCharacterSelect}/> : null
         }
-      </Modal>
+      </GestureHandlerRootView>
+
       <CharacterSelect
         visible={characterSelectVisible}
         edition={edition}
@@ -186,8 +145,8 @@ function InfoTokenShower({ visible, infoToken, characters, custom, onDismiss, th
           hideCharacterSelect();
         }}
         onDismiss={hideCharacterSelect}/>
-    </Portal>
+    </ShowFullScreen>
   );
 }
 
-export default withTheme(InfoTokenShower);
+export default withTheme(ShowFullScreenInfo);

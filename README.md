@@ -54,4 +54,4 @@ https://github.com/Skateside/pocket-grimoire
 
 This project uses assets from https://www.freepik.com/.
 
-[macrovector / Freepik](http://www.freepik.com)
+Thanks to macrovector / kotkoa / Freepik!

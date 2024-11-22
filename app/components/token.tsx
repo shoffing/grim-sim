@@ -160,7 +160,7 @@ function Token(props: TokenProps) {
             imageStyle={styles.tokenBackgroundImageNoise}
             resizeMethod="auto"
             resizeMode="stretch"
-            source={require('@/assets/images/token/character-token-noise.webp')}>
+            source={require('@/assets/images/token/token-background.webp')}>
             <ImageBackground
               style={styles.tokenBackground}
               imageStyle={styles.tokenBackgroundImageClock}
@@ -182,7 +182,13 @@ function Token(props: TokenProps) {
             role="presentation"
             accessibilityLabel={bottomText}>
             <Svg.Path d="M 13 75 A 1 1 0 0 0 138 75" id="curve" fill="transparent"/>
-            <Svg.Text x="66.6%" textAnchor="middle" fill="black">
+            {/* TODO: why can't I use custom fonts here? */}
+            <Svg.Text x="66.6%"
+                      textAnchor="middle"
+                      fill="black"
+                      fontFamily="serif"
+                      letterSpacing="2"
+                      fontWeight="800">
               <Svg.TextPath href="#curve">
                 {bottomText}
               </Svg.TextPath>

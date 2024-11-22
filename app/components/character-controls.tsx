@@ -17,11 +17,12 @@ import { Button, Dialog, Divider, MD3Theme, Menu, Portal, TextInput, withTheme }
 
 interface CharacterControlsProps {
   characterKey?: CharacterKey;
+  onShow: () => void;
   onDismiss: () => void;
   theme: MD3Theme;
 }
 
-function CharacterControls({ characterKey, onDismiss, theme }: CharacterControlsProps) {
+function CharacterControls({ characterKey, onShow, onDismiss, theme }: CharacterControlsProps) {
   const dispatch = useAppDispatch();
   const character = useAppSelector(state => selectCharacterByKey(state.characters, characterKey));
 
@@ -68,6 +69,8 @@ function CharacterControls({ characterKey, onDismiss, theme }: CharacterControls
         visible={!!characterKey}
         onDismiss={onDismiss}
         mode="flat">
+        <Menu.Item leadingIcon="eye" title="Show" testID="show-character"
+                   onPress={onPress(onShow)}/>
         <Menu.Item leadingIcon="swap-horizontal" title="Replace" testID="replace-character"
                    onPress={onPress(() => characterKey && dispatch(setReplacingCharacter(characterKey)))}/>
         <Menu.Item leadingIcon="account-group" title="Change team" testID="change-team-character"

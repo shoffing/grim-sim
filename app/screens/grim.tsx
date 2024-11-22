@@ -10,8 +10,9 @@ import CharacterSelect from '@/app/screens/character-select';
 import DemonBluffs from '@/app/screens/demon-bluffs';
 import InfoTokens from '@/app/screens/info-tokens';
 import ReminderSelect from '@/app/screens/reminder-select';
+import ShowFullScreenCharacter from '@/app/screens/show-full-screen-character';
 import * as charactersSlice from '@/app/state/characters-slice';
-import { CharacterKey } from '@/app/state/characters-slice';
+import { CharacterState } from '@/app/state/characters-slice';
 import * as grimSlice from '@/app/state/grim-slice';
 import * as remindersSlice from '@/app/state/reminders-slice';
 import { ReminderKey } from '@/app/state/reminders-slice';
@@ -20,9 +21,9 @@ import { getCharacterById } from '@/constants/characters/characters';
 import ReminderData from '@/constants/reminder-data';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { Image, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
+import { Image, ImageBackground, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { MD3Theme, Surface, withTheme } from 'react-native-paper';
+import { MD3Theme, Portal, withTheme } from 'react-native-paper';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -95,8 +96,8 @@ function Grim({ theme }: GrimProps) {
   const replacingReminderKey = useAppSelector(state => grimSlice.selectReplacingReminderKey(state.grim));
 
   /** Handle character selection (and controls display). */
-  const [selectedCharacterKey, setSelectedCharacterKey] = useState<CharacterKey>();
-  const clearSelectedCharacter = () => setSelectedCharacterKey(undefined);
+  const [selectedCharacter, setSelectedCharacter] = useState<CharacterState>();
+  const clearSelectedCharacter = () => setSelectedCharacter(undefined);
 
   /** Handle reminder selection (and controls display). */
   const [selectedReminderKey, setSelectedReminderKey] = useState<ReminderKey>();
@@ -107,10 +108,15 @@ function Grim({ theme }: GrimProps) {
   const showAddNewCharacter = () => setAddingNewCharacter(true);
   const hideAddNewCharacter = () => setAddingNewCharacter(false);
 
-  /** Handling adding new character */
+  /** Handling adding new reminder */
   const [addingNewReminder, setAddingNewReminder] = useState(false);
   const showAddNewReminder = () => setAddingNewReminder(true);
   const hideAddNewReminder = () => setAddingNewReminder(false);
+
+  /** Handling showing character tokens. */
+  const [showingCharacter, setShowingCharacter] = useState<CharacterState>();
+  const showSelectedCharacter = (character: CharacterState) => setShowingCharacter(character);
+  const hideSelectedCharacter = () => setShowingCharacter(undefined);
 
   /** Handling info tokens */
   const [infoTokensVisible, setInfoTokensVisible] = useState(false);
@@ -127,9 +133,9 @@ function Grim({ theme }: GrimProps) {
   };
 
   const currentCharacters = Object.values(characters).map((character, idx) => {
-    const selected = character.key === selectedCharacterKey;
+    const selected = character.key === selectedCharacter?.key;
     const onPress = () => {
-      setSelectedCharacterKey(character.key);
+      setSelectedCharacter(character);
     };
     const onMove = (position: GrimPosition) => {
       dispatch(charactersSlice.moveCharacter({ key: character.key, position }));
@@ -242,22 +248,30 @@ function Grim({ theme }: GrimProps) {
   return (
     <>
       <GestureDetector gesture={tapGrim}>
-        <Surface mode="elevated" style={styles.container} testID="grim" onLayout={onLayout}>
+        <ImageBackground
+          source={require('@/assets/images/grim/grim-background.webp')}
+          style={styles.container}
+          imageStyle={{ opacity: 0.0345, resizeMode: 'repeat', transform: [{ scale: 1 }] }}>
           {currentCharacters}
           {currentReminders}
-        </Surface>
+        </ImageBackground>
       </GestureDetector>
 
-      <GameControls
-        visible={focused && currentScreen === Screen.Grim}
-        onAddCharacter={showAddNewCharacter}
-        onAddReminder={showAddNewReminder}
-        onInfoTokens={showInfoTokens}
-        onDemonBluffs={showDemonBluffs}
-        onGameSetup={() => router.navigate('/game-setup')}
-        onClearGrim={onClearGrim}/>
-      <CharacterControls characterKey={selectedCharacterKey} onDismiss={clearSelectedCharacter}/>
-      <ReminderControls reminderKey={selectedReminderKey} onDismiss={clearSelectedReminder}/>
+      <Portal.Host>
+        <GameControls
+          visible={focused && currentScreen === Screen.Grim}
+          onAddCharacter={showAddNewCharacter}
+          onAddReminder={showAddNewReminder}
+          onInfoTokens={showInfoTokens}
+          onDemonBluffs={showDemonBluffs}
+          onGameSetup={() => router.navigate('/game-setup')}
+          onClearGrim={onClearGrim}/>
+        <CharacterControls characterKey={selectedCharacter?.key}
+                           onShow={() => setShowingCharacter(selectedCharacter)}
+                           onDismiss={clearSelectedCharacter}/>
+        <ReminderControls reminderKey={selectedReminderKey}
+                          onDismiss={clearSelectedReminder}/>
+      </Portal.Host>
 
       <CharacterSelect
         visible={currentScreen === Screen.CharacterSelect}
@@ -278,6 +292,11 @@ function Grim({ theme }: GrimProps) {
       <DemonBluffs
         visible={currentScreen === Screen.DemonBluffs}
         onDismiss={hideDemonBluffs}/>
+
+      <ShowFullScreenCharacter
+        visible={!!showingCharacter}
+        characterId={showingCharacter?.id}
+        onDismiss={hideSelectedCharacter}/>
     </>
   );
 }

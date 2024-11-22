@@ -34,7 +34,8 @@
         "expo-font",
         {
           "fonts": [
-            "./assets/fonts/NewRocker-Regular.ttf"
+            "./assets/fonts/NewRocker-Regular.ttf",
+            "./assets/fonts/GermaniaOne-Regular.ttf"
           ]
         }
       ]
