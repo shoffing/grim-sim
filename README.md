@@ -39,7 +39,9 @@ npm run icon-variants
 This will use ImageMagick to convert all the icons to their red/blue variants. Note that ImageMagick must be installed
 locally for this to work.
 
- ## Acknowledgements
+## Acknowledgements
+
+### Pocket Grimoire
 
 GrimSim uses assets taken from the wonderful "Pocket Grimoire" project by Skateside.
 Check it out!
@@ -47,3 +49,9 @@ Check it out!
 https://www.pocketgrimoire.co.uk/
 
 https://github.com/Skateside/pocket-grimoire
+
+### Freepik Assets
+
+This project uses assets from https://www.freepik.com/.
+
+[macrovector / Freepik](http://www.freepik.com)

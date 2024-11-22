@@ -9,6 +9,7 @@ import { CHARACTER_SIZE, REMINDER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
 import DemonBluffs from '@/app/screens/demon-bluffs';
+import InfoTokens from '@/app/screens/info-tokens';
 import ReminderSelect from '@/app/screens/reminder-select';
 import * as charactersSlice from '@/app/state/characters-slice';
 import { CharacterKey } from '@/app/state/characters-slice';
@@ -48,6 +49,7 @@ enum Screen {
   Grim,
   CharacterSelect,
   ReminderSelect,
+  InfoTokens,
   DemonBluffs,
   TokenShower,
 }
@@ -112,6 +114,11 @@ function Grim({ theme }: GrimProps) {
   const [addingNewReminder, setAddingNewReminder] = useState(false);
   const showAddNewReminder = () => setAddingNewReminder(true);
   const hideAddNewReminder = () => setAddingNewReminder(false);
+
+  /** Handling info tokens */
+  const [infoTokensVisible, setInfoTokensVisible] = useState(false);
+  const showInfoTokens = () => setInfoTokensVisible(true);
+  const hideInfoTokens = () => setInfoTokensVisible(false);
 
   /** Handling demon bluffs */
   const [demonBluffsVisible, setDemonBluffsVisible] = useState(false);
@@ -240,6 +247,8 @@ function Grim({ theme }: GrimProps) {
     currentScreen = Screen.CharacterSelect;
   } else if (addingNewReminder || replacingReminderKey != null || reminderCharacter != null) {
     currentScreen = Screen.ReminderSelect;
+  } else if (infoTokensVisible) {
+    currentScreen = Screen.InfoTokens;
   } else if (demonBluffsVisible) {
     currentScreen = Screen.DemonBluffs;
   }
@@ -260,6 +269,7 @@ function Grim({ theme }: GrimProps) {
         visible={focused && currentScreen === Screen.Grim}
         onAddCharacter={showAddNewCharacter}
         onAddReminder={showAddNewReminder}
+        onInfoTokens={showInfoTokens}
         onDemonBluffs={showDemonBluffs}
         onGameSetup={() => router.navigate('/game-setup')}
         onClearGrim={onClearGrim}/>
@@ -279,6 +289,9 @@ function Grim({ theme }: GrimProps) {
         }
         onSelect={onReminderSelect}
         onDismiss={dismissReminderSelect}/>
+      <InfoTokens
+        visible={currentScreen === Screen.InfoTokens}
+        onDismiss={hideInfoTokens}/>
       <DemonBluffs
         visible={currentScreen === Screen.DemonBluffs}
         onShowBluffs={showDemonBluffTokens}

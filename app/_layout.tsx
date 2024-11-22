@@ -6,7 +6,9 @@ import {
   NavigationContainer,
 } from '@react-navigation/native';
 import merge from 'deepmerge';
-import { Stack } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { SplashScreen, Stack } from 'expo-router';
+import { useEffect } from 'react';
 import { StatusBar, useColorScheme } from 'react-native';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -24,10 +26,26 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 const CombinedLightTheme = merge(LightTheme, customLightTheme);
 const CombinedDarkTheme = merge(DarkTheme, customDarkTheme);
 
+SplashScreen.preventAutoHideAsync();
+
 function RootLayout() {
   const colorScheme = useColorScheme();
 
   const paperTheme = colorScheme === 'dark' ? CombinedDarkTheme : CombinedLightTheme;
+
+  const [loaded, error] = useFonts({
+    'NewRocker-Regular': require('@/assets/fonts/NewRocker-Regular.ttf'),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
 
   return (
     <ReduxProvider store={store}>

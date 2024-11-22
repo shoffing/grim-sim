@@ -1,0 +1,62 @@
+[
+  {
+    "text": "This is the Demon",
+    "color": "red",
+    "icon": "emoticon-devil",
+    "showCharacters": false
+  },
+  {
+    "text": "These are your Minions",
+    "color": "red",
+    "icon": "account-group",
+    "showCharacters": false
+  },
+  {
+    "text": "These characters are not in play",
+    "color": "blueGrey",
+    "icon": "account-off",
+    "showCharacters": true
+  },
+  {
+    "text": "This character selected you",
+    "color": "green",
+    "icon": "hand-pointing-right",
+    "showCharacters": true
+  },
+  {
+    "text": "This player is",
+    "color": "pink",
+    "icon": "account-question",
+    "showCharacters": true
+  },
+  {
+    "text": "You are",
+    "color": "purple",
+    "icon": "account-circle",
+    "showCharacters": true
+  },
+  {
+    "text": "You are GOOD",
+    "color": "blue",
+    "icon": "thumb-up",
+    "showCharacters": false
+  },
+  {
+    "text": "You are EVIL",
+    "color": "red",
+    "icon": "thumb-down",
+    "showCharacters": false
+  },
+  {
+    "text": "Did you nominate today?",
+    "color": "orange",
+    "icon": "chat-question",
+    "showCharacters": false
+  },
+  {
+    "text": "Did you vote today?",
+    "color": "brown",
+    "icon": "vote",
+    "showCharacters": false
+  }
+]
