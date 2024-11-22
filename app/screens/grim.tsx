@@ -1,6 +1,5 @@
 import Character from '@/app/components/character';
 import CharacterControls from '@/app/components/character-controls';
-import CharacterTokenShower from '@/app/screens/character-token-shower';
 import GameControls from '@/app/components/game-controls';
 import Reminder from '@/app/components/reminder';
 import ReminderControls from '@/app/components/reminder-controls';
@@ -51,7 +50,6 @@ enum Screen {
   ReminderSelect,
   InfoTokens,
   DemonBluffs,
-  TokenShower,
 }
 
 function Grim({ theme }: GrimProps) {
@@ -87,7 +85,6 @@ function Grim({ theme }: GrimProps) {
   const dispatch = useAppDispatch();
   const characters = useAppSelector(state => charactersSlice.selectCharacters(state.characters));
   const reminders = useAppSelector(state => remindersSlice.selectReminders(state.reminders));
-  const demonBluffs = useAppSelector(state => charactersSlice.selectDemonBluffs(state.characters));
 
   const edition = useAppSelector(state => grimSlice.selectEdition(state.grim));
 
@@ -124,18 +121,6 @@ function Grim({ theme }: GrimProps) {
   const [demonBluffsVisible, setDemonBluffsVisible] = useState(false);
   const showDemonBluffs = () => setDemonBluffsVisible(true);
   const hideDemonBluffs = () => setDemonBluffsVisible(false);
-  const showDemonBluffTokens = () => {
-    setShowingCharactersText('These characters are not in play.');
-    setShowingCharacterIds(demonBluffs);
-  };
-
-  /** Handling showing characters in full-screen */
-  const [showingCharacterIds, setShowingCharacterIds] = useState<CharacterId[]>([]);
-  const [showingCharactersText, setShowingCharactersText] = useState<string>();
-  const hideShowingCharacters = () => {
-    setShowingCharacterIds([]);
-    setShowingCharactersText(undefined);
-  };
 
   const onLayout = (event: LayoutChangeEvent) => {
     dispatch(grimSlice.setLayout(event.nativeEvent.layout));
@@ -241,9 +226,7 @@ function Grim({ theme }: GrimProps) {
 
   /** Handle screen visibility. Order these conditionals by screen precedence. */
   let currentScreen: Screen = Screen.Grim;
-  if (showingCharacterIds.length > 0) {
-    currentScreen = Screen.TokenShower;
-  } else if (addingNewCharacter || replacingCharacterKey != null) {
+  if (addingNewCharacter || replacingCharacterKey != null) {
     currentScreen = Screen.CharacterSelect;
   } else if (addingNewReminder || replacingReminderKey != null || reminderCharacter != null) {
     currentScreen = Screen.ReminderSelect;
@@ -294,13 +277,7 @@ function Grim({ theme }: GrimProps) {
         onDismiss={hideInfoTokens}/>
       <DemonBluffs
         visible={currentScreen === Screen.DemonBluffs}
-        onShowBluffs={showDemonBluffTokens}
         onDismiss={hideDemonBluffs}/>
-      <CharacterTokenShower
-        visible={currentScreen === Screen.TokenShower}
-        characterIds={showingCharacterIds}
-        text={showingCharactersText}
-        onDismiss={hideShowingCharacters}/>
     </>
   );
 }

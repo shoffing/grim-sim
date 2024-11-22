@@ -1,12 +1,14 @@
 import Character from '@/app/components/character';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
+import InfoTokenShower from '@/app/screens/info-token-shower';
 import { selectCharacters, selectDemonBluffs, setDemonBluffs } from '@/app/state/characters-slice';
 import { selectEdition } from '@/app/state/grim-slice';
 import { baseModalCloseButton, baseModalContainer, baseModalContent, baseModalScroll } from '@/app/styles/modals';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
 import Team from '@/constants/team';
+import infoTokens from '@/data/info-tokens.json';
 import _ from 'lodash';
 import { useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
@@ -26,16 +28,18 @@ import {
 
 interface DemonBluffsProps {
   visible: boolean;
-  onShowBluffs: () => void;
   onDismiss: () => void;
   theme: MD3Theme;
 }
 
-function DemonBluffs({ visible, onShowBluffs, onDismiss, theme }: DemonBluffsProps) {
+function DemonBluffs({ visible, onDismiss, theme }: DemonBluffsProps) {
   const dispatch = useAppDispatch();
   const edition = useAppSelector(state => selectEdition(state.grim));
   const charactersInGame = useAppSelector(state => selectCharacters(state.characters));
   const bluffs = useAppSelector(state => selectDemonBluffs(state.characters));
+
+  const notInPlayToken = infoTokens.find(token => token.text === 'These characters are not in play');
+  if (notInPlayToken == null) throw new Error('Characters not in play info token could not be found for Demon Bluffs.');
 
   const styles = StyleSheet.create({
     modalContainer: baseModalContainer(theme),
@@ -87,6 +91,10 @@ function DemonBluffs({ visible, onShowBluffs, onDismiss, theme }: DemonBluffsPro
       ..._.drop(bluffs, (idx ?? 0) + 1),
     ]));
   };
+
+  const [showingBluffs, setShowingBluffs] = useState(false);
+  const showBluffs = () => setShowingBluffs(true);
+  const hideBluffs = () => setShowingBluffs(false);
 
   const gameIds = Object.values(charactersInGame).map(character => character.id);
 
@@ -141,7 +149,7 @@ function DemonBluffs({ visible, onShowBluffs, onDismiss, theme }: DemonBluffsPro
           mode="contained"
           icon="eye"
           disabled={bluffs.length === 0}
-          onPress={onShowBluffs}
+          onPress={showBluffs}
           testID="show-bluffs">
           Show bluffs
         </Button>
@@ -160,6 +168,11 @@ function DemonBluffs({ visible, onShowBluffs, onDismiss, theme }: DemonBluffsPro
         filter={character => !bluffs.includes(character.id) && !gameIds.includes(character.id) && character.team === Team.Good}
         onSelect={onEditBluff}
         onDismiss={() => setEditBluffIdx(undefined)}/>
+      <InfoTokenShower visible={showingBluffs}
+                       infoToken={notInPlayToken}
+                       characters={bluffs}
+                       custom={false}
+                       onDismiss={hideBluffs}/>
     </Portal>
   );
 }

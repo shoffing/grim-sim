@@ -95,7 +95,7 @@ describe('<Grim />', () => {
       expect(queryByTestId('select-saint')).toBeNull();
       await userEvent.press(getByTestId('select-ravenkeeper'));
       await userEvent.press(getByText('Show bluffs'));
-      expect(getByText('These characters are not in play.')).toBeOnTheScreen();
+      expect(getByText('These characters are not in play')).toBeOnTheScreen();
       expect(getByRole('presentation', { name: 'Ravenkeeper' })).toBeOnTheScreen();
     });
 
