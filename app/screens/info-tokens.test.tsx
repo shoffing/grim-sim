@@ -63,7 +63,7 @@ describe('<InfoTokens />', () => {
     await userEvent.press(getByText('Did you vote today?'));
     expect(getByTestId('showing-content')).toBeOnTheScreen();
     expect(getByTestId('showing-content')).toHaveTextContent(/Did you vote today?/);
-    expect(getByTestId('show-full-screen-icon-vote', { includeHiddenElements: true })).toBeOnTheScreen();
+    expect(getByTestId('info-token-icon-vote', { includeHiddenElements: true })).toBeOnTheScreen();
   });
 
   it('dismisses the showing of an info token', async () => {
