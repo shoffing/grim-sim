@@ -7,7 +7,7 @@ import { selectEdition } from '@/app/state/grim-slice';
 import { InfoToken, removeCustomToken } from '@/app/state/info-tokens-slice';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
-import { colorContainer, ColorContainerType, onColorContainer } from '@/constants/colors';
+import { ColorContainerType, onColorContainer } from '@/constants/colors';
 import _ from 'lodash';
 import React, { useState } from 'react';
 import { StyleSheet, TextStyle, useWindowDimensions, View } from 'react-native';

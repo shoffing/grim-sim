@@ -52,11 +52,11 @@ function ShowFullScreenCharacter({ visible, characterId, onDismiss, theme }: Sho
       color={color}
       tall
       onDismiss={onDismiss}>
-      <View style={{position: 'relative', top: 32, flexDirection: 'column', gap: 24}}>
+      <View style={{ position: 'relative', top: 32, flexDirection: 'column', gap: 24 }}>
         <Text variant="displaySmall" style={styles.abilityText} adjustsFontSizeToFit>
           {character.ability}
         </Text>
-        <GestureHandlerRootView style={{  }}>
+        <GestureHandlerRootView style={{}}>
           <Token
             fixed
             size={Dimensions.get('window').width * 0.6}
