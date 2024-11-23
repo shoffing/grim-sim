@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import InfoTokenShower from '@/app/screens/info-token-shower';
+import InfoTokenShower from '@/app/screens/show-full-screen-info';
 import { addCustomToken, InfoToken, selectCustomTokens, selectDefaultTokens } from '@/app/state/info-tokens-slice';
 import { baseModalCloseButton, baseModalContainer, baseModalContent, baseModalScroll } from '@/app/styles/modals';
 import { COLOR_CONTAINER_COLORS, colorContainer, ColorContainerType, onColorContainer } from '@/constants/colors';

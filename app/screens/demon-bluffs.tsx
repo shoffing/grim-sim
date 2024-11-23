@@ -1,7 +1,7 @@
 import Character from '@/app/components/character';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
-import InfoTokenShower from '@/app/screens/info-token-shower';
+import InfoTokenShower from '@/app/screens/show-full-screen-info';
 import { selectCharacters, selectDemonBluffs, setDemonBluffs } from '@/app/state/characters-slice';
 import { selectEdition } from '@/app/state/grim-slice';
 import { baseModalCloseButton, baseModalContainer, baseModalContent, baseModalScroll } from '@/app/styles/modals';

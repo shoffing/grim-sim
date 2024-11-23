@@ -12,6 +12,10 @@ class CharacterData {
   edition?: string;
   name: string;
   ability: string;
+  firstNight?: number;
+  firstNightReminder?: string;
+  otherNight?: number;
+  otherNightReminder?: string;
   reminders: string[] = [];
 
   get team(): Team {
@@ -38,6 +42,10 @@ class CharacterData {
     this.type = characterData.type as CharacterType;
     this.name = characterData.name;
     this.ability = characterData.ability;
+    this.firstNight = characterData.firstNight;
+    this.firstNightReminder = characterData.firstNightReminder;
+    this.otherNight = characterData.otherNight;
+    this.otherNightReminder = characterData.otherNightReminder;
     this.reminders = characterData.reminders;
     this.edition = characterData.edition;
   }

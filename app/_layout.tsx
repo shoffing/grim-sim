@@ -42,6 +42,7 @@ function RootLayout() {
 
   const [loaded, error] = useFonts({
     'NewRocker-Regular': require('@/assets/fonts/NewRocker-Regular.ttf'),
+    'GermaniaOne-Regular': require('@/assets/fonts/GermaniaOne-Regular.ttf'),
   });
 
   useEffect(() => {

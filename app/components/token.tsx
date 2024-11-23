@@ -20,7 +20,9 @@ interface TokenProps {
   selected?: boolean;
   size: number;
   centerContent?: ReactNode;
+  topLeftContent?: ReactNode;
   topCenterContent?: ReactNode;
+  topRightContent?: ReactNode;
   bottomText?: string;
   belowText?: string;
   containerLayout?: LayoutRectangle;
@@ -38,7 +40,9 @@ function Token(props: TokenProps) {
     selected,
     size,
     centerContent,
+    topLeftContent,
     topCenterContent,
+    topRightContent,
     bottomText,
     belowText,
     containerLayout,
@@ -49,7 +53,7 @@ function Token(props: TokenProps) {
     testID,
   } = props;
   const offset = useSharedValue(position || { x: 0, y: 0 });
-  const interacting = useSharedValue(false);
+  const interacting = useSharedValue(0);
   const opacity = useDerivedValue(() => withTiming(interacting.value ? 0.666 : 1, { easing: Easing.out(Easing.ease) }));
 
   // Update offset to position only when it changes.
@@ -63,12 +67,12 @@ function Token(props: TokenProps) {
   const containerHeight = containerLayout?.height ?? Dimensions.get('window').height;
 
   const tap = Gesture.Tap()
-    .onBegin(() => interacting.value = true)
+    .onBegin(() => interacting.value++)
     .onEnd(() => onPress && runOnJS(onPress)())
-    .onFinalize(() => interacting.value = false);
+    .onFinalize(() => interacting.value--);
 
   const pan = Gesture.Pan()
-    .onBegin(() => interacting.value = true)
+    .onBegin(() => interacting.value++)
     .onChange((event) => {
       if (position) {
         offset.value = {
@@ -78,7 +82,7 @@ function Token(props: TokenProps) {
       }
     })
     .onEnd(() => onMove && runOnJS(onMove)(offset.value))
-    .onFinalize(() => interacting.value = false);
+    .onFinalize(() => interacting.value--);
 
   const gestures = fixed ? tap : Gesture.Exclusive(pan, tap);
 
@@ -89,7 +93,7 @@ function Token(props: TokenProps) {
         { translateY: fixed ? 0 : offset.value.y },
       ],
       opacity: opacity.value,
-      zIndex: interacting.value ? 999 : 0,
+      zIndex: interacting.value > 0 ? 999 : 0,
     };
   });
 
@@ -123,11 +127,29 @@ function Token(props: TokenProps) {
       opacity: 0.15,
       transform: [{ scale: 0.9 }],
     },
-    topCenterContent: {
+    topLeftContent: {
       alignItems: 'flex-start',
       flexDirection: 'row',
       height: '100%',
+      justifyContent: 'flex-start',
+      position: 'absolute',
+      width: '100%',
+    },
+    topCenterContent: {
+      alignItems: 'flex-start',
+      elevation: 1,
+      flexDirection: 'row',
+      height: '100%',
       justifyContent: 'center',
+      position: 'absolute',
+      width: '100%',
+      zIndex: 1,
+    },
+    topRightContent: {
+      alignItems: 'flex-start',
+      flexDirection: 'row',
+      height: '100%',
+      justifyContent: 'flex-end',
       position: 'absolute',
       width: '100%',
     },
@@ -160,18 +182,24 @@ function Token(props: TokenProps) {
             imageStyle={styles.tokenBackgroundImageNoise}
             resizeMethod="auto"
             resizeMode="stretch"
-            source={require('@/assets/images/token/character-token-noise.webp')}>
+            source={require('@/assets/images/token/token-background.webp')}>
             <ImageBackground
               style={styles.tokenBackground}
               imageStyle={styles.tokenBackgroundImageClock}
               resizeMethod="auto"
               resizeMode="contain"
               source={require('@/assets/images/token/clockface.webp')}>
-              <View style={styles.centerContent}>
-                {centerContent}
+              <View style={styles.topLeftContent}>
+                {topLeftContent}
               </View>
               <View style={styles.topCenterContent}>
                 {topCenterContent}
+              </View>
+              <View style={styles.topRightContent}>
+                {topRightContent}
+              </View>
+              <View style={styles.centerContent}>
+                {centerContent}
               </View>
             </ImageBackground>
           </ImageBackground>
@@ -182,7 +210,13 @@ function Token(props: TokenProps) {
             role="presentation"
             accessibilityLabel={bottomText}>
             <Svg.Path d="M 13 75 A 1 1 0 0 0 138 75" id="curve" fill="transparent"/>
-            <Svg.Text x="66.6%" textAnchor="middle" fill="black">
+            {/* TODO: why can't I use custom fonts here? */}
+            <Svg.Text x="66.6%"
+                      textAnchor="middle"
+                      fill="black"
+                      fontFamily="serif"
+                      letterSpacing="2"
+                      fontWeight="800">
               <Svg.TextPath href="#curve">
                 {bottomText}
               </Svg.TextPath>
