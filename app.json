@@ -36,10 +36,10 @@
           "fonts": [
             "./assets/fonts/Bellefair-Regular",
             "./assets/fonts/Cardo-Bold",
-            "./assets/fonts/Cardo-Italic"
+            "./assets/fonts/Cardo-Italic",
             "./assets/fonts/Cardo-Regular",
             "./assets/fonts/GermaniaOne.ttf",
-            "./assets/fonts/NewRocker.ttf",
+            "./assets/fonts/NewRocker.ttf"
           ]
         }
       ]

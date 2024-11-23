@@ -10,6 +10,7 @@ interface GrimModalProps {
   bottomContentStyle?: ViewStyle;
   scrollContentStyle?: ViewStyle;
   onDismiss: () => void;
+  testID?: string;
   theme: MD3Theme;
 }
 
@@ -21,6 +22,7 @@ function GrimModal({
                      bottomContentStyle,
                      scrollContentStyle,
                      onDismiss,
+                     testID,
                      theme,
                      children,
                    }: PropsWithChildren<GrimModalProps>) {
@@ -54,7 +56,8 @@ function GrimModal({
       <Modal visible={visible}
              onDismiss={onDismiss}
              style={styles.modalContainer}
-             contentContainerStyle={styles.modalContent}>
+             contentContainerStyle={styles.modalContent}
+             testID={testID}>
         <View style={topContentStyle}>{topContent}</View>
         <ScrollView style={styles.modalScroll}
                     contentContainerStyle={scrollContentStyle}>
@@ -70,7 +73,7 @@ function GrimModal({
           iconColor={theme.colors.onErrorContainer}
           style={styles.closeButton}
           onPress={onDismiss}
-          testID="close-token-select"/>
+          testID={`close-${testID}`}/>
       </Modal>
     </Portal>
   );

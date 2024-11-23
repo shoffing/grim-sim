@@ -45,7 +45,7 @@ describe('<DemonBluffs />', () => {
   });
 
   it('replaces a bluff', async () => {
-    const { getByText, queryByText } = render(
+    const { getByText, queryByText, getByTestId } = render(
       <DemonBluffs
         visible
         onDismiss={jest.fn()}/>,
@@ -59,7 +59,7 @@ describe('<DemonBluffs />', () => {
       },
     );
     await userEvent.press(getByText('Empath'));
-    await userEvent.press(getByText('Fortune Teller'));
+    await userEvent.press(getByTestId('select-bluff-fortuneteller'));
     await waitFor(() => expect(queryByText('Empath')).toBeNull(), { interval: 500 });
     expect(queryByText(/Each night, you learn how many/)).toBeNull();
     expect(getByText('Fortune Teller')).toBeOnTheScreen();

@@ -179,7 +179,8 @@ function InfoTokens({ visible, onDismiss, theme }: InfoTokensProps) {
       visible={visible}
       topContent={<Text variant="headlineLarge">Info Tokens</Text>}
       scrollContentStyle={{ gap: 12 }}
-      onDismiss={onDismiss}>
+      onDismiss={onDismiss}
+      testID="info-tokens">
       <View style={styles.tokenButtons}>
         {defaultInfoTokenButtons}
       </View>

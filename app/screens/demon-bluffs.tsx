@@ -112,7 +112,8 @@ function DemonBluffs({ visible, onDismiss, theme }: DemonBluffsProps) {
                  </Button>
                }
                scrollContentStyle={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}
-               onDismiss={onDismiss}>
+               onDismiss={onDismiss}
+               testID={'demon-bluffs'}>
       {bluffCharacters}
       <Card mode="outlined" style={{ flexDirection: 'row' }}>
         <TouchableRipple
@@ -131,7 +132,11 @@ function DemonBluffs({ visible, onDismiss, theme }: DemonBluffsProps) {
         edition={edition}
         filter={character => !bluffs.includes(character.id) && !gameIds.includes(character.id) && character.team === Team.Good}
         characterActions={[
-          { icon: 'account-plus', onAction: onEditBluff },
+          {
+            icon: 'account-plus',
+            onAction: onEditBluff,
+            testID: 'select-bluff',
+          },
         ]}
         onDismiss={() => setEditBluffIdx(undefined)}/>
       <InfoTokenShower visible={showingBluffs}

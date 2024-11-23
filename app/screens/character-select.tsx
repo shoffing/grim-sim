@@ -121,9 +121,9 @@ function CharacterSelect({ visible, edition, filter, characterActions, onDismiss
         return (
           <View key={`character-button-${character.id}`}
                 style={characterStyle.container}
-                testID={`select-${character.id}${replacing ? '_replacing' : undefined}`}>
+                testID={`${character.id}${replacing ? '_replacing' : ''}`}>
             <Character character={character}/>
-            <View style={{marginTop: -16}}>
+            <View style={{ marginTop: -16 }}>
               {actions}
             </View>
             <Text variant="headlineSmall"
@@ -181,7 +181,8 @@ function CharacterSelect({ visible, edition, filter, characterActions, onDismiss
   return (
     <GrimModal visible={visible}
                bottomContent={actions}
-               onDismiss={onDismiss}>
+               onDismiss={onDismiss}
+               testID="character-select">
       {tokens}
     </GrimModal>
   );

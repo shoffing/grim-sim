@@ -2,7 +2,7 @@ import CharacterSelect from '@/app/screens/character-select';
 import { CharacterKey, CharacterState, initialCharactersState } from '@/app/state/characters-slice';
 import { initialGrimState } from '@/app/state/grim-slice';
 import CharacterId from '@/constants/characters/character-id';
-import { act, userEvent, waitFor } from '@testing-library/react-native';
+import { act, userEvent } from '@testing-library/react-native';
 import { render } from '../test-utils';
 import '@testing-library/react-native/extend-expect';
 
@@ -90,8 +90,8 @@ describe('<CharacterSelect />', () => {
         visible
         edition="tb"
         characterActions={[
-          {icon: 'eye', onAction: onActionA, testID: 'action-a'},
-          {icon: 'plus', onAction: onActionB, testID: 'action-b'},
+          { icon: 'eye', onAction: onActionA, testID: 'action-a' },
+          { icon: 'plus', onAction: onActionB, testID: 'action-b' },
         ]}
         onDismiss={onDismiss}/>,
     );
@@ -110,8 +110,8 @@ describe('<CharacterSelect />', () => {
         visible
         edition="tb"
         characterActions={[
-          {icon: 'eye', onAction: onActionA, testID: 'action-a'},
-          {icon: 'plus', onAction: onActionB, testID: 'action-b'},
+          { icon: 'eye', onAction: onActionA, testID: 'action-a' },
+          { icon: 'plus', onAction: onActionB, testID: 'action-b' },
         ]}
         onDismiss={onDismiss}/>,
     );
@@ -130,7 +130,7 @@ describe('<CharacterSelect />', () => {
         edition="tb"
         onDismiss={onDismiss}/>,
     );
-    await userEvent.press(getByTestId('close-token-select'));
+    await userEvent.press(getByTestId('close-character-select'));
     expect(onSelect).not.toHaveBeenCalled();
     expect(onDismiss).toHaveBeenCalled();
   });

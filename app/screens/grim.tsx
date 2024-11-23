@@ -1,7 +1,6 @@
 import Character from '@/app/components/character';
 import CharacterControls from '@/app/components/character-controls';
 import GameControls from '@/app/components/game-controls';
-import GrimModal from '@/app/components/grim-modal';
 import Reminder from '@/app/components/reminder';
 import ReminderControls from '@/app/components/reminder-controls';
 import Token from '@/app/components/token';

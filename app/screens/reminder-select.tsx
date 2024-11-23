@@ -101,7 +101,8 @@ function ReminderSelect({ visible, edition, characterIds, onDismiss, onSelect, t
   return (
     <GrimModal visible={visible}
                bottomContent={actions}
-               onDismiss={onDismiss}>
+               onDismiss={onDismiss}
+               testID="reminder-select">
       {reminderSelectContent}
     </GrimModal>
   );

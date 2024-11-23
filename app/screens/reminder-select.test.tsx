@@ -147,7 +147,7 @@ describe('<ReminderSelect />', () => {
         onSelect={onSelect}
         onDismiss={onDismiss}/>,
     );
-    await userEvent.press(getByTestId('close-token-select'));
+    await userEvent.press(getByTestId('close-reminder-select'));
     expect(onSelect).not.toHaveBeenCalled();
     expect(onDismiss).toHaveBeenCalled();
   });
