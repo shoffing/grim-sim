@@ -11,7 +11,7 @@ import Team from '@/constants/team';
 import infoTokens from '@/data/info-tokens.json';
 import _ from 'lodash';
 import { useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import {
   Button,
   Card,

@@ -1,4 +1,4 @@
-import { colorContainer, ColorContainerType, onColorContainer } from '@/constants/colors';
+import { colorContainer, ColorContainerType } from '@/constants/colors';
 import React, { PropsWithChildren, ReactNode } from 'react';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import { FAB, MD3Theme, Modal, Portal, withTheme } from 'react-native-paper';
@@ -21,11 +21,10 @@ function ShowFullScreen({
                           theme,
                           children,
                         }: PropsWithChildren<ShowFullScreenProps>) {
-  const containerImage = tall ? require('@/assets/images/info-token/show-full-screen-content-tall.webp') : require('@/assets/images/info-token/show-full-screen-content.webp');
-  const containerBackgroundImage = tall ? require('@/assets/images/info-token/show-full-screen-content-tall-bg.webp') : require('@/assets/images/info-token/show-full-screen-content-bg.webp');
+  const containerImage = tall ? require('@/assets/images/show-full-screen/show-full-screen-content-tall.webp') : require('@/assets/images/show-full-screen/show-full-screen-content.webp');
+  const containerBackgroundImage = tall ? require('@/assets/images/show-full-screen/show-full-screen-content-tall-bg.webp') : require('@/assets/images/show-full-screen/show-full-screen-content-bg.webp');
 
-  const showingInfoBackground = colorContainer(theme.dark, color);
-  const showingInfoForeground = onColorContainer(theme.dark, color);
+  const modalBackground = colorContainer(theme.dark, color);
 
   const styles = StyleSheet.create({
     closeButton: {
@@ -36,7 +35,7 @@ function ShowFullScreen({
       borderColor: theme.colors.outline,
     },
     modal: {
-      backgroundColor: showingInfoBackground,
+      backgroundColor: modalBackground,
     },
     modalContent: {
       alignItems: 'center',
@@ -60,7 +59,7 @@ function ShowFullScreen({
         style={styles.modal}
         contentContainerStyle={styles.modalContent}>
         <ImageBackground
-          source={require('@/assets/images/info-token/show-full-screen-background.png')}
+          source={require('@/assets/images/show-full-screen/show-full-screen-background.png')}
           style={{ alignItems: 'center', justifyContent: 'space-around', height: '100%', width: '100%' }}
           imageStyle={{ opacity: 0.33, resizeMode: 'repeat' }}
           fadeDuration={0}>
@@ -68,7 +67,7 @@ function ShowFullScreen({
             source={containerBackgroundImage}
             style={{ alignItems: 'center', width: '95%' }}
             imageStyle={{ resizeMode: 'contain', width: '100%' }}
-            tintColor={showingInfoBackground}
+            tintColor={modalBackground}
             testID="container-background-image">
             <ImageBackground
               source={containerImage}

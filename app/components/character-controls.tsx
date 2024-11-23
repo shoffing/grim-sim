@@ -70,7 +70,8 @@ function CharacterControls({ characterKey, onShow, onDismiss, theme }: Character
     menuContent: {
       flexDirection: 'row',
       maxWidth: Dimensions.get('window').width / 2,
-      maxHeight: Dimensions.get('window').height * 0.666,
+      maxHeight: Dimensions.get('window').height / 2,
+      flexWrap: 'nowrap'
     },
     menuItemsContainer: {
       maxHeight: '100%',

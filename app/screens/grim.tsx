@@ -12,7 +12,7 @@ import InfoTokens from '@/app/screens/info-tokens';
 import ReminderSelect from '@/app/screens/reminder-select';
 import ShowFullScreenCharacter from '@/app/screens/show-full-screen-character';
 import * as charactersSlice from '@/app/state/characters-slice';
-import { CharacterKey, CharacterState } from '@/app/state/characters-slice';
+import { CharacterState } from '@/app/state/characters-slice';
 import * as grimSlice from '@/app/state/grim-slice';
 import * as remindersSlice from '@/app/state/reminders-slice';
 import { ReminderKey } from '@/app/state/reminders-slice';
@@ -80,7 +80,7 @@ function Grim({ theme }: GrimProps) {
     fontFamily: 'GermaniaOne-Regular',
     fontSize: 128,
     textAlign: 'center',
-  }
+  };
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,

@@ -10,7 +10,7 @@ import { getCharacterById } from '@/constants/characters/characters';
 import { colorContainer, ColorContainerType, onColorContainer } from '@/constants/colors';
 import _ from 'lodash';
 import React, { useState } from 'react';
-import { StyleSheet, TextStyle, useWindowDimensions, View, ViewStyle } from 'react-native';
+import { StyleSheet, TextStyle, useWindowDimensions, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { FAB, Icon, IconButton, MD3Theme, Text, withTheme } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
@@ -56,7 +56,6 @@ function ShowFullScreenInfo({ visible, infoToken, characters, custom, onDismiss,
   // Show characters if they were passed in as props, otherwise show the characters that have been added manually.
   const displayCharacters = characters ?? showingCharacters;
 
-  const showingInfoBackground = colorContainer(theme.dark, infoToken?.color);
   const showingInfoForeground = onColorContainer(theme.dark, infoToken?.color);
 
   const styles = StyleSheet.create({

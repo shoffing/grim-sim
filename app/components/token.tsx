@@ -53,7 +53,7 @@ function Token(props: TokenProps) {
     testID,
   } = props;
   const offset = useSharedValue(position || { x: 0, y: 0 });
-  const interacting = useSharedValue(false);
+  const interacting = useSharedValue(0);
   const opacity = useDerivedValue(() => withTiming(interacting.value ? 0.666 : 1, { easing: Easing.out(Easing.ease) }));
 
   // Update offset to position only when it changes.
@@ -67,12 +67,12 @@ function Token(props: TokenProps) {
   const containerHeight = containerLayout?.height ?? Dimensions.get('window').height;
 
   const tap = Gesture.Tap()
-    .onBegin(() => interacting.value = true)
+    .onBegin(() => interacting.value++)
     .onEnd(() => onPress && runOnJS(onPress)())
-    .onFinalize(() => interacting.value = false);
+    .onFinalize(() => interacting.value--);
 
   const pan = Gesture.Pan()
-    .onBegin(() => interacting.value = true)
+    .onBegin(() => interacting.value++)
     .onChange((event) => {
       if (position) {
         offset.value = {
@@ -82,7 +82,7 @@ function Token(props: TokenProps) {
       }
     })
     .onEnd(() => onMove && runOnJS(onMove)(offset.value))
-    .onFinalize(() => interacting.value = false);
+    .onFinalize(() => interacting.value--);
 
   const gestures = fixed ? tap : Gesture.Exclusive(pan, tap);
 
@@ -93,7 +93,7 @@ function Token(props: TokenProps) {
         { translateY: fixed ? 0 : offset.value.y },
       ],
       opacity: opacity.value,
-      zIndex: interacting.value ? 999 : 0,
+      zIndex: interacting.value > 0 ? 999 : 0,
     };
   });
 
@@ -137,11 +137,13 @@ function Token(props: TokenProps) {
     },
     topCenterContent: {
       alignItems: 'flex-start',
+      elevation: 1,
       flexDirection: 'row',
       height: '100%',
       justifyContent: 'center',
       position: 'absolute',
       width: '100%',
+      zIndex: 1,
     },
     topRightContent: {
       alignItems: 'flex-start',
