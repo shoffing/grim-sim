@@ -62,17 +62,19 @@ function ShowFullScreen({
           source={require('@/assets/images/show-full-screen/show-full-screen-background.png')}
           style={{ alignItems: 'center', justifyContent: 'space-around', height: '100%', width: '100%' }}
           imageStyle={{ opacity: 0.33, resizeMode: 'repeat' }}
-          fadeDuration={0}>
+          fadeDuration={300}>
           <ImageBackground
             source={containerBackgroundImage}
             style={{ alignItems: 'center', width: '95%' }}
             imageStyle={{ resizeMode: 'contain', width: '100%' }}
             tintColor={modalBackground}
-            testID="container-background-image">
+            testID="container-background-image"
+            fadeDuration={0}>
             <ImageBackground
               source={containerImage}
               style={{ alignItems: 'center', height: '100%', justifyContent: 'center', width: '100%' }}
-              imageStyle={{ resizeMode: 'contain', width: '100%' }}>
+              imageStyle={{ resizeMode: 'contain', width: '100%' }}
+              fadeDuration={0}>
               <View style={{ alignItems: 'center', padding: 64, position: 'relative', gap: 12 }}
                     testID="showing-content">
                 {children}

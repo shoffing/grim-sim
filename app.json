@@ -34,8 +34,12 @@
         "expo-font",
         {
           "fonts": [
-            "./assets/fonts/NewRocker-Regular.ttf",
-            "./assets/fonts/GermaniaOne-Regular.ttf"
+            "./assets/fonts/Bellefair-Regular",
+            "./assets/fonts/Cardo-Bold",
+            "./assets/fonts/Cardo-Italic",
+            "./assets/fonts/Cardo-Regular",
+            "./assets/fonts/GermaniaOne.ttf",
+            "./assets/fonts/NewRocker.ttf"
           ]
         }
       ]

@@ -78,7 +78,7 @@ function ShowFullScreenInfo({ visible, infoToken, characters, custom, onDismiss,
     textAlign: 'center',
     marginHorizontal: 64,
     maxHeight: 350,
-    fontFamily: 'NewRocker-Regular',
+    fontFamily: 'NewRocker',
   } : null);
 
   // Turns out packing squares into a rectangle is NP-hard. Who knew?
@@ -139,10 +139,15 @@ function ShowFullScreenInfo({ visible, infoToken, characters, custom, onDismiss,
       <CharacterSelect
         visible={characterSelectVisible}
         edition={edition}
-        onSelect={character => {
-          addShowingCharacter(character);
-          hideCharacterSelect();
-        }}
+        characterActions={[
+          {
+            icon: 'eye-plus',
+            onAction: (character) => {
+              addShowingCharacter(character);
+              hideCharacterSelect();
+            },
+          },
+        ]}
         onDismiss={hideCharacterSelect}/>
     </ShowFullScreen>
   );

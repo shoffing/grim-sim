@@ -5,7 +5,6 @@ import * as grimSlice from '@/app/state/grim-slice';
 import * as remindersSlice from '@/app/state/reminders-slice';
 import { store } from '@/app/state/store';
 import CharacterId from '@/constants/characters/character-id';
-import { getCharacterById } from '@/constants/characters/characters';
 import { act, fireEvent, userEvent } from '@testing-library/react-native';
 import { ReactTestInstance } from 'react-test-renderer';
 import { render, screen } from '../test-utils';
@@ -38,8 +37,10 @@ const openReminderControls = async (label: string, idx = 0) => {
 
 const addCharacter = async (id: CharacterId) => {
   await openGameControls();
-  await userEvent.press(screen.getByTestId('add-character-game', { includeHiddenElements: true }));
-  await userEvent.press(screen.getByRole('button', { name: getCharacterById(id).name }));
+  await userEvent.press(screen.getByTestId('characters-game', { includeHiddenElements: true }));
+  fireEvent(screen.getByTestId('characters-show-travellers'), 'valueChange', true);
+  fireEvent(screen.getByTestId('characters-show-fabled'), 'valueChange', true);
+  await userEvent.press(screen.getByTestId(`add-character-${id}`));
   return queryCharacterToken(id);
 };
 
@@ -83,19 +84,19 @@ describe('<Grim />', () => {
     });
 
     it('opens demon bluffs, shows correct options, and shows bluffs', async () => {
-      const { getByRole, queryByTestId, getByTestId, getByText } = render(<Grim/>);
+      const { getByRole, queryByTestId, getByTestId, getByText, findByText } = render(<Grim/>);
       await addCharacter(CharacterId.Empath);
       await addCharacter(CharacterId.Fortuneteller);
       await addCharacter(CharacterId.Saint);
       await openGameControls();
       await userEvent.press(getByTestId('demon-bluffs-game', { includeHiddenElements: true }));
       await userEvent.press(getByText('Add bluff'));
-      expect(queryByTestId('select-empath')).toBeNull();
-      expect(queryByTestId('select-fortuneteller')).toBeNull();
-      expect(queryByTestId('select-saint')).toBeNull();
-      await userEvent.press(getByTestId('select-ravenkeeper'));
+      expect(queryByTestId('empath')).toBeNull();
+      expect(queryByTestId('fortuneteller')).toBeNull();
+      expect(queryByTestId('saint')).toBeNull();
+      await userEvent.press(getByTestId('select-bluff-ravenkeeper'));
       await userEvent.press(getByText('Show bluffs'));
-      expect(getByText('These characters are not in play')).toBeOnTheScreen();
+      expect(await findByText('These characters are not in play')).toBeOnTheScreen();
       expect(getByRole('presentation', { name: 'Ravenkeeper' })).toBeOnTheScreen();
     });
 
@@ -119,11 +120,11 @@ describe('<Grim />', () => {
 
   describe('CharacterControls', () => {
     it('replaces the Imp with the Mayor', async () => {
-      const { getByRole, getByTestId } = render(<Grim/>);
+      const { getByTestId } = render(<Grim/>);
       await addCharacter(CharacterId.Imp);
       await openCharacterControls(CharacterId.Imp);
       await userEvent.press(getByTestId('replace-character', { includeHiddenElements: true }));
-      await userEvent.press(getByRole('button', { name: getCharacterById(CharacterId.Mayor).name }));
+      await userEvent.press(getByTestId('replace-character-mayor'));
       expect(queryCharacterToken(CharacterId.Mayor)).toBeOnTheScreen();
       expect(queryCharacterToken(CharacterId.Imp)).toBeNull();
     });

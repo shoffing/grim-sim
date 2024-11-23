@@ -1,6 +1,6 @@
 /** @see https://stackoverflow.com/questions/6972331/how-can-i-generate-a-set-of-points-evenly-distributed-along-the-perimeter-of-an */
 export const grimEllipsePoints = (count: number, rx: number, ry: number, offset = Math.PI / 2) => {
-  const points: Array<{ x: number, y: number }> = [];
+  const points: { x: number, y: number }[] = [];
 
   // dp(t) calculates the distance from the center of the ellipse
   // to the point on the ellipse at the given theta plus π/2

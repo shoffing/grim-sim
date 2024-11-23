@@ -6,7 +6,7 @@ import ReminderControls from '@/app/components/reminder-controls';
 import Token from '@/app/components/token';
 import { CHARACTER_SIZE, REMINDER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import CharacterSelect from '@/app/screens/character-select';
+import CharacterSelect, { CharacterSelectAction } from '@/app/screens/character-select';
 import DemonBluffs from '@/app/screens/demon-bluffs';
 import InfoTokens from '@/app/screens/info-tokens';
 import ReminderSelect from '@/app/screens/reminder-select';
@@ -77,7 +77,7 @@ function Grim({ theme }: GrimProps) {
     zIndex: 99,
   };
   const baseNightBadgeText: TextStyle = {
-    fontFamily: 'GermaniaOne-Regular',
+    fontFamily: 'GermaniaOne',
     fontSize: 128,
     textAlign: 'center',
   };
@@ -148,10 +148,10 @@ function Grim({ theme }: GrimProps) {
   const [selectedReminderKey, setSelectedReminderKey] = useState<ReminderKey>();
   const clearSelectedReminder = () => setSelectedReminderKey(undefined);
 
-  /** Handling adding new character */
-  const [addingNewCharacter, setAddingNewCharacter] = useState(false);
-  const showAddNewCharacter = () => setAddingNewCharacter(true);
-  const hideAddNewCharacter = () => setAddingNewCharacter(false);
+  /** Handling showing character select character */
+  const [showingCharacterSelect, setShowingCharacterSelect] = useState(false);
+  const showCharacterSelect = () => setShowingCharacterSelect(true);
+  const hideCharacterSelect = () => setShowingCharacterSelect(false);
 
   /** Handling adding new reminder */
   const [addingNewReminder, setAddingNewReminder] = useState(false);
@@ -159,9 +159,9 @@ function Grim({ theme }: GrimProps) {
   const hideAddNewReminder = () => setAddingNewReminder(false);
 
   /** Handling showing character tokens. */
-  const [showingCharacter, setShowingCharacter] = useState<CharacterState>();
-  const showCharacter = (character?: CharacterState) => setShowingCharacter(character);
-  const hideCharacter = () => setShowingCharacter(undefined);
+  const [showingCharacterId, setShowingCharacterId] = useState<CharacterId>();
+  const showCharacter = (id?: CharacterId) => setShowingCharacterId(id);
+  const hideCharacter = () => setShowingCharacterId(undefined);
 
   /** Handling info tokens */
   const [infoTokensVisible, setInfoTokensVisible] = useState(false);
@@ -280,7 +280,7 @@ function Grim({ theme }: GrimProps) {
 
   const dismissCharacterSelect = () => {
     dispatch(grimSlice.clearReplacingCharacter());
-    hideAddNewCharacter();
+    hideCharacterSelect();
   };
   const onCharacterSelect = (id: CharacterId) => {
     if (replacingCharacterKey != null) {
@@ -312,9 +312,33 @@ function Grim({ theme }: GrimProps) {
     dismissReminderSelect();
   };
 
+  /** Which icon buttons actions should be shown currently on the character select screen? */
+  const characterSelectActions: CharacterSelectAction[] = replacingCharacterKey == null ? [
+    {
+      icon: 'account-plus',
+      onAction: onCharacterSelect,
+      containerColor: theme.colors.primary,
+      iconColor: theme.colors.onPrimary,
+      testID: 'add-character',
+    },
+    {
+      icon: 'eye',
+      onAction: showCharacter,
+      containerColor: theme.colors.secondary,
+      iconColor: theme.colors.onSecondary,
+      testID: 'show-character',
+    },
+  ] : [
+    {
+      icon: 'swap-horizontal',
+      onAction: onCharacterSelect,
+      testID: 'replace-character',
+    },
+  ];
+
   /** Handle screen visibility. Order these conditionals by screen precedence. */
   let currentScreen: Screen = Screen.Grim;
-  if (addingNewCharacter || replacingCharacterKey != null) {
+  if (showingCharacterSelect || replacingCharacterKey != null) {
     currentScreen = Screen.CharacterSelect;
   } else if (addingNewReminder || replacingReminderKey != null || reminderCharacter != null) {
     currentScreen = Screen.ReminderSelect;
@@ -344,14 +368,14 @@ function Grim({ theme }: GrimProps) {
       <Portal.Host>
         <GameControls
           visible={focused && currentScreen === Screen.Grim}
-          onAddCharacter={showAddNewCharacter}
+          onCharacters={showCharacterSelect}
           onAddReminder={showAddNewReminder}
           onInfoTokens={showInfoTokens}
           onDemonBluffs={showDemonBluffs}
           onGameSetup={() => router.navigate('/game-setup')}
           onClearGrim={onClearGrim}/>
         <CharacterControls characterKey={selectedCharacter?.key}
-                           onShow={() => showCharacter(selectedCharacter)}
+                           onShow={() => showCharacter(selectedCharacter?.id)}
                            onDismiss={clearSelectedCharacter}/>
         <ReminderControls reminderKey={selectedReminderKey}
                           onDismiss={clearSelectedReminder}/>
@@ -359,7 +383,7 @@ function Grim({ theme }: GrimProps) {
 
       <CharacterSelect
         visible={currentScreen === Screen.CharacterSelect}
-        onSelect={onCharacterSelect}
+        characterActions={characterSelectActions}
         onDismiss={dismissCharacterSelect}
         edition={edition}/>
       <ReminderSelect
@@ -378,8 +402,8 @@ function Grim({ theme }: GrimProps) {
         onDismiss={hideDemonBluffs}/>
 
       <ShowFullScreenCharacter
-        visible={!!showingCharacter}
-        characterId={showingCharacter?.id}
+        visible={!!showingCharacterId}
+        characterId={showingCharacterId}
         onDismiss={hideCharacter}/>
     </>
   );
