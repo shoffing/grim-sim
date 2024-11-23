@@ -12,18 +12,29 @@ import InfoTokens from '@/app/screens/info-tokens';
 import ReminderSelect from '@/app/screens/reminder-select';
 import ShowFullScreenCharacter from '@/app/screens/show-full-screen-character';
 import * as charactersSlice from '@/app/state/characters-slice';
-import { CharacterState } from '@/app/state/characters-slice';
+import { CharacterKey, CharacterState } from '@/app/state/characters-slice';
 import * as grimSlice from '@/app/state/grim-slice';
 import * as remindersSlice from '@/app/state/reminders-slice';
 import { ReminderKey } from '@/app/state/reminders-slice';
 import CharacterId from '@/constants/characters/character-id';
 import { getCharacterById } from '@/constants/characters/characters';
+import { colorContainer, onColorContainer } from '@/constants/colors';
 import ReminderData from '@/constants/reminder-data';
 import { useFocusEffect, useRouter } from 'expo-router';
+import _ from 'lodash';
 import React, { useCallback, useState } from 'react';
-import { Image, ImageBackground, LayoutChangeEvent, LayoutRectangle, StyleSheet } from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  LayoutChangeEvent,
+  LayoutRectangle,
+  StyleSheet,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { MD3Theme, Portal, withTheme } from 'react-native-paper';
+import { MD3Theme, Portal, Text, withTheme } from 'react-native-paper';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -54,6 +65,22 @@ enum Screen {
 }
 
 function Grim({ theme }: GrimProps) {
+  const baseNightBadge: ViewStyle = {
+    alignItems: 'center',
+    borderRadius: 999,
+    elevation: 99,
+    height: '30%',
+    justifyContent: 'center',
+    padding: 4,
+    position: 'relative',
+    width: '30%',
+    zIndex: 99,
+  };
+  const baseNightBadgeText: TextStyle = {
+    fontFamily: 'GermaniaOne-Regular',
+    fontSize: 128,
+    textAlign: 'center',
+  }
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
@@ -70,6 +97,24 @@ function Grim({ theme }: GrimProps) {
       borderRadius: CHARACTER_SIZE,
       borderStyle: 'dotted',
       borderWidth: CHARACTER_SIZE / 20,
+    },
+    firstNightBadge: {
+      ...baseNightBadge,
+      backgroundColor: colorContainer(theme.dark, 'blue'),
+      right: 6,
+    },
+    firstNightBadgeText: {
+      ...baseNightBadgeText,
+      color: onColorContainer(theme.dark, 'blue'),
+    },
+    otherNightBadge: {
+      ...baseNightBadge,
+      backgroundColor: colorContainer(theme.dark, 'red'),
+      left: 6,
+    },
+    otherNightBadgeText: {
+      ...baseNightBadgeText,
+      color: onColorContainer(theme.dark, 'red'),
     },
   });
 
@@ -115,8 +160,8 @@ function Grim({ theme }: GrimProps) {
 
   /** Handling showing character tokens. */
   const [showingCharacter, setShowingCharacter] = useState<CharacterState>();
-  const showSelectedCharacter = (character: CharacterState) => setShowingCharacter(character);
-  const hideSelectedCharacter = () => setShowingCharacter(undefined);
+  const showCharacter = (character?: CharacterState) => setShowingCharacter(character);
+  const hideCharacter = () => setShowingCharacter(undefined);
 
   /** Handling info tokens */
   const [infoTokensVisible, setInfoTokensVisible] = useState(false);
@@ -132,6 +177,20 @@ function Grim({ theme }: GrimProps) {
     dispatch(grimSlice.setLayout(event.nativeEvent.layout));
   };
 
+  const firstNightOrder: CharacterId[] = _(Object.values(characters))
+    .map(character => getCharacterById(character.id))
+    .filter(data => !!data.firstNight && data.firstNight > 0)
+    .sortBy(data => data.firstNight)
+    .map(data => data.id)
+    .value();
+
+  const otherNightOrder: CharacterId[] = _(Object.values(characters))
+    .map(character => getCharacterById(character.id))
+    .filter(data => !!data.otherNight && data.otherNight > 0)
+    .sortBy(data => data.otherNight)
+    .map(data => data.id)
+    .value();
+
   const currentCharacters = Object.values(characters).map((character, idx) => {
     const selected = character.key === selectedCharacter?.key;
     const onPress = () => {
@@ -145,6 +204,11 @@ function Grim({ theme }: GrimProps) {
     const alive = character.player.alive;
     const ghostVote = character.player.ghostVote;
 
+    const firstNightIdx = firstNightOrder.indexOf(character.id);
+    const firstNightLabel = firstNightIdx >= 0 ? firstNightIdx + 1 : null;
+    const otherNightIdx = otherNightOrder.indexOf(character.id);
+    const otherNightLabel = otherNightIdx >= 0 ? otherNightIdx + 1 : null;
+
     return (
       <Token
         key={`character-${character.key}`}
@@ -152,9 +216,27 @@ function Grim({ theme }: GrimProps) {
         position={character.position}
         selected={selected}
         size={CHARACTER_SIZE}
+        topLeftContent={
+          firstNightLabel ?
+            <View style={styles.firstNightBadge}>
+              <Text style={styles.firstNightBadgeText} adjustsFontSizeToFit>
+                {firstNightLabel}
+              </Text>
+            </View> :
+            null
+        }
         topCenterContent={!alive ?
           <Image style={styles.shroud} source={require('@/assets/images/token/shroud.webp')}
                  testID="shroud"/> : undefined}
+        topRightContent={
+          otherNightLabel ?
+            <View style={styles.otherNightBadge}>
+              <Text style={styles.otherNightBadgeText} adjustsFontSizeToFit>
+                {otherNightLabel}
+              </Text>
+            </View> :
+            null
+        }
         centerContent={<Character character={characterData} team={character.team}/>}
         bottomText={characterData.name}
         belowText={character?.player?.name}
@@ -249,6 +331,8 @@ function Grim({ theme }: GrimProps) {
     <>
       <GestureDetector gesture={tapGrim}>
         <ImageBackground
+          testID="grim"
+          onLayout={onLayout}
           source={require('@/assets/images/grim/grim-background.webp')}
           style={styles.container}
           imageStyle={{ opacity: 0.0345, resizeMode: 'repeat', transform: [{ scale: 1 }] }}>
@@ -267,7 +351,7 @@ function Grim({ theme }: GrimProps) {
           onGameSetup={() => router.navigate('/game-setup')}
           onClearGrim={onClearGrim}/>
         <CharacterControls characterKey={selectedCharacter?.key}
-                           onShow={() => setShowingCharacter(selectedCharacter)}
+                           onShow={() => showCharacter(selectedCharacter)}
                            onDismiss={clearSelectedCharacter}/>
         <ReminderControls reminderKey={selectedReminderKey}
                           onDismiss={clearSelectedReminder}/>
@@ -296,7 +380,7 @@ function Grim({ theme }: GrimProps) {
       <ShowFullScreenCharacter
         visible={!!showingCharacter}
         characterId={showingCharacter?.id}
-        onDismiss={hideSelectedCharacter}/>
+        onDismiss={hideCharacter}/>
     </>
   );
 }

@@ -20,7 +20,9 @@ interface TokenProps {
   selected?: boolean;
   size: number;
   centerContent?: ReactNode;
+  topLeftContent?: ReactNode;
   topCenterContent?: ReactNode;
+  topRightContent?: ReactNode;
   bottomText?: string;
   belowText?: string;
   containerLayout?: LayoutRectangle;
@@ -38,7 +40,9 @@ function Token(props: TokenProps) {
     selected,
     size,
     centerContent,
+    topLeftContent,
     topCenterContent,
+    topRightContent,
     bottomText,
     belowText,
     containerLayout,
@@ -123,11 +127,27 @@ function Token(props: TokenProps) {
       opacity: 0.15,
       transform: [{ scale: 0.9 }],
     },
+    topLeftContent: {
+      alignItems: 'flex-start',
+      flexDirection: 'row',
+      height: '100%',
+      justifyContent: 'flex-start',
+      position: 'absolute',
+      width: '100%',
+    },
     topCenterContent: {
       alignItems: 'flex-start',
       flexDirection: 'row',
       height: '100%',
       justifyContent: 'center',
+      position: 'absolute',
+      width: '100%',
+    },
+    topRightContent: {
+      alignItems: 'flex-start',
+      flexDirection: 'row',
+      height: '100%',
+      justifyContent: 'flex-end',
       position: 'absolute',
       width: '100%',
     },
@@ -167,11 +187,17 @@ function Token(props: TokenProps) {
               resizeMethod="auto"
               resizeMode="contain"
               source={require('@/assets/images/token/clockface.webp')}>
-              <View style={styles.centerContent}>
-                {centerContent}
+              <View style={styles.topLeftContent}>
+                {topLeftContent}
               </View>
               <View style={styles.topCenterContent}>
                 {topCenterContent}
+              </View>
+              <View style={styles.topRightContent}>
+                {topRightContent}
+              </View>
+              <View style={styles.centerContent}>
+                {centerContent}
               </View>
             </ImageBackground>
           </ImageBackground>
