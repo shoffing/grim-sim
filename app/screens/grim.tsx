@@ -331,11 +331,11 @@ function Grim({ theme }: GrimProps) {
     <>
       <GestureDetector gesture={tapGrim}>
         <ImageBackground
-          testID="grim"
-          onLayout={onLayout}
           source={require('@/assets/images/grim/grim-background.webp')}
+          imageStyle={{ opacity: 0.0345, resizeMode: 'repeat', transform: [{ scale: 1 }] }}
           style={styles.container}
-          imageStyle={{ opacity: 0.0345, resizeMode: 'repeat', transform: [{ scale: 1 }] }}>
+          onLayout={onLayout}
+          testID="grim">
           {currentCharacters}
           {currentReminders}
         </ImageBackground>

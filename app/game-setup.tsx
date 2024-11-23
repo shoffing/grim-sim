@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { addCharacter, setCharacters } from '@/app/state/characters-slice';
 import { selectLayout, setEdition as setStateEdition } from '@/app/state/grim-slice';
 import { setReminders } from '@/app/state/reminders-slice';
+import { grimEllipsePoints } from '@/app/util/ellipse';
 import CharacterData from '@/constants/characters/character-data';
 import CharacterType from '@/constants/characters/character-type';
 import { getCharactersByEdition } from '@/constants/characters/characters';
@@ -59,8 +60,10 @@ function GameSetup({ theme }: GameSetupProps) {
   const [selectedCharacters, setSelectedCharacters] = useState<CharacterData[]>([]);
 
   // TODO: these will need to change to support duplicates of characterIds.
-  const selectCharacter = (character: CharacterData) => setSelectedCharacters([...selectedCharacters, character]);
-  const unselectCharacter = (character: CharacterData) => setSelectedCharacters(selectedCharacters.filter(c => c.id !== character.id));
+  const selectCharacter = (character: CharacterData) =>
+    setSelectedCharacters(_.shuffle([...selectedCharacters, character]));
+  const unselectCharacter = (character: CharacterData) =>
+    setSelectedCharacters(_.shuffle(selectedCharacters.filter(c => c.id !== character.id)));
   const toggleCharacter = (character: CharacterData) => {
     if (selectedCharacters.includes(character)) {
       unselectCharacter(character);
@@ -152,12 +155,12 @@ function GameSetup({ theme }: GameSetupProps) {
     );
   };
   const selectRandom = () => {
-    setSelectedCharacters([
+    setSelectedCharacters(_.shuffle([
       ..._.sampleSize(townsfolk, typeCountTargets.townsfolk),
       ..._.sampleSize(outsiders, typeCountTargets.outsider),
       ..._.sampleSize(minions, typeCountTargets.minion),
       ..._.sampleSize(demons, typeCountTargets.demon),
-    ]);
+    ]));
   };
   const charactersForm = (
     <Card style={style.card}>
@@ -196,15 +199,25 @@ function GameSetup({ theme }: GameSetupProps) {
     // Set edition
     dispatch(setStateEdition(edition));
 
-    // Add characters in ellipse layout.
-    selectedCharacters.forEach((character, idx) => {
-      const t = idx / selectedCharacters.length;
-      const position = layout ? {
-        x: (layout.width / 2) + Math.cos(2 * t * Math.PI) * 0.8 * (layout.width / 2) - CHARACTER_SIZE / 2,
-        y: (layout.height / 2) + Math.sin(2 * t * Math.PI) * 0.8 * (layout.height / 2) - CHARACTER_SIZE / 2,
-      } : undefined;
-      dispatch(addCharacter({ id: character.id, position }));
-    });
+    if (layout) {
+      // Add characters in ellipse layout (with a gap at the bottom).
+      const points = grimEllipsePoints(
+        /* count= */ selectedCharacters.length,
+        /* rx= */ 0.8 * (layout.width / 2),
+        /* ry= */ 0.8 * (layout.height / 2),
+      );
+      points.forEach((point, idx) => {
+        const position = {
+          x: layout.width / 2 + point.x - CHARACTER_SIZE / 2,
+          y: layout.height / 2 + point.y - CHARACTER_SIZE / 2,
+        };
+        dispatch(addCharacter({ id: selectedCharacters[idx].id, position }));
+      });
+    } else {
+      // Add characters all at (0, 0).
+      selectedCharacters.forEach(character => dispatch(addCharacter({ id: character.id })));
+    }
+
     router.navigate('/');
   };
 
