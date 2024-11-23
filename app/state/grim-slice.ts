@@ -1,7 +1,9 @@
+import { CHARACTER_SIZE, REMINDER_SIZE } from '@/app/constants';
 import { CharacterKey, selectCharacterByKey } from '@/app/state/characters-slice';
 import { ReminderKey, selectReminderByKey } from '@/app/state/reminders-slice';
 import { RootState } from '@/app/state/store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import _ from 'lodash';
 import { LayoutRectangle } from 'react-native';
 
 export interface GrimState {
@@ -12,10 +14,12 @@ export interface GrimState {
   reminderCharacterKey?: CharacterKey;
   selectedReminderKey?: ReminderKey;
   replacingReminderKey?: ReminderKey;
+  tokenScale: number;
 }
 
 export const initialGrimState: GrimState = {
   edition: 'tb',
+  tokenScale: 1,
 };
 
 export const grimSlice = createSlice({
@@ -50,6 +54,11 @@ export const grimSlice = createSlice({
       state.replacingReminderKey = undefined;
     },
 
+    setTokenScale: (state, { payload }: PayloadAction<number>) => {
+      console.log('setting scale!', payload);
+      state.tokenScale = _.clamp(payload, 0.5, 4);
+    },
+
     reset: () => initialGrimState,
   },
 });
@@ -63,10 +72,14 @@ export const {
   clearReminderCharacter,
   setReplacingReminder,
   clearReplacingReminder,
+  setTokenScale,
   reset,
 } = grimSlice.actions;
 
 export const selectLayout = (state: GrimState) => state.layout;
+export const selectTokenScale = (state: GrimState) => state.tokenScale;
+export const selectCharacterSize = (state: GrimState) => CHARACTER_SIZE * state.tokenScale;
+export const selectReminderSize = (state: GrimState) => REMINDER_SIZE * state.tokenScale;
 export const selectEdition = (state: GrimState) => state.edition;
 export const selectReplacingCharacterKey = (state: GrimState) => state.replacingCharacterKey;
 export const selectReplacingReminderKey = (state: GrimState) => state.replacingReminderKey;

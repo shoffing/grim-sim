@@ -1,6 +1,6 @@
 import { REMINDER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { setReplacingReminder } from '@/app/state/grim-slice';
+import { selectReminderSize, setReplacingReminder } from '@/app/state/grim-slice';
 import { useState } from 'react';
 import { Button, Dialog, MD3Theme, Menu, Portal, withTheme } from 'react-native-paper';
 import { ReminderKey, removeReminder, selectReminderByKey } from '../state/reminders-slice';
@@ -28,10 +28,12 @@ function ReminderControls({ reminderKey, onDismiss, theme }: ReminderControlsPro
     wrapped();
   };
 
+  const reminderSize = useAppSelector(state => selectReminderSize(state.grim));
+
   const reminder = useAppSelector(state => selectReminderByKey(state.reminders, reminderKey));
   const position = reminder?.position ? {
-    x: reminder.position.x + REMINDER_SIZE / 2,
-    y: reminder.position.y + REMINDER_SIZE / 2,
+    x: reminder.position.x + reminderSize / 2,
+    y: reminder.position.y + reminderSize / 2,
   } : { x: 0, y: 0 };
 
   return (

@@ -1,4 +1,3 @@
-import { CHARACTER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
   castPlayerGhostVote,
@@ -11,7 +10,7 @@ import {
   setPlayerName,
   swapCharacterTeam,
 } from '@/app/state/characters-slice';
-import { setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
+import { selectCharacterSize, setReminderCharacter, setReplacingCharacter } from '@/app/state/grim-slice';
 import { getCharacterById } from '@/constants/characters/characters';
 import { colorContainer, onColorContainer } from '@/constants/colors';
 import { useEffect, useState } from 'react';
@@ -29,6 +28,8 @@ function CharacterControls({ characterKey, onShow, onDismiss, theme }: Character
   const dispatch = useAppDispatch();
   const character = useAppSelector(state => selectCharacterByKey(state.characters, characterKey));
   const characterData = character && getCharacterById(character.id);
+
+  const characterSize = useAppSelector(state => selectCharacterSize(state.grim));
 
   // Confirmation dialog for remving this character.
   const [confirmingRemoveKey, setConfirmingRemoveKey] = useState<CharacterKey>();
@@ -59,8 +60,8 @@ function CharacterControls({ characterKey, onShow, onDismiss, theme }: Character
   };
 
   const position = character?.position ? {
-    x: character.position.x + CHARACTER_SIZE / 2,
-    y: character.position.y + CHARACTER_SIZE / 2,
+    x: character.position.x + characterSize / 2,
+    y: character.position.y + characterSize / 2,
   } : { x: 0, y: 0 };
 
   const alive = character?.player?.alive ?? true;
@@ -71,7 +72,7 @@ function CharacterControls({ characterKey, onShow, onDismiss, theme }: Character
       flexDirection: 'row',
       maxWidth: Dimensions.get('window').width / 2,
       maxHeight: Dimensions.get('window').height / 2,
-      flexWrap: 'nowrap'
+      flexWrap: 'nowrap',
     },
     menuItemsContainer: {
       maxHeight: '100%',

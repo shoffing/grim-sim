@@ -7,6 +7,7 @@ import Animated, {
   clamp,
   Easing,
   runOnJS,
+  SharedValue,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -27,6 +28,7 @@ interface TokenProps {
   belowText?: string;
   containerLayout?: LayoutRectangle;
   tokenStyle?: ViewStyle;
+  scale?: SharedValue<number>;
   onMove?: (position: GrimPosition) => void;
   onPress?: () => void;
   theme: MD3Theme;
@@ -47,6 +49,7 @@ function Token(props: TokenProps) {
     belowText,
     containerLayout,
     tokenStyle,
+    scale,
     onMove,
     onPress,
     theme,
@@ -97,6 +100,14 @@ function Token(props: TokenProps) {
     };
   });
 
+  const animatedTokenStyles = useAnimatedStyle(() => {
+    return {
+      width: size * (scale?.value || 1),
+      height: size * (scale?.value || 1),
+      borderRadius: size * (scale?.value || 1) * 2,
+    };
+  });
+
   const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
@@ -105,10 +116,7 @@ function Token(props: TokenProps) {
     },
     token: {
       alignItems: 'center',
-      borderRadius: size * 2,
-      height: size,
       justifyContent: 'center',
-      width: size,
       ...tokenStyle,
     },
     tokenBackground: {
@@ -176,7 +184,7 @@ function Token(props: TokenProps) {
         accessibilityRole="button"
         aria-selected={selected}
         style={[styles.container, animatedStyles]}>
-        <View style={styles.token}>
+        <Animated.View style={[styles.token, animatedTokenStyles]}>
           <ImageBackground
             style={styles.tokenBackground}
             imageStyle={styles.tokenBackgroundImageNoise}
@@ -222,7 +230,7 @@ function Token(props: TokenProps) {
               </Svg.TextPath>
             </Svg.Text>
           </Svg.Svg>
-        </View>
+        </Animated.View>
         <Text variant="labelMedium" style={styles.belowText}>{belowText}</Text>
       </Animated.View>
     </GestureDetector>

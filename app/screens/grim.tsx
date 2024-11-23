@@ -4,7 +4,6 @@ import GameControls from '@/app/components/game-controls';
 import Reminder from '@/app/components/reminder';
 import ReminderControls from '@/app/components/reminder-controls';
 import Token from '@/app/components/token';
-import { CHARACTER_SIZE, REMINDER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CharacterSelect from '@/app/screens/character-select';
 import DemonBluffs from '@/app/screens/demon-bluffs';
@@ -14,6 +13,7 @@ import ShowFullScreenCharacter from '@/app/screens/show-full-screen-character';
 import * as charactersSlice from '@/app/state/characters-slice';
 import { CharacterState } from '@/app/state/characters-slice';
 import * as grimSlice from '@/app/state/grim-slice';
+import { setTokenScale } from '@/app/state/grim-slice';
 import * as remindersSlice from '@/app/state/reminders-slice';
 import { ReminderKey } from '@/app/state/reminders-slice';
 import CharacterId from '@/constants/characters/character-id';
@@ -35,6 +35,7 @@ import {
 } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { MD3Theme, Portal, Text, withTheme } from 'react-native-paper';
+import { clamp, runOnJS, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 interface GrimProps {
   theme: MD3Theme,
@@ -44,16 +45,6 @@ export interface GrimPosition {
   x: number;
   y: number;
 }
-
-const characterSpawnPos = (layout: LayoutRectangle) => ({
-  x: layout ? layout.width - CHARACTER_SIZE - 64 : 0,
-  y: layout ? layout.height - CHARACTER_SIZE - 64 : 0,
-});
-
-const reminderSpawnPos = (layout: LayoutRectangle) => ({
-  x: layout ? layout.width - REMINDER_SIZE - 64 : 0,
-  y: layout ? layout.height - REMINDER_SIZE - 64 : 0,
-});
 
 // To prevent issues with zIndex overlapping, make sure to show only one screen at a time.
 enum Screen {
@@ -65,59 +56,6 @@ enum Screen {
 }
 
 function Grim({ theme }: GrimProps) {
-  const baseNightBadge: ViewStyle = {
-    alignItems: 'center',
-    borderRadius: 999,
-    elevation: 99,
-    height: '30%',
-    justifyContent: 'center',
-    padding: 4,
-    position: 'relative',
-    width: '30%',
-    zIndex: 99,
-  };
-  const baseNightBadgeText: TextStyle = {
-    fontFamily: 'GermaniaOne-Regular',
-    fontSize: 128,
-    textAlign: 'center',
-  };
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: theme.colors.background,
-      height: '100%',
-      width: '100%',
-    },
-    shroud: {
-      height: CHARACTER_SIZE / 1.5,
-      resizeMode: 'contain',
-      width: CHARACTER_SIZE / 1.5,
-    },
-    ghostVote: {
-      borderColor: theme.colors.tertiary,
-      borderRadius: CHARACTER_SIZE,
-      borderStyle: 'dotted',
-      borderWidth: CHARACTER_SIZE / 20,
-    },
-    firstNightBadge: {
-      ...baseNightBadge,
-      backgroundColor: colorContainer(theme.dark, 'blue'),
-      right: 6,
-    },
-    firstNightBadgeText: {
-      ...baseNightBadgeText,
-      color: onColorContainer(theme.dark, 'blue'),
-    },
-    otherNightBadge: {
-      ...baseNightBadge,
-      backgroundColor: colorContainer(theme.dark, 'red'),
-      left: 6,
-    },
-    otherNightBadgeText: {
-      ...baseNightBadgeText,
-      color: onColorContainer(theme.dark, 'red'),
-    },
-  });
-
   const router = useRouter();
 
   const [focused, setFocused] = useState(true);
@@ -135,6 +73,9 @@ function Grim({ theme }: GrimProps) {
   const edition = useAppSelector(state => grimSlice.selectEdition(state.grim));
 
   const layout = useAppSelector(state => grimSlice.selectLayout(state.grim));
+  const tokenScale = useAppSelector(state => grimSlice.selectTokenScale(state.grim));
+  const characterSize = useAppSelector(state => grimSlice.selectCharacterSize(state.grim));
+  const reminderSize = useAppSelector(state => grimSlice.selectReminderSize(state.grim));
 
   const replacingCharacterKey = useAppSelector(state => grimSlice.selectReplacingCharacterKey(state.grim));
   const reminderCharacter = useAppSelector(state => grimSlice.selectReminderCharacter(state));
@@ -177,6 +118,16 @@ function Grim({ theme }: GrimProps) {
     dispatch(grimSlice.setLayout(event.nativeEvent.layout));
   };
 
+  const characterSpawnPos = (layout: LayoutRectangle) => ({
+    x: layout ? layout.width - characterSize - 64 : 0,
+    y: layout ? layout.height - characterSize - 64 : 0,
+  });
+
+  const reminderSpawnPos = (layout: LayoutRectangle) => ({
+    x: layout ? layout.width - reminderSize - 64 : 0,
+    y: layout ? layout.height - reminderSize - 64 : 0,
+  });
+
   const firstNightOrder: CharacterId[] = _(Object.values(characters))
     .map(character => getCharacterById(character.id))
     .filter(data => !!data.firstNight && data.firstNight > 0)
@@ -190,6 +141,61 @@ function Grim({ theme }: GrimProps) {
     .sortBy(data => data.otherNight)
     .map(data => data.id)
     .value();
+
+  const baseNightBadge: ViewStyle = {
+    alignItems: 'center',
+    borderRadius: 999,
+    elevation: 99,
+    height: '30%',
+    justifyContent: 'center',
+    padding: 4,
+    position: 'relative',
+    width: '30%',
+    zIndex: 99,
+  };
+  const baseNightBadgeText: TextStyle = {
+    fontFamily: 'GermaniaOne-Regular',
+    fontSize: 128,
+    textAlign: 'center',
+  };
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: theme.colors.background,
+      height: '100%',
+      width: '100%',
+    },
+    shroud: {
+      height: characterSize / 1.5,
+      resizeMode: 'contain',
+      width: characterSize / 1.5,
+    },
+    ghostVote: {
+      borderColor: theme.colors.tertiary,
+      borderRadius: characterSize,
+      borderStyle: 'dotted',
+      borderWidth: characterSize / 20,
+    },
+    firstNightBadge: {
+      ...baseNightBadge,
+      backgroundColor: colorContainer(theme.dark, 'blue'),
+      right: 6,
+    },
+    firstNightBadgeText: {
+      ...baseNightBadgeText,
+      color: onColorContainer(theme.dark, 'blue'),
+    },
+    otherNightBadge: {
+      ...baseNightBadge,
+      backgroundColor: colorContainer(theme.dark, 'red'),
+      left: 6,
+    },
+    otherNightBadgeText: {
+      ...baseNightBadgeText,
+      color: onColorContainer(theme.dark, 'red'),
+    },
+  });
+
+  const scale = useSharedValue(1);
 
   const currentCharacters = Object.values(characters).map((character, idx) => {
     const selected = character.key === selectedCharacter?.key;
@@ -211,11 +217,10 @@ function Grim({ theme }: GrimProps) {
 
     return (
       <Token
-        key={`character-${character.key}`}
         testID={`character-${idx}-${character.id}`}
         position={character.position}
         selected={selected}
-        size={CHARACTER_SIZE}
+        size={characterSize}
         topLeftContent={
           firstNightLabel ?
             <View style={styles.firstNightBadge}>
@@ -241,6 +246,7 @@ function Grim({ theme }: GrimProps) {
         bottomText={characterData.name}
         belowText={character?.player?.name}
         tokenStyle={(!alive && ghostVote) ? styles.ghostVote : undefined}
+        scale={scale}
         onMove={onMove}
         onPress={onPress}/>
     );
@@ -260,7 +266,7 @@ function Grim({ theme }: GrimProps) {
         testID={`reminder-${idx}-${reminder.data.label}`}
         position={reminder.position}
         selected={selected}
-        size={REMINDER_SIZE}
+        size={reminderSize}
         centerContent={<Reminder reminder={reminder.data}/>}
         bottomText={reminder.data.label}
         onMove={onMove}
@@ -271,26 +277,6 @@ function Grim({ theme }: GrimProps) {
   const onClearGrim = () => {
     dispatch(charactersSlice.setCharacters([]));
     dispatch(remindersSlice.setReminders([]));
-  };
-
-  const tapGrim = Gesture.Tap().onStart(() => {
-    clearSelectedCharacter();
-    clearSelectedReminder();
-  }).runOnJS(true);
-
-  const dismissCharacterSelect = () => {
-    dispatch(grimSlice.clearReplacingCharacter());
-    hideAddNewCharacter();
-  };
-  const onCharacterSelect = (id: CharacterId) => {
-    if (replacingCharacterKey != null) {
-      // Replacing an existing character.
-      dispatch(charactersSlice.setCharacterId({ key: replacingCharacterKey, id }));
-    } else {
-      // Adding a new character.
-      dispatch(charactersSlice.addCharacter({ id, position: layout ? characterSpawnPos(layout) : undefined }));
-    }
-    dismissCharacterSelect();
   };
 
   const dismissReminderSelect = () => {
@@ -324,12 +310,45 @@ function Grim({ theme }: GrimProps) {
     currentScreen = Screen.DemonBluffs;
   }
 
+  const pinchGrim = Gesture.Pinch()
+    .onChange(e => {
+      scale.value = clamp(e.scale, 0.5, 4);
+    })
+    .onEnd(() => {
+      dispatch(setTokenScale(tokenScale * scale.value));
+      setTimeout(() => scale.value = 1, 0);
+    })
+    .runOnJS(true);
+  const tapGrim = Gesture.Tap()
+    .onStart(() => {
+      clearSelectedCharacter();
+      clearSelectedReminder();
+    })
+    .runOnJS(true);
+  const grimGestures = Gesture.Race(tapGrim, pinchGrim);
+
+
+  const dismissCharacterSelect = () => {
+    dispatch(grimSlice.clearReplacingCharacter());
+    hideAddNewCharacter();
+  };
+  const onCharacterSelect = (id: CharacterId) => {
+    if (replacingCharacterKey != null) {
+      // Replacing an existing character.
+      dispatch(charactersSlice.setCharacterId({ key: replacingCharacterKey, id }));
+    } else {
+      // Adding a new character.
+      dispatch(charactersSlice.addCharacter({ id, position: layout ? characterSpawnPos(layout) : undefined }));
+    }
+    dismissCharacterSelect();
+  };
+
   // Render nothing if this page is not focused.
   if (!focused) return;
 
   return (
     <>
-      <GestureDetector gesture={tapGrim}>
+      <GestureDetector gesture={grimGestures}>
         <ImageBackground
           testID="grim"
           onLayout={onLayout}

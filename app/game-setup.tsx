@@ -1,8 +1,7 @@
 import Character from '@/app/components/character';
-import { CHARACTER_SIZE } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { addCharacter, setCharacters } from '@/app/state/characters-slice';
-import { selectLayout, setEdition as setStateEdition } from '@/app/state/grim-slice';
+import { selectCharacterSize, selectLayout, setEdition as setStateEdition } from '@/app/state/grim-slice';
 import { setReminders } from '@/app/state/reminders-slice';
 import CharacterData from '@/constants/characters/character-data';
 import CharacterType from '@/constants/characters/character-type';
@@ -53,6 +52,7 @@ function GameSetup({ theme }: GameSetupProps) {
 
   const dispatch = useAppDispatch();
   const layout = useAppSelector(state => selectLayout(state.grim));
+  const characterSize = useAppSelector(state => selectCharacterSize(state.grim));
 
   const [edition, setEdition] = useState('tb');
   const [playerCount, setPlayerCount] = useState(8);
@@ -200,8 +200,8 @@ function GameSetup({ theme }: GameSetupProps) {
     selectedCharacters.forEach((character, idx) => {
       const t = idx / selectedCharacters.length;
       const position = layout ? {
-        x: (layout.width / 2) + Math.cos(2 * t * Math.PI) * 0.8 * (layout.width / 2) - CHARACTER_SIZE / 2,
-        y: (layout.height / 2) + Math.sin(2 * t * Math.PI) * 0.8 * (layout.height / 2) - CHARACTER_SIZE / 2,
+        x: (layout.width / 2) + Math.cos(2 * t * Math.PI) * 0.8 * (layout.width / 2) - characterSize / 2,
+        y: (layout.height / 2) + Math.sin(2 * t * Math.PI) * 0.8 * (layout.height / 2) - characterSize / 2,
       } : undefined;
       dispatch(addCharacter({ id: character.id, position }));
     });
