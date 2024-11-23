@@ -38,8 +38,10 @@ const openReminderControls = async (label: string, idx = 0) => {
 
 const addCharacter = async (id: CharacterId) => {
   await openGameControls();
-  await userEvent.press(screen.getByTestId('add-character-game', { includeHiddenElements: true }));
-  await userEvent.press(screen.getByRole('button', { name: getCharacterById(id).name }));
+  await userEvent.press(screen.getByTestId('characters-game', { includeHiddenElements: true }));
+  fireEvent(screen.getByTestId('characters-show-travellers'), 'valueChange', true);
+  fireEvent(screen.getByTestId('characters-show-fabled'), 'valueChange', true);
+  await userEvent.press(screen.getByTestId(`add-character-${id}`));
   return queryCharacterToken(id);
 };
 

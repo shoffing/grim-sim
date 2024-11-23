@@ -5,7 +5,7 @@ import { Button, Dialog, FAB, MD3Theme, Portal, withTheme } from 'react-native-p
 interface GameControlsProps {
   visible: boolean;
   fabStyle?: ViewStyle,
-  onAddCharacter: () => void;
+  onCharacters: () => void;
   onAddReminder: () => void;
   onInfoTokens: () => void;
   onDemonBluffs: () => void;
@@ -19,7 +19,7 @@ export const ACCESSIBILITY_LABEL = 'open game controls';
 function GameControls({
                         visible,
                         fabStyle,
-                        onAddCharacter,
+                        onCharacters,
                         onAddReminder,
                         onInfoTokens,
                         onDemonBluffs,
@@ -65,11 +65,11 @@ function GameControls({
         icon={open ? 'arrow-collapse-down' : 'book-open-blank-variant'}
         actions={[
           {
-            icon: 'account-plus',
-            label: 'Add character',
-            onPress: onAddCharacter,
+            icon: 'account-circle-outline',
+            label: 'Characters',
+            onPress: onCharacters,
             size: 'medium',
-            testID: 'add-character-game',
+            testID: 'characters-game',
           },
           {
             icon: 'information-outline',

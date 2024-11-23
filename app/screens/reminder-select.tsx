@@ -1,6 +1,6 @@
+import GrimModal from '@/app/components/grim-modal';
 import Reminder from '@/app/components/reminder';
 import { useAppSelector } from '@/app/hooks';
-import TokenSelect from '@/app/screens/token-select';
 import { selectReplacingReminder } from '@/app/state/grim-slice';
 import CharacterId from '@/constants/characters/character-id';
 import CharacterType, { SCRIPT_ORDER } from '@/constants/characters/character-type';
@@ -9,7 +9,7 @@ import ReminderData from '@/constants/reminder-data';
 
 import characterData from '@/data/characters.json';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MD3Theme, Switch, Text, TouchableRipple, withTheme } from 'react-native-paper';
 
@@ -44,53 +44,67 @@ function ReminderSelect({ visible, edition, characterIds, onDismiss, onSelect, t
   // Set show all to false when characterIds changes.
   useEffect(() => setShowAll(false), [characterIds]);
 
-  const reminderSelectContent = reminders.map((reminder, idx) => {
-    const replacing = _.isEqual(replacingReminder?.data, reminder);
-    const reminderStyle = StyleSheet.create({
-      touchable: {
-        borderRadius: 16,
-      },
-      container: {
-        alignItems: 'center',
-        borderColor: replacing ? theme.colors.outline : undefined,
-        borderRadius: 16,
-        borderWidth: replacing ? 2 : undefined,
-        flexDirection: 'column',
-        flexShrink: 1,
-        gap: 8,
-        height: 'auto',
-        justifyContent: 'center',
-        opacity: replacing ? 0.666 : 1,
-        padding: 16,
-        width: 120,
-      },
-      font: {
-        color: theme.colors.onSurface,
-      },
-    });
-    return (
-      <TouchableRipple
-        accessibilityRole="button"
-        key={`reminder-${idx}`}
-        onPress={() => onSelect(reminder)}
-        style={reminderStyle.touchable}
-        rippleColor={theme.colors.secondary}
-        borderless={true}
-        testID={replacing ? 'replacing' : undefined}>
-        <View style={reminderStyle.container}>
-          <Reminder reminder={reminder}/>
-          <Text variant="labelLarge" adjustsFontSizeToFit={true} numberOfLines={1}>{reminder.label}</Text>
-        </View>
-      </TouchableRipple>
-    );
-  });
+  const reminderSelectContent = (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+      {
+        reminders.map((reminder, idx) => {
+          const replacing = _.isEqual(replacingReminder?.data, reminder);
+          const reminderStyle = StyleSheet.create({
+            touchable: {
+              borderRadius: 16,
+            },
+            container: {
+              alignItems: 'center',
+              borderColor: replacing ? theme.colors.outline : undefined,
+              borderRadius: 16,
+              borderWidth: replacing ? 2 : undefined,
+              flexDirection: 'column',
+              flexShrink: 1,
+              gap: 8,
+              height: 'auto',
+              justifyContent: 'center',
+              opacity: replacing ? 0.666 : 1,
+              padding: 16,
+              width: 120,
+            },
+            font: {
+              color: theme.colors.onSurface,
+            },
+          });
+          return (
+            <TouchableRipple
+              accessibilityRole="button"
+              key={`reminder-${idx}`}
+              onPress={() => onSelect(reminder)}
+              style={reminderStyle.touchable}
+              rippleColor={theme.colors.secondary}
+              borderless={true}
+              testID={replacing ? 'replacing' : undefined}>
+              <View style={reminderStyle.container}>
+                <Reminder reminder={reminder}/>
+                <Text variant="labelLarge" adjustsFontSizeToFit={true} numberOfLines={1}>{reminder.label}</Text>
+              </View>
+            </TouchableRipple>
+          );
+        })
+      }
+    </View>
+  );
+
   const actions = (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+    <View style={{ alignSelf: 'flex-end', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       <Text variant="labelLarge">Show all</Text>
       <Switch value={showAll} onValueChange={value => setShowAll(value)} testID="reminders-show-all"/>
     </View>
   );
-  return <TokenSelect visible={visible} onDismiss={onDismiss} tokens={reminderSelectContent} actions={actions}/>;
+
+  return (
+    <GrimModal visible={visible}
+               bottomContent={actions}
+               onDismiss={onDismiss}>
+      {reminderSelectContent}
+    </GrimModal>
+  );
 }
 
 export default withTheme(ReminderSelect);

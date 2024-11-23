@@ -1,19 +1,16 @@
+import GrimModal from '@/app/components/grim-modal';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import InfoTokenShower from '@/app/screens/show-full-screen-info';
 import { addCustomToken, InfoToken, selectCustomTokens, selectDefaultTokens } from '@/app/state/info-tokens-slice';
-import { baseModalCloseButton, baseModalContainer, baseModalContent, baseModalScroll } from '@/app/styles/modals';
 import { COLOR_CONTAINER_COLORS, colorContainer, ColorContainerType, onColorContainer } from '@/constants/colors';
 import React, { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import {
   Button,
   Divider,
   Icon,
   IconButton,
   MD3Theme,
-  Modal,
-  Portal,
-  Surface,
   Text,
   TextInput,
   TouchableRipple,
@@ -33,17 +30,6 @@ function InfoTokens({ visible, onDismiss, theme }: InfoTokensProps) {
   const customTokens = useAppSelector(state => selectCustomTokens(state.infoTokens));
 
   const styles = StyleSheet.create({
-    modalContainer: baseModalContainer(theme),
-    modalContent: {
-      ...baseModalContent(theme),
-      alignItems: 'center',
-      gap: 16,
-    },
-    modalScroll: {
-      ...baseModalScroll(theme),
-      backgroundColor: theme.colors.surface,
-      gap: 24,
-    },
     newCustomContainer: {
       flexDirection: 'row',
       gap: 8,
@@ -58,7 +44,6 @@ function InfoTokens({ visible, onDismiss, theme }: InfoTokensProps) {
       gap: 12,
       width: '100%',
     },
-    closeButton: baseModalCloseButton(theme),
     infoButton: {
       minHeight: 64,
       minWidth: 64,
@@ -161,7 +146,7 @@ function InfoTokens({ visible, onDismiss, theme }: InfoTokensProps) {
   };
 
   const renderTokenButton = (custom: boolean) => {
-    function TokenButton(info: InfoToken, idx: number) {
+    return function TokenButton(info: InfoToken, idx: number) {
       const background = colorContainer(theme.dark, info.color);
       const foreground = onColorContainer(theme.dark, info.color);
       return (
@@ -183,85 +168,66 @@ function InfoTokens({ visible, onDismiss, theme }: InfoTokensProps) {
           {info.text}
         </Button>
       );
-    }
-
-    return TokenButton;
+    };
   };
 
   const defaultInfoTokenButtons = defaultTokens.map(renderTokenButton(/* custom= */ false));
   const customInfoTokenButtons = customTokens.map(renderTokenButton(/* custom= */ true));
 
   return (
-    <Portal>
-      <Modal visible={visible}
-             onDismiss={onDismiss}
-             style={styles.modalContainer}
-             contentContainerStyle={styles.modalContent}>
-        <Text variant="headlineLarge">Info Tokens</Text>
-
-        <ScrollView>
-          <Surface style={styles.modalScroll}>
-            <View style={styles.tokenButtons}>
-              {defaultInfoTokenButtons}
-            </View>
-            <Divider style={{ width: '100%' }}/>
-            {
-              customInfoTokenButtons.length > 0 ?
-                <View style={styles.tokenButtons}>
-                  {customInfoTokenButtons}
-                </View> :
-                null
-            }
-            <View style={styles.tokenButtons}>
-              {
-                addingNewCustom ?
-                  <View style={styles.newCustomContainer}>
-                    <TextInput style={{ flex: 1 }}
-                               value={newCustom}
-                               onChangeText={setNewCustom}
-                               onSubmitEditing={saveNewCustom}
-                               placeholder="New custom info token"
-                               testID="custom-token-text"/>
-                    <Dropdown hideMenuHeader
-                              options={COLOR_OPTIONS}
-                              value={newCustomColor}
-                              onSelect={value => value && setNewCustomColor(value as ColorContainerType)}
-                              CustomDropdownInput={ColorDropdownInput}
-                              CustomDropdownItem={ColorDropdownItem}
-                              testID="color-dropdown"/>
-                    <IconButton icon="check"
-                                mode="contained"
-                                disabled={(newCustom ?? '').length === 0}
-                                onPress={saveNewCustom}
-                                testID="save-custom-token"/>
-                    <IconButton icon="close"
-                                mode="contained"
-                                onPress={hideNewCustom}
-                                containerColor={theme.colors.errorContainer}
-                                iconColor={theme.colors.onErrorContainer}
-                                testID="cancel-custom-token"/>
-                  </View> :
-                  <Button icon="plus" mode="outlined" onPress={showNewCustom}>Add custom</Button>
-              }
-            </View>
-          </Surface>
-        </ScrollView>
-
-        <IconButton
-          icon="close"
-          mode="contained"
-          containerColor={theme.colors.errorContainer}
-          iconColor={theme.colors.onErrorContainer}
-          style={styles.closeButton}
-          onPress={onDismiss}
-          testID="close-info-tokens"/>
-      </Modal>
-
+    <GrimModal
+      visible={visible}
+      topContent={<Text variant="headlineLarge">Info Tokens</Text>}
+      scrollContentStyle={{ gap: 12 }}
+      onDismiss={onDismiss}>
+      <View style={styles.tokenButtons}>
+        {defaultInfoTokenButtons}
+      </View>
+      <Divider style={{ width: '100%' }}/>
+      {
+        customInfoTokenButtons.length > 0 ?
+          <View style={styles.tokenButtons}>
+            {customInfoTokenButtons}
+          </View> :
+          null
+      }
+      <View style={styles.tokenButtons}>
+        {
+          addingNewCustom ?
+            <View style={styles.newCustomContainer}>
+              <TextInput style={{ flex: 1 }}
+                         value={newCustom}
+                         onChangeText={setNewCustom}
+                         onSubmitEditing={saveNewCustom}
+                         placeholder="New custom info token"
+                         testID="custom-token-text"/>
+              <Dropdown hideMenuHeader
+                        options={COLOR_OPTIONS}
+                        value={newCustomColor}
+                        onSelect={value => value && setNewCustomColor(value as ColorContainerType)}
+                        CustomDropdownInput={ColorDropdownInput}
+                        CustomDropdownItem={ColorDropdownItem}
+                        testID="color-dropdown"/>
+              <IconButton icon="check"
+                          mode="contained"
+                          disabled={(newCustom ?? '').length === 0}
+                          onPress={saveNewCustom}
+                          testID="save-custom-token"/>
+              <IconButton icon="close"
+                          mode="contained"
+                          onPress={hideNewCustom}
+                          containerColor={theme.colors.errorContainer}
+                          iconColor={theme.colors.onErrorContainer}
+                          testID="cancel-custom-token"/>
+            </View> :
+            <Button icon="plus" mode="outlined" onPress={showNewCustom}>Add custom</Button>
+        }
+      </View>
       <InfoTokenShower visible={showingInfoVisible}
                        infoToken={showingInfo}
                        custom={showingInfoIsCustom}
                        onDismiss={hideInfo}/>
-    </Portal>
+    </GrimModal>
   );
 }
 

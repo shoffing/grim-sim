@@ -93,7 +93,7 @@ function CharacterControls({ characterKey, onShow, onDismiss, theme }: Character
       borderRadius: 8,
     },
     nameText: {
-      fontFamily: 'GermaniaOne-Regular',
+      fontFamily: 'GermaniaOne',
     },
     abilityText: {
       marginTop: 0,

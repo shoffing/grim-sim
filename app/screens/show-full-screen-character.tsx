@@ -37,7 +37,7 @@ function ShowFullScreenCharacter({ visible, characterId, onDismiss, theme }: Sho
       borderRadius: 32,
       borderWidth: 6,
       color: onColorContainer(theme.dark, color),
-      fontFamily: 'GermaniaOne-Regular',
+      fontFamily: 'GermaniaOne',
       margin: 12,
       marginBottom: 24,
       padding: 24,

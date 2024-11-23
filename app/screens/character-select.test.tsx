@@ -2,7 +2,7 @@ import CharacterSelect from '@/app/screens/character-select';
 import { CharacterKey, CharacterState, initialCharactersState } from '@/app/state/characters-slice';
 import { initialGrimState } from '@/app/state/grim-slice';
 import CharacterId from '@/constants/characters/character-id';
-import { act, userEvent } from '@testing-library/react-native';
+import { act, userEvent, waitFor } from '@testing-library/react-native';
 import { render } from '../test-utils';
 import '@testing-library/react-native/extend-expect';
 
@@ -21,7 +21,6 @@ describe('<CharacterSelect />', () => {
       <CharacterSelect
         visible
         edition="tb"
-        onSelect={jest.fn()}
         onDismiss={jest.fn()}/>,
     );
     expect(getByText('Scarlet Woman')).toBeOnTheScreen();
@@ -33,7 +32,6 @@ describe('<CharacterSelect />', () => {
       <CharacterSelect
         visible
         edition="snv"
-        onSelect={jest.fn()}
         onDismiss={jest.fn()}/>,
     );
     expect(getByText('Vortox')).toBeOnTheScreen();
@@ -45,7 +43,6 @@ describe('<CharacterSelect />', () => {
       <CharacterSelect
         visible
         edition="bmr"
-        onSelect={jest.fn()}
         onDismiss={jest.fn()}/>,
     );
     expect(getByText('Zombuul')).toBeOnTheScreen();
@@ -57,7 +54,6 @@ describe('<CharacterSelect />', () => {
       <CharacterSelect
         visible
         edition="tb"
-        onSelect={jest.fn()}
         onDismiss={jest.fn()}/>,
     );
     expect(queryByTestId('replacing')).toBeNull();
@@ -68,7 +64,6 @@ describe('<CharacterSelect />', () => {
       <CharacterSelect
         visible
         edition="tb"
-        onSelect={jest.fn()}
         onDismiss={jest.fn()}/>,
       {
         preloadedState: {
@@ -83,21 +78,46 @@ describe('<CharacterSelect />', () => {
         },
       },
     );
-    expect(queryByTestId('replacing')).toHaveTextContent('Imp');
+    expect(queryByTestId(/_replacing/)).toHaveTextContent(/Imp/);
   });
 
-  it('calls onSelect when selecting character', async () => {
-    const onSelect = jest.fn();
+  it('calls onAction with first of two actions', async () => {
+    const onActionA = jest.fn();
+    const onActionB = jest.fn();
     const onDismiss = jest.fn();
-    const { getByText } = render(
+    const { getByTestId } = render(
       <CharacterSelect
         visible
         edition="tb"
-        onSelect={onSelect}
+        characterActions={[
+          {icon: 'eye', onAction: onActionA, testID: 'action-a'},
+          {icon: 'plus', onAction: onActionB, testID: 'action-b'},
+        ]}
         onDismiss={onDismiss}/>,
     );
-    await userEvent.press(getByText('Imp'));
-    expect(onSelect).toHaveBeenCalled();
+    await userEvent.press(getByTestId('action-a-imp'));
+    expect(onActionA).toHaveBeenCalledWith(CharacterId.Imp);
+    expect(onActionB).not.toHaveBeenCalled();
+    expect(onDismiss).not.toHaveBeenCalled();
+  });
+
+  it('calls onAction with second of two actions', async () => {
+    const onActionA = jest.fn();
+    const onActionB = jest.fn();
+    const onDismiss = jest.fn();
+    const { getByTestId } = render(
+      <CharacterSelect
+        visible
+        edition="tb"
+        characterActions={[
+          {icon: 'eye', onAction: onActionA, testID: 'action-a'},
+          {icon: 'plus', onAction: onActionB, testID: 'action-b'},
+        ]}
+        onDismiss={onDismiss}/>,
+    );
+    await userEvent.press(getByTestId('action-b-imp'));
+    expect(onActionA).not.toHaveBeenCalled();
+    expect(onActionB).toHaveBeenCalledWith(CharacterId.Imp);
     expect(onDismiss).not.toHaveBeenCalled();
   });
 
@@ -108,7 +128,6 @@ describe('<CharacterSelect />', () => {
       <CharacterSelect
         visible
         edition="tb"
-        onSelect={onSelect}
         onDismiss={onDismiss}/>,
     );
     await userEvent.press(getByTestId('close-token-select'));
